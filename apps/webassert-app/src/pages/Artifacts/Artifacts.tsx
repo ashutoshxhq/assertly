@@ -1,0 +1,31 @@
+import { RiAddLargeLine, RiFolderCloudLine } from "react-icons/ri"
+import { Button } from "src/components/ui/button"
+
+const Artifacts = () => {
+  return (
+    <div className="p-8">
+      <div className="flex items-center justify-between px-4">
+        <div className="flex items-center justify-between gap-4">
+          <span className="text-4xl">
+            <RiFolderCloudLine />
+          </span>
+          <div className="flex flex-col gap-1">
+            <h2 className="text-2xl font-bold tracking-tight">Artifacts</h2>
+            <p className="text-neutral-500 text-sm">Upload and manage your artifacts here.</p>
+          </div>
+        </div>
+
+        <div className="flex items-center mt-0">
+          <Button variant={"brand"} className="bg-orange-500 mt-0"><RiAddLargeLine className="mx-2" />Add New Artifact</Button>
+        </div>
+      </div>
+      <div className="border-b border-neutral-900 my-8 mx-2"></div>
+
+      <div className="bg-neutral-900 rounded-md">
+        
+      </div>
+    </div>
+  )
+}
+
+export default Artifacts

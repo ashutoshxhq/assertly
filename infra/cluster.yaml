@@ -1,0 +1,11 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: webassert
+  region: us-west-2
+
+nodeGroups:
+  - name: ng-t2-large
+    instanceType: t2.large
+    desiredCapacity: 1
+    volumeSize: 40

@@ -3,6 +3,7 @@ import { columns } from "./TestSpecsTable/columns"
 import { specs } from "./TestSpecsTable/data"
 import { DataTable } from "./TestSpecsTable/data-table"
 import { RiAddLargeLine, RiFlaskLine } from "react-icons/ri"
+import { Link } from "react-router-dom"
 
 const TestSpecs = () => {
   return (
@@ -18,7 +19,7 @@ const TestSpecs = () => {
           </div>
         </div>
         <div className="flex items-center mt-0">
-          <Button variant={"brand"} className="bg-orange-500 mt-0"><RiAddLargeLine className="mx-2" /> New Test Spec</Button>
+          <Button asChild variant={"brand"} className="bg-orange-500 mt-0"><Link to="/specs/newspec"><RiAddLargeLine className="mx-2" /> New Test Spec</Link></Button>
         </div>
       </div>
       <div className="border-b border-neutral-900 my-8 mx-2"></div>

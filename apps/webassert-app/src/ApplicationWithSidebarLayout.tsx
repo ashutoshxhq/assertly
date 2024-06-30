@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./components/molecules/Sidebar/Sidebar";
 
-function AuthorizedLayout() {
+function ApplicationWithSidebarLayout() {
   return (
     <div className="dark flex flex-col h-[100vh] bg-neutral-900">
       <div className="flex flex-1 w-full bg-neutral-900">
@@ -18,4 +18,4 @@ function AuthorizedLayout() {
   );
 }
 
-export default AuthorizedLayout;
+export default ApplicationWithSidebarLayout;

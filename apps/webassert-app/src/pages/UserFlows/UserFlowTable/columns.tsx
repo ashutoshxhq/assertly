@@ -51,6 +51,7 @@ export const columns: ColumnDef<UserFlow>[] = [
     },
     {
         accessorKey: "createdAt",
+        size: 60,
         header: "Created",
         cell: ({ row }) => moment(row.original.createdAt).fromNow(),
     },

@@ -13,8 +13,8 @@ const Sidebar = () => (
 
                 <div data-slot="section" className="flex flex-col gap-2 p-4" data-tauri-drag-region>
                     <SidebarNavItem to="specs" icon={<RiFlaskLine />} title="Test Specs" />
-                    <SidebarNavItem to="runs" icon={<RiListCheck3 />} title="Test Runs" />
                     <SidebarNavItem to="user-flows" icon={<RiHashtag />} title="User Flows" />
+                    <SidebarNavItem to="runs" icon={<RiListCheck3 />} title="Test Runs" />
                     <SidebarNavItem to="artifacts" icon={<RiFolderCloudLine />} title="Data & Artifacts" />
                     <SidebarNavItem to="api-keys" icon={<RiKeyLine />} title="Api Keys" />
                     <SidebarNavItem to="settings" icon={<RiSettings2Line />} title="Settings" />

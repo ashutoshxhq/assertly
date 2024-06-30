@@ -51,10 +51,10 @@ const Explore = () => {
                 <div className="bg-card bottom-0 flex items-center gap-2 bg-neutral-900 rounded-[30px] min-h-14 mx-20 my-6">
                     <Textarea
                         ref={textAreaRef}
+                        onChange={handleTextAreaChange}
                         placeholder="Type your message..."
                         rows={1}
                         className="flex-1 resize-none rounded-none px-8 py-4"
-                        onChange={handleTextAreaChange}
                     />
                     <div className="flex items-end justify-center h-full p-3">
                         <Button variant="default" size="icon" className="rounded-[30px]">

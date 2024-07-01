@@ -14,7 +14,7 @@ const TestRuns = () => {
           </span>
           <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-bold tracking-tight">Test Runs</h2>
-            <p className="text-neutral-500 text-sm">Manage your test run history</p>
+            <p className="text-zinc-500 text-sm">Manage your test run history</p>
           </div>
         </div>
 
@@ -22,11 +22,11 @@ const TestRuns = () => {
           <Button variant={"brand"} className="bg-orange-500 mt-0"><RiAddLargeLine className="mx-2" />New Test Run</Button>
         </div>
       </div>
-      <div className="border-b border-neutral-900 my-8 mx-2"></div>
-      <div className="bg-neutral-900 rounded-md">
-        <div className="bg-neutral-800/50 h-4 rounded-t-md"></div>
+      <div className="border-b border-zinc-900 my-8 mx-2"></div>
+      <div className="bg-zinc-900 rounded-md">
+        <div className="bg-zinc-800/50 h-4 rounded-t-md"></div>
         <DataTable columns={columns} data={testRuns} />
-        <div className="bg-neutral-800/50 h-8 rounded-b-md"></div>
+        <div className="bg-zinc-800/50 h-8 rounded-b-md"></div>
       </div>
     </div>
   )

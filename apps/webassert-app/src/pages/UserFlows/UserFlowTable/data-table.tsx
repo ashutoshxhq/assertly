@@ -42,12 +42,12 @@ export function DataTable<TData, TValue>({
     return (
         <div className="rounded-md">
             <Table className="border-none">
-                <TableHeader className="border-neutral-800 bg-neutral-800/50">
+                <TableHeader className="border-zinc-800 bg-zinc-800/50">
                     {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id} className="border-neutral-800">
+                        <TableRow key={headerGroup.id} className="border-zinc-800">
                             {headerGroup.headers.map((header) => {
                                 return (
-                                    <TableHead key={header.id} className={cn("border-neutral-800")} style={{ width: `${header.getSize()}px` }}>
+                                    <TableHead key={header.id} className={cn("border-zinc-800")} style={{ width: `${header.getSize()}px` }}>
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
@@ -60,13 +60,13 @@ export function DataTable<TData, TValue>({
                         </TableRow>
                     ))}
                 </TableHeader>
-                <TableBody className="border-b border-b-neutral-800">
+                <TableBody className="border-b border-b-zinc-800">
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
-                                className={cn("border-neutral-800/50", "bg-neutral-800/20")}
+                                className={cn("border-zinc-800/50", "bg-zinc-800/20")}
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell key={cell.id} className="border-none">

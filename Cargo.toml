@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 members = [ 
-    "apps/gatekeeper_service", 
+    "apps/gatekeeper-service", 
     "apps/identity-service",
     "apps/webassert-app/src-tauri",
 ]

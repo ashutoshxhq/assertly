@@ -15,3 +15,32 @@ body {
     width: 100vw;
     position: fixed;
 }
+
+::-moz-selection {
+    color: white;
+    background-color: #cbcbcb !important;
+  }
+  
+  ::selection {
+    color: white;
+    background: #8b8b8b !important;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #3b3c3f !important;
+  }
+  
+  
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #404040 !important;
+    border-radius: 10px;
+    opacity: 0.5;
+  }

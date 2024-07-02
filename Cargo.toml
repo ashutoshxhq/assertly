@@ -3,5 +3,5 @@ resolver = "2"
 members = [ 
     "apps/gatekeeper-service", 
     "apps/identity-service",
-    "apps/webassert-app/src-tauri",
+    "apps/assertly-app/src-tauri",
 ]

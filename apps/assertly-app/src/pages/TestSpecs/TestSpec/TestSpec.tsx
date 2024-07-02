@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "src/components/ui/tabs
 import { Textarea } from "src/components/ui/textarea"
 import { cn } from "src/lib/utils"
 
-const frameworks = [
+const actions = [
     {
         value: "ai-action",
         label: "AI Action",
@@ -282,7 +282,7 @@ export function TestTypeSelector() {
                     className="justify-between"
                 >
                     {value
-                        ? frameworks.find((framework) => framework.value === value)?.label
+                        ? actions.find((framework) => framework.value === value)?.label
                         : "Select"}
                     <RiArrowDownSLine className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -293,7 +293,7 @@ export function TestTypeSelector() {
                     <CommandList>
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup>
-                            {frameworks.map((framework) => (
+                            {actions.map((framework) => (
                                 <CommandItem
                                     key={framework.value}
                                     value={framework.value}

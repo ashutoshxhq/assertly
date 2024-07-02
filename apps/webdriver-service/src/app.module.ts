@@ -1,10 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { WebdriverModule } from './webdriver/webdriver.module';
 
 @Module({
-  controllers: [AppController],
-  providers: [AppService],
-  imports: [],
+  imports: [WebdriverModule],
 })
 export class AppModule {}

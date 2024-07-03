@@ -39,12 +39,16 @@ export class WebdriverService {
                 await playwrightClient.execute([action]);
 
                 const content = await clientSession.page.content();
+                const url = clientSession.page.url();
+                const hostname = new URL(url).hostname;
 
                 client.send(JSON.stringify({
                     event: "ACTION_RESULT",
                     data: {
                         actionType: action.type,
-                        pageContet: content,
+                        pageContent: content,
+                        url: url,
+                        hostname: hostname,
                     }
                 }));
 

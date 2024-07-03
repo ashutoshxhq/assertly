@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Browser, Page, chromium } from 'playwright';
 import { Socket } from 'socket.io';
 import { PlaywrightClient } from 'src/common/playwright/playwright.client';
+import { Action } from 'src/common/playwright/playwright.types';
 
 @Injectable()
 export class WebdriverService {
@@ -24,8 +25,36 @@ export class WebdriverService {
         }
     }
 
-    async executeActions(client: Socket, id: string, actions: any[]) {
-        client.send(JSON.stringify({ event: 'response', data: { success: true, message: 'actions executed successfully' } }));
-    }
+    async executeActions(client: Socket, id: string, actions: Action[]) {
 
+        const clientSession = this.clients.get(id);
+        if (!clientSession) {
+            throw new Error('Client session not found');
+        }
+
+        const playwrightClient = new PlaywrightClient(clientSession.browser, clientSession.page);
+
+        for (const action of actions) {
+            try {
+                await playwrightClient.execute([action]);
+
+                const content = await clientSession.page.content();
+
+                client.send(JSON.stringify({
+                    event: "ACTION_RESULT",
+                    data: {
+                        actionType: action.type,
+                        pageContet: content,
+                    }
+                }));
+
+            } catch (error) {
+                client.send(JSON.stringify({
+                    event: "ERROR",
+                    data: { message: `Error executing action: ${error.message}`, actionType: action.type }
+                }));
+                break
+            }
+        }
+    }
 }

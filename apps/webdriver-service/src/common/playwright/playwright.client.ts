@@ -1,24 +1,16 @@
-import { chromium, Browser, Page } from 'playwright';
+import { Browser, Page } from 'playwright';
+import { Action } from './playwright.types';
 
 export class PlaywrightClient {
   private browser: Browser;
   private page: Page;
 
-  async initialize() {
-    this.browser = await chromium.launch();
-    this.page = await this.browser.newPage();
+  constructor(browser: Browser, page: Page) {
+    this.browser = browser
+    this.page = page
   }
 
-  async close() {
-    if (this.page) {
-      await this.page.close();
-    }
-    if (this.browser) {
-      await this.browser.close();
-    }
-  }
-
-  async executeActions(actions: any[]) {
+  async execute(actions: Action[]) {
     if (!this.page) {
       throw new Error('PlaywrightClient not initialized. Call initialize() first.');
     }
@@ -27,117 +19,75 @@ export class PlaywrightClient {
     }
   }
 
-  private async executeAction(action: any) {
+  private async executeAction(action: Action) {
     if (!this.page) {
       throw new Error('PlaywrightClient not initialized. Call initialize() first.');
     }
 
     switch (action.type) {
-      case 'ai-action':
-      case 'ai-assert':
-      case 'ai-extract':
-        console.log(`AI action '${action.type}' not implemented in this wrapper.`);
-        break;
-
-      case 'user-flow':
-        await this.executeUserFlow(action.flow);
-        break;
-
-      case 'captha':
-        console.log('Captcha solving not implemented in this wrapper.');
-        break;
-
       case 'javascript':
-        await this.page.evaluate(action.script);
+        await this.page.evaluate(action.props.script);
         break;
 
       case 'visual-assert':
         console.log('Visual diff not implemented in this wrapper.');
         break;
 
+      case 'goto':
+        await this.page.goto(action.props.url);
+        break;
+
       case 'click':
-        await this.page.click(action.selector);
+        await this.page.click(action.props.selector);
         break;
 
       case 'type':
-        await this.page.type(action.selector, action.text);
+        await this.page.click(action.props.selector);
+        await this.page.keyboard.type(action.props.text);
         break;
 
       case 'press':
-        await this.page.press(action.selector, action.key);
+        await this.page.press(action.props.selector, action.props.key);
         break;
 
       case 'hover':
-        await this.page.hover(action.selector);
+        await this.page.hover(action.props.selector);
         break;
 
       case 'scroll':
         await this.page.evaluate((selector) => {
           document.querySelector(selector)?.scrollIntoView();
-        }, action.selector);
+        }, action.props.selector);
         break;
 
       case 'select':
-        await this.page.selectOption(action.selector, action.value);
+        await this.page.selectOption(action.props.selector, action.props.value);
         break;
 
       case 'wait':
-        if (action.selector) {
-          await this.page.waitForSelector(action.selector);
+        if (action.props.selector) {
+          await this.page.waitForSelector(action.props.selector);
         } else {
-          await this.page.waitForTimeout(action.timeout);
+          await this.page.waitForTimeout(action.props.timeout);
         }
         break;
 
       case 'localstorage':
-        if (action.operation === 'set') {
+        if (action.props.operation === 'set') {
           await this.page.evaluate(({ key, value }) => {
             localStorage.setItem(key, value);
-          }, { key: action.key, value: action.value });
-        } else if (action.operation === 'get') {
-          return await this.page.evaluate((key) => localStorage.getItem(key), action.key);
+          }, { key: action.props.key, value: action.props.value });
+        } else if (action.props.operation === 'get') {
+          return await this.page.evaluate((key) => localStorage.getItem(key), action.props.key);
         }
         break;
 
       case 'file-upload':
-        await this.page.setInputFiles(action.selector, action.files);
+        await this.page.setInputFiles(action.props.selector, action.props.files);
         break;
 
       default:
-        console.log(`Unknown action type: ${action.type}`);
+        console.log(`Unknown action type`);
     }
-  }
-
-  private async executeUserFlow(flow: any[]) {
-    await this.executeActions(flow);
-  }
-
-  async goto(url: string) {
-    if (!this.page) {
-      throw new Error('PlaywrightClient not initialized. Call initialize() first.');
-    }
-    await this.page.goto(url);
-  }
-}
-
-// Usage example
-async function runTest() {
-  const service = new PlaywrightClient();
-  await service.initialize();
-
-  try {
-    await service.goto('https://example.com');
-
-    const actions = [
-      { type: 'click', selector: '#login-button' },
-      { type: 'type', selector: '#username', text: 'testuser' },
-      { type: 'type', selector: '#password', text: 'password123' },
-      { type: 'click', selector: '#submit' },
-      { type: 'wait', selector: '#dashboard' },
-    ];
-
-    await service.executeActions(actions);
-  } finally {
-    await service.close();
   }
 }

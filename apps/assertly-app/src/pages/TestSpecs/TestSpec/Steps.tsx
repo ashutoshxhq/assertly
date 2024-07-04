@@ -1,62 +1,62 @@
-import { useState } from 'react'
-import StepTypeSelect from './StepTypeSelect'
-import { RiAddLargeLine, RiArrowDownSLine, RiArrowRightSLine } from 'react-icons/ri'
+import { RiAddLargeLine } from 'react-icons/ri'
 import { Button } from 'src/components/ui/button'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from 'src/components/ui/collapsible'
+import Step from './Step'
 
-const Steps = () => {
-    const [stepCollapsible, setStepCollapsible] = useState<boolean[]>([true])
+interface StepData {
+  id: string;
+  type: string;
+  properties: Record<string, any>;
+}
 
-    return (
-        <div className="py-4 flex flex-col gap-2 w-full">
-            <div className="flex w-full bg-zinc-800 rounded-md">
-                <Collapsible className="w-full" open={stepCollapsible[0]} onOpenChange={(open) => {
-                    let newStepCollapsible = [...stepCollapsible]
-                    newStepCollapsible[0] = open
-                    setStepCollapsible([...newStepCollapsible])
-                }}>
-                    <CollapsibleTrigger className="w-full">
-                        <div className="flex justify-between items-center w-full py-3 px-4">
-                            <span className="text-sm font-semibold">Goto https://google.com</span>
-                            <span>{stepCollapsible[0] ? <RiArrowRightSLine /> : <RiArrowDownSLine />}</span>
-                        </div>
+interface StepsProps {
+  steps: StepData[];
+  updateSteps: (steps: StepData[]) => void;
+  runStep: (index: number) => void;
+  currentStepIndex: number;
+}
 
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="w-full">
-                        <div className="w-full flex flex-col border-t border-zinc-700/40 p-4">
-                            <StepTypeSelect />
-                        </div>
-                    </CollapsibleContent>
-                </Collapsible>
-            </div>
-            <div className="flex w-full bg-zinc-800 rounded-md">
-                <Collapsible className="w-full" open={stepCollapsible[1]} onOpenChange={(open) => {
-                    let newStepCollapsible = [...stepCollapsible]
-                    newStepCollapsible[1] = open
-                    setStepCollapsible([...newStepCollapsible])
-                }}>
-                    <CollapsibleTrigger className="w-full">
-                        <div className="flex justify-between items-center w-full py-3 px-4">
-                            <span className="text-sm font-semibold">Select Step Type</span>
-                            <span>{stepCollapsible[1] ? <RiArrowRightSLine /> : <RiArrowDownSLine />}</span>
-                        </div>
+const Steps: React.FC<StepsProps> = ({ steps, updateSteps, runStep, currentStepIndex  }) => {
+  const addStep = () => {
+    const newStep: StepData = {
+      id: Date.now().toString(),
+      type: '',
+      properties: {}
+    };
+    updateSteps([...steps, newStep]);
+  };
 
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="w-full">
-                        <div className="w-full flex flex-col border-t border-zinc-700/40 p-4">
-                            <StepTypeSelect />
-                        </div>
-                    </CollapsibleContent>
-                </Collapsible>
-            </div>
-            <div className="w-full flex justify-center items-center mt-4">
-                <div className="border-t border-zinc-800 flex-1 mr-2"></div>
-                <Button variant={"brand"} className="px-8"><RiAddLargeLine className="mr-2" /> Add New Step</Button>
-                <div className="border-t border-zinc-800 flex-1 ml-2"></div>
+  const updateStep = (id: string, updatedStep: Partial<StepData>) => {
+    updateSteps(steps.map(step => 
+      step.id === id ? { ...step, ...updatedStep } : step
+    ));
+  };
 
-            </div>
-        </div>
-    )
+  const deleteStep = (id: string) => {
+    updateSteps(steps.filter(step => step.id !== id));
+  };
+
+  return (
+    <div className="py-4 pb-0 flex flex-col gap-2 w-full">
+      {steps.map((step, index) => (
+        <Step
+          key={step.id}
+          step={step}
+          updateStep={(updatedStep) => updateStep(step.id, updatedStep)}
+          deleteStep={() => deleteStep(step.id)}
+          runStep={() => runStep(index)}
+          currentStepIndex={currentStepIndex}
+          index={index}
+        />
+      ))}
+      <div className="w-full flex justify-center items-center mt-4">
+        <div className="border-t border-zinc-800 flex-1 mr-2"></div>
+        <Button variant="brand" className="px-8" onClick={addStep}>
+          <RiAddLargeLine className="mr-2" /> Add New Step
+        </Button>
+        <div className="border-t border-zinc-800 flex-1 ml-2"></div>
+      </div>
+    </div>
+  )
 }
 
 export default Steps

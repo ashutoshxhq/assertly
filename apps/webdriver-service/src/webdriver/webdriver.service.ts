@@ -37,21 +37,24 @@ export class WebdriverService {
         for (const action of actions) {
             try {
                 await playwrightClient.execute([action]);
+                await clientSession.page.waitForLoadState('domcontentloaded')
 
                 const content = await clientSession.page.content();
+                const screenshot = (await clientSession.page.screenshot()).toString('base64');
                 const url = clientSession.page.url();
                 const hostname = new URL(url).hostname;
-
+                console.log("sending result for ",action.type)
                 client.send(JSON.stringify({
                     event: "ACTION_RESULT",
                     data: {
                         actionType: action.type,
                         pageContent: content,
+                        screenshot: screenshot,
                         url: url,
                         hostname: hostname,
                     }
                 }));
-
+                await clientSession.page.waitForTimeout(1000)
             } catch (error) {
                 client.send(JSON.stringify({
                     event: "ERROR",

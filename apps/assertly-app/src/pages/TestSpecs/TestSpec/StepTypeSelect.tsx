@@ -5,9 +5,8 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
 import { cn } from "src/lib/utils"
 
-const StepTypeSelect = () => {
+const StepTypeSelect = ({stepType, setStepType}: any) => {
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
 
     return (
         <Popover open={open} onOpenChange={setOpen} >
@@ -18,24 +17,24 @@ const StepTypeSelect = () => {
                     aria-expanded={open}
                     className="justify-between"
                 >
-                    {value
-                        ? actions.find((framework) => framework.value === value)?.label
+                    {stepType
+                        ? steps.find((framework) => framework.value === stepType)?.label
                         : "Select"}
                     <RiArrowDownSLine className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[200px] p-0" side="bottom" align="start">
                 <Command>
-                    <CommandInput placeholder="Search action..." className="h-9" />
+                    <CommandInput placeholder="Search step..." className="h-9" />
                     <CommandList>
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup>
-                            {actions.map((framework) => (
+                            {steps.map((framework) => (
                                 <CommandItem
                                     key={framework.value}
                                     value={framework.value}
                                     onSelect={(currentValue) => {
-                                        setValue(currentValue === value ? "" : currentValue)
+                                        setStepType(currentValue === stepType ? "" : currentValue)
                                         setOpen(false)
                                     }}
                                 >
@@ -43,7 +42,7 @@ const StepTypeSelect = () => {
                                     <RiCheckLine
                                         className={cn(
                                             "ml-auto h-4 w-4",
-                                            value === framework.value ? "opacity-100" : "opacity-0"
+                                            stepType === framework.value ? "opacity-100" : "opacity-0"
                                         )}
                                     />
                                 </CommandItem>
@@ -59,7 +58,39 @@ const StepTypeSelect = () => {
 export default StepTypeSelect
 
 
-const actions = [
+const steps = [
+    {
+        value: "goto",
+        label: "Goto URL",
+    },
+    {
+        value: "click",
+        label: "Click Element",
+    },
+    {
+        value: "type",
+        label: "Type Text",
+    },
+    {
+        value: "press",
+        label: "Press Keys",
+    },
+    {
+        value: "hover",
+        label: "Hover Element",
+    },
+    {
+        value: "scroll",
+        label: "Scroll",
+    },
+    {
+        value: "select",
+        label: "Select",
+    },
+    {
+        value: "wait",
+        label: "Wait For Time/Element",
+    },
     {
         value: "ai-action",
         label: "AI Action",
@@ -71,6 +102,14 @@ const actions = [
     {
         value: "ai-extract",
         label: "AI Extract",
+    },
+    {
+        value: "localstorage",
+        label: "Local Storage",
+    },
+    {
+        value: "file-upload",
+        label: "File Upload",
     },
     {
         value: "user-flow",
@@ -87,45 +126,5 @@ const actions = [
     {
         value: "visual-assert",
         label: "Visual Diff",
-    },
-    {
-        value: "click",
-        label: "Click",
-    },
-    {
-        value: "type",
-        label: "Type",
-    },
-    {
-        value: "press",
-        label: "Press",
-    },
-    {
-        value: "hover",
-        label: "Hover",
-    },
-    {
-        value: "scroll",
-        label: "Scroll",
-    },
-    {
-        value: "select",
-        label: "Select",
-    },
-    {
-        value: "wait",
-        label: "Wait",
-    },
-    {
-        value: "localstorage",
-        label: "Local Storage",
-    },
-    {
-        value: "file-upload",
-        label: "File Upload",
-    },
-    {
-        value: "captha",
-        label: "Solve Captcha",
     },
 ]

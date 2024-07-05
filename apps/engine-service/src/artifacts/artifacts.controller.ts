@@ -3,7 +3,7 @@ import { ArtifactsService } from './artifacts.service';
 import { CreateArtifactDto } from './dto/create-artifact.dto';
 import { UpdateArtifactDto } from './dto/update-artifact.dto';
 
-@Controller('artifacts')
+@Controller('teams/:teamId/artifacts')
 export class ArtifactsController {
   constructor(private readonly artifactsService: ArtifactsService) {}
 

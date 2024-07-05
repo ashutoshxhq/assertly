@@ -3,7 +3,7 @@ import { TestRunsService } from './test-runs.service';
 import { CreateTestRunDto } from './dto/create-test-run.dto';
 import { UpdateTestRunDto } from './dto/update-test-run.dto';
 
-@Controller('test-runs')
+@Controller('teams/:teamId/test-runs')
 export class TestRunsController {
   constructor(private readonly testRunsService: TestRunsService) {}
 

@@ -3,7 +3,7 @@ import { ClientCredentialsService } from './client-credentials.service';
 import { CreateClientCredentialDto } from './dto/create-client-credential.dto';
 import { UpdateClientCredentialDto } from './dto/update-client-credential.dto';
 
-@Controller('client-credentials')
+@Controller('teams/:teamId/client-credentials')
 export class ClientCredentialsController {
   constructor(private readonly clientCredentialsService: ClientCredentialsService) {}
 

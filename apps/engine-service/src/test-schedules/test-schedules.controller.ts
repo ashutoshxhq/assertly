@@ -3,7 +3,7 @@ import { TestSchedulesService } from './test-schedules.service';
 import { CreateTestScheduleDto } from './dto/create-test-schedule.dto';
 import { UpdateTestScheduleDto } from './dto/update-test-schedule.dto';
 
-@Controller('test-schedules')
+@Controller('teams/:teamId/test-schedules')
 export class TestSchedulesController {
   constructor(private readonly testSchedulesService: TestSchedulesService) {}
 

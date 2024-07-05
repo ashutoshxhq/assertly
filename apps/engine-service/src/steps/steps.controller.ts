@@ -3,7 +3,7 @@ import { StepsService } from './steps.service';
 import { CreateStepDto } from './dto/create-step.dto';
 import { UpdateStepDto } from './dto/update-step.dto';
 
-@Controller('steps')
+@Controller('teams/:teamId/steps')
 export class StepsController {
   constructor(private readonly stepsService: StepsService) {}
 

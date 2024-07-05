@@ -10,116 +10,116 @@ generator client {
 }
 
 model TestSpec {
-  id            String         @id @default(uuid()) @map("id")
-  title         String         @map("title")
-  status        String         @map("status")
-  metadata      Json           @map("metadata")
-  teamId        String         @map("team_id")
+  id            String         @id @default(uuid())
+  title         String        
+  status        String        
+  metadata      Json          
+  teamId        String        
   steps         Step[]
   testRuns      TestRuns[]
   testSchedules TestSchedule[]
-  lastRunAt     DateTime       @map("last_run_at")
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
+  lastRunAt     DateTime      
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@map("test_specs")
 }
 
 model UserFlow {
-  id        String   @id @default(uuid()) @map("id")
-  title     String   @map("title")
-  status    String   @map("status")
-  metadata  Json     @map("metadata")
-  teamId    String   @map("team_id")
+  id        String   @id @default(uuid())
+  title     String  
+  status    String  
+  metadata  Json    
+  teamId    String  
   steps     Step[]
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("user_flows")
 }
 
 model TestSchedule {
-  id        String   @id @default(uuid()) @map("id")
-  teamId    String   @map("team_id")
-  schedule  Json     @map("schedule")
+  id        String   @id @default(uuid())
+  teamId    String  
+  schedule  Json    
   spec      TestSpec @relation(fields: [specId], references: [id])
-  specId    String   @map("spec_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  specId    String  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("test_schedules")
 }
 
 model Step {
-  id         String    @id @default(uuid()) @map("id")
-  title      String    @map("title")
-  stepType   String    @map("step_type")
-  properties Json      @map("properties")
-  status     String    @map("status")
-  teamId     String    @map("team_id")
+  id         String    @id @default(uuid())
+  title      String   
+  stepType   String   
+  properties Json     
+  status     String   
+  teamId     String   
   spec       TestSpec? @relation(fields: [specId], references: [id])
-  specId     String?   @map("spec_id")
+  specId     String?  
   userFlow   UserFlow? @relation(fields: [userFlowId], references: [id])
   userFlowId String?
-  finishedAt DateTime  @map("finished_at")
-  createdAt  DateTime  @default(now()) @map("created_at")
-  updatedAt  DateTime  @updatedAt @map("updated_at")
+  finishedAt DateTime 
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
   @@map("steps")
 }
 
 model TestRuns {
-  id             String   @id @default(uuid()) @map("id")
-  title          String   @map("title")
-  status         String   @map("status")
-  metadata       Json     @map("metadata")
-  stepContext    Json     @map("step_context")
-  consoleContext Json     @map("console_context")
-  networkContext Json     @map("network_context")
+  id             String   @id @default(uuid())
+  title          String  
+  status         String  
+  metadata       Json    
+  stepContext    Json    
+  consoleContext Json    
+  networkContext Json    
   spec           TestSpec @relation(fields: [specId], references: [id])
   specId         String
-  startedAt      DateTime @map("started_at")
-  finishedAt     DateTime @map("finished_at")
-  teamId         String   @map("team_id")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  startedAt      DateTime
+  finishedAt     DateTime
+  teamId         String  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@map("test_runs")
 }
 
 model ClientCredentials {
-  id           String   @id @default(uuid()) @map("id")
-  clientId     String   @map("client_id")
-  clientSecret String   @map("client_secret")
-  permissions  Json     @map("permissions")
-  teamId       String   @map("team_id")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id           String   @id @default(uuid())
+  clientId     String  
+  clientSecret String  
+  permissions  Json    
+  teamId       String  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map("client_credentials")
 }
 
 model Artifacts {
-  id            String   @id @default(uuid()) @map("id")
-  name          String   @map("name")
-  artifact_type String   @map("artifact_type")
-  artifact_url  String   @map("artifact_url")
-  metadata      Json     @map("metadata")
-  teamId        String   @map("team_id")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id            String   @id @default(uuid())
+  name          String  
+  artifactType String  
+  artifactUrl  String  
+  metadata      Json    
+  teamId        String  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@map("artifacts")
 }
 
 model Integration {
-  id               String   @id @default(uuid()) @map("id")
-  name             String   @map("name")
-  integration_type String   @map("integration_type")
-  credentials      Json     @map("credentials")
-  teamId           String   @map("team_id")
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
+  id               String   @id @default(uuid())
+  name             String  
+  integrationType String  
+  credentials      Json    
+  teamId           String  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@map("integrations")
 }

@@ -1,4 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class ActionService {}
+export class ActionService {
+
+    async findLocator(data: any) {
+        
+    }
+}

@@ -1,7 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ActionService } from './action.service';
 
-@Controller('teams/:teamId/action')
+@Controller('teams/:teamId/actions')
 export class ActionController {
   constructor(private readonly actionService: ActionService) {}
+
+  @Post('find-locator')
+  async findLocator(@Body() data: any) {
+    const created = await this.actionService.findLocator(data);
+    return created;
+  }
 }

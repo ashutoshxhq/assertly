@@ -11,7 +11,7 @@ export class WebdriverService {
     constructor() { }
 
     async setupWebdriverClient(client: Socket, id: string) {
-        const browser = await chromium.launch({ headless: false });
+        const browser = await chromium.launch({ headless: true });
         const page = await browser.newPage();
         this.clients.set(id, { browser, page });
     }
@@ -43,7 +43,6 @@ export class WebdriverService {
                 const screenshot = (await clientSession.page.screenshot()).toString('base64');
                 const url = clientSession.page.url();
                 const hostname = new URL(url).hostname;
-                console.log("sending result for ",action.type)
                 client.send(JSON.stringify({
                     event: "ACTION_RESULT",
                     data: {

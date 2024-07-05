@@ -1,0 +1,36 @@
+version: '3.7'
+
+services:
+  engine_service:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - engine_service_db
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://engine_service_user:supersecretpassword@$POSTGRES_HOST:5432/engine_service_db?schema=public
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+
+  engine_service_db:
+    image: postgres:15
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_DB=$POSTGRES_DB
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/engine_service/data
+
+volumes:
+  pgdata:

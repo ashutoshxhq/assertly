@@ -89,7 +89,7 @@ const steps = [
     },
     {
         value: "wait",
-        label: "Wait For Time/Element",
+        label: "Wait For",
     },
     {
         value: "ai-action",

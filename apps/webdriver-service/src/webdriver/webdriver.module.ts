@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { WebdriverService } from './webdriver.service';
 import { WebdriverGateway } from './webdriver.gateway';
+import { WebdriverService } from './webdriver.service';
 
 @Module({
   providers: [WebdriverGateway, WebdriverService],

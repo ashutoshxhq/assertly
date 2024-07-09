@@ -4,10 +4,10 @@ import { FindLocatorDTO } from './dto/find-locator.dto';
 
 @Controller('teams/:teamId/actions')
 export class ActionController {
-  constructor(private readonly actionService: ActionService) {}
+    constructor(private readonly actionService: ActionService) {}
 
-  @Post('find-locator')
-  async findLocator(@Body() data: FindLocatorDTO) {
-    return await this.actionService.findLocator(data);
-  }
+    @Post('find-locator')
+    async findLocator(@Body() data: FindLocatorDTO) {
+        return await this.actionService.findLocator(data);
+    }
 }

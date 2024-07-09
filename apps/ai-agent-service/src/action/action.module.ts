@@ -4,7 +4,7 @@ import { ActionController } from './action.controller';
 import { LanguageModelService } from 'src/language-model/language-model.service';
 
 @Module({
-  controllers: [ActionController],
-  providers: [ActionService, LanguageModelService],
+    controllers: [ActionController],
+    providers: [ActionService, LanguageModelService],
 })
 export class ActionModule {}

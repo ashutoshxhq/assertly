@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Socket } from 'socket.io';
+import type { Socket } from 'socket.io';
 
 @Injectable()
 export class AgentSocketService {
-
-    async orchestrate(client: Socket, message: string) { }
+    async orchestrate(client: Socket, message: string) {
+        console.log('message', message);
+    }
 }

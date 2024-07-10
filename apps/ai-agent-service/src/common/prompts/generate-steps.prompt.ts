@@ -32,7 +32,6 @@ Natural Language Step Description from User:
 5. Verify that the user profile is visible.
 
 Output:
-
 [
     {
         "type": "goto",

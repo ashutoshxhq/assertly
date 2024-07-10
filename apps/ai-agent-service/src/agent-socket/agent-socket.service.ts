@@ -8,7 +8,7 @@ import {
     generateStepsSystemPrompt,
     generateStepsUserPrompt,
 } from 'src/common/prompts/generate-steps.prompt';
-import { Step } from '@prisma/client';
+import { Step } from './dto/step.dto';
 
 @Injectable()
 export class AgentSocketService {

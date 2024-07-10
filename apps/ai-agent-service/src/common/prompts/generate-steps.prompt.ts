@@ -8,7 +8,6 @@ JSON Schema:
 \`\`\`
 
 Instructions:
-
 1. If there are existing steps, pick up from where they left off.
 2. Identify the high-level actions described in the natural language input.
 3. Map each action to the appropriate StepType based on the JSON schema.

@@ -14,12 +14,18 @@ jobs:
             CI: false
         steps:
             - uses: actions/checkout@v2
+            
+            - uses: pnpm/action-setup@v4
+              name: Install pnpm
+              with:
+                version: 8
+                run_install: false
 
             - name: Install dependencies
-              run: cd apps/assertly-app && npm install
+              run: cd apps/assertly-app && pnpm install
 
             - name: Build
-              run: cd apps/assertly-app && npm run build
+              run: cd apps/assertly-app && pnpm run build
 
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v1

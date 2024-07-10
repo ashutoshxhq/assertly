@@ -2,17 +2,24 @@ FROM node:18 AS builder
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+# Install pnpm
+RUN npm install -g pnpm
 
-RUN npm install @nestjs/cli -g
-RUN npm install
+# Set up pnpm environment
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+
+COPY package.json ./
+
+RUN pnpm install @nestjs/cli -g
+RUN pnpm install
 
 COPY prisma ./prisma
 
 COPY . .
 
 RUN npx prisma generate
-RUN npm run build
+RUN pnpm run build
 
 FROM node:18-slim
 

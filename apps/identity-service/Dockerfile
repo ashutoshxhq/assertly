@@ -1,4 +1,4 @@
-FROM rust:1.78.0-slim-bullseye AS build
+FROM rust:1.78.0 AS build
 
 # View app name in Cargo.toml
 ARG APP_NAME=identity_service

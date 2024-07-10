@@ -1,4 +1,4 @@
-export type ActionType =
+export type StepType =
     | 'javascript'
     | 'visual-assert'
     | 'goto'
@@ -12,37 +12,37 @@ export type ActionType =
     | 'localstorage'
     | 'file-upload';
 
-export interface BaseAction {
-    type: ActionType;
+export interface BaseStep {
+    type: StepType;
     props: Record<string, any>;
 }
 
-export interface JavaScriptAction extends BaseAction {
+export interface JavaScriptStep extends BaseStep {
     type: 'javascript';
     props: {
         script: string;
     };
 }
 
-export interface VisualAssertAction extends BaseAction {
+export interface VisualAssertStep extends BaseStep {
     type: 'visual-assert';
 }
 
-export interface GotoAction extends BaseAction {
+export interface GotoStep extends BaseStep {
     type: 'goto';
     props: {
         url: string;
     };
 }
 
-export interface ClickAction extends BaseAction {
+export interface ClickStep extends BaseStep {
     type: 'click';
     props: {
         selector: string;
     };
 }
 
-export interface TypeAction extends BaseAction {
+export interface TypeStep extends BaseStep {
     type: 'type';
     props: {
         selector: string;
@@ -50,7 +50,7 @@ export interface TypeAction extends BaseAction {
     };
 }
 
-export interface PressAction extends BaseAction {
+export interface PressStep extends BaseStep {
     type: 'press';
     props: {
         selector: string;
@@ -58,21 +58,21 @@ export interface PressAction extends BaseAction {
     };
 }
 
-export interface HoverAction extends BaseAction {
+export interface HoverStep extends BaseStep {
     type: 'hover';
     props: {
         selector: string;
     };
 }
 
-export interface ScrollAction extends BaseAction {
+export interface ScrollStep extends BaseStep {
     type: 'scroll';
     props: {
         selector: string;
     };
 }
 
-export interface SelectAction extends BaseAction {
+export interface SelectStep extends BaseStep {
     type: 'select';
     props: {
         selector: string;
@@ -85,7 +85,7 @@ export interface SelectAction extends BaseAction {
     };
 }
 
-export interface WaitAction extends BaseAction {
+export interface WaitStep extends BaseStep {
     type: 'wait';
     props: {
         selector?: string;
@@ -93,7 +93,7 @@ export interface WaitAction extends BaseAction {
     };
 }
 
-export interface LocalStorageAction extends BaseAction {
+export interface LocalStorageStep extends BaseStep {
     type: 'localstorage';
     props: {
         operation: 'set' | 'get';
@@ -102,7 +102,7 @@ export interface LocalStorageAction extends BaseAction {
     };
 }
 
-export interface FileUploadAction extends BaseAction {
+export interface FileUploadStep extends BaseStep {
     type: 'file-upload';
     props: {
         selector: string;
@@ -110,16 +110,16 @@ export interface FileUploadAction extends BaseAction {
     };
 }
 
-export type Action =
-    | JavaScriptAction
-    | VisualAssertAction
-    | GotoAction
-    | ClickAction
-    | TypeAction
-    | PressAction
-    | HoverAction
-    | ScrollAction
-    | SelectAction
-    | WaitAction
-    | LocalStorageAction
-    | FileUploadAction;
+export type Step =
+    | JavaScriptStep
+    | VisualAssertStep
+    | GotoStep
+    | ClickStep
+    | TypeStep
+    | PressStep
+    | HoverStep
+    | ScrollStep
+    | SelectStep
+    | WaitStep
+    | LocalStorageStep
+    | FileUploadStep;

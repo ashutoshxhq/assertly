@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: assertly-gatekeeper-service-deployment
+    labels:
+        name: assertly-gatekeeper-service-deployment
+        app: assertly
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: assertly
+    template:
+        metadata:
+            name: assertly-gatekeeper-service-pod
+            labels:
+                app: assertly
+                name: assertly-gatekeeper-service-pod
+        spec:
+            containers:
+                - name: assertly-gatekeeper-service-pod
+                  image: 381492239882.dkr.ecr.us-west-2.amazonaws.com/assertly-gatekeeper-service:latest
+                  ports:
+                      - containerPort: 8000
+                  env:
+                      - name: PORT
+                        value: '8000'
+                  envFrom:
+                      - secretRef:
+                            name: assertly-gatekeeper-service-secrets

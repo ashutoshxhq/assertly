@@ -31,8 +31,7 @@ export class ActionService {
         const locator = JSON.parse(res.message.content).locator;
 
         return {
-                              // eslint-disable-next-line prettier/prettier
-                                                                                    locator,
+            locator,
         };
     }
 }

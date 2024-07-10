@@ -1,7 +1,7 @@
-FROM rust:1.76 as builder
+FROM rust:1.78 as builder
 
-RUN USER=root cargo new --bin gatekeeper-service
-WORKDIR ./gatekeeper-service
+RUN USER=root cargo new --bin assertly-engine-service
+WORKDIR ./assertly-engine-service
 COPY ./Cargo.toml ./Cargo.toml
 
 ADD . ./
@@ -25,11 +25,11 @@ RUN groupadd $APP_USER \
     && useradd -g $APP_USER $APP_USER \
     && mkdir -p ${APP}
 
-COPY --from=builder /gatekeeper-service/target/release/gatekeeper-service ${APP}/gatekeeper-service
+COPY --from=builder /assertly-engine-service/target/release/assertly-engine-service ${APP}/assertly-engine-service
 
 RUN chown -R $APP_USER:$APP_USER ${APP}
 
 USER $APP_USER
 WORKDIR ${APP}
 
-CMD ["./gatekeeper-service"]
+CMD ["./assertly-engine-service"]

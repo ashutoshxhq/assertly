@@ -1,8 +1,8 @@
 export const findLocatorPrompt = (data: {
-  message: string;
-  pageContent: string;
+    message: string;
+    pageContent: string;
 }) => {
-  return `Here is the html content of a webpage can you help me find the correct locator for playwright using the given message from user.
+    return `Here is the html content of a webpage can you help me find the correct locator for playwright using the given message from user.
 # User message to find locator
 \`\`\`
 ${data.message}

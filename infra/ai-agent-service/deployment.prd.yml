@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: assertly-webdriver-service-deployment
+    name: assertly-ai-agent-service-deployment
     labels:
-        name: assertly-webdriver-service-deployment
+        name: assertly-ai-agent-service-deployment
         app: assertly
 spec:
     replicas: 1
@@ -12,14 +12,14 @@ spec:
             app: assertly
     template:
         metadata:
-            name: assertly-webdriver-service-pod
+            name: assertly-ai-agent-service-pod
             labels:
                 app: assertly
-                name: assertly-webdriver-service-pod
+                name: assertly-ai-agent-service-pod
         spec:
             containers:
-                - name: assertly-webdriver-service-pod
-                  image: 381492239882.dkr.ecr.us-west-2.amazonaws.com/assertly-webdriver-service:latest
+                - name: assertly-ai-agent-service-pod
+                  image: 381492239882.dkr.ecr.us-west-2.amazonaws.com/assertly-ai-agent-service:latest
                   ports:
                       - containerPort: 8000
                   env:
@@ -27,4 +27,4 @@ spec:
                         value: '8000'
                   envFrom:
                       - secretRef:
-                            name: assertly-webdriver-service-secrets
+                            name: assertly-ai-agent-service-secrets

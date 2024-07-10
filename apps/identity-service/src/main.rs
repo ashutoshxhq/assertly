@@ -70,11 +70,11 @@ async fn main() {
             .into_inner(),
     );
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:8000")
         .await
         .expect("unable to create listner");
 
-    tracing::info!("Server started, listening on port 8080");
+    tracing::info!("Server started, listening on port 8000");
     axum::serve(listener, app)
         .await
         .expect("unable to start srver");

@@ -1,4 +1,4 @@
-name: Deploy AI Agent Service to Server
+name: Deploy Engine Service to Server
 on:
     push:
         paths:

@@ -1,4 +1,4 @@
-name: Deploy AI Agent Service to Server
+name: Deploy Identity Service to Server
 on:
     push:
         paths:

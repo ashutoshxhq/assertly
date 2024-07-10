@@ -1,35 +1,30 @@
-FROM rust:1.76 as builder
+FROM rust:1.70.0-slim-bullseye AS build
 
-RUN USER=root cargo new --bin gatekeeper-service
-WORKDIR ./gatekeeper-service
-COPY ./Cargo.toml ./Cargo.toml
+# View app name in Cargo.toml
+ARG APP_NAME=gatekeeper_service
 
-ADD . ./
-RUN cargo build --release
+WORKDIR /build
 
+COPY Cargo.lock Cargo.toml ./
+RUN mkdir src \
+    && echo "// dummy file" > src/lib.rs \
+    && cargo build --release
 
-FROM debian:bullseye-slim
+COPY src src
+RUN cargo build --locked --release
+RUN cp ./target/release/$APP_NAME /bin/server
 
-ARG APP=/usr/src/app
+FROM debian:bullseye-slim AS final
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates tzdata libpq-dev gcc libc6-dev curl gnupg lsb-release \
-    && rm -rf /var/lib/apt/lists/*
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "10001" \
+    appuser
+USER appuser
 
-EXPOSE 8000
-
-ENV TZ=Etc/UTC \
-    APP_USER=appuser
-
-RUN groupadd $APP_USER \
-    && useradd -g $APP_USER $APP_USER \
-    && mkdir -p ${APP}
-
-COPY --from=builder /gatekeeper-service/target/release/gatekeeper-service ${APP}/gatekeeper-service
-
-RUN chown -R $APP_USER:$APP_USER ${APP}
-
-USER $APP_USER
-WORKDIR ${APP}
-
-CMD ["./gatekeeper-service"]
+COPY --from=build /bin/server /bin/
+CMD ["/bin/server"]

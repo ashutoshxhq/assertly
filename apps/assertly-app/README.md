@@ -1,3 +1,3 @@
 # Assertly App
 
-Web client for assertly
+Web client for assertly.

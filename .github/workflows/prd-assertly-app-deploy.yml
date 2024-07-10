@@ -1,0 +1,35 @@
+name: Deploy Assertly App to S3
+on:
+    push:
+        paths:
+            - 'apps/assertly-app/**'
+        branches:
+            - main
+jobs:
+    run:
+        runs-on: ubuntu-latest
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            CI: false
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install dependencies
+              run: cd apps/assertly-app && npm install
+
+            - name: Build
+              run: cd apps/assertly-app && npm run build
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: us-west-2
+
+            - name: Deploy app to Bucket
+              run: aws s3 sync ./apps/assertly-app/dist/ s3://prd-assertly-app/
+
+            - name: Invalidate dashboard cloudfront
+              run: aws cloudfront create-invalidation --distribution-id E2IRH7B2SA4MBC --paths "/*"

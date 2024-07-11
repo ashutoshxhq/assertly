@@ -1,5 +1,5 @@
-import { Button } from "@webassert/components";
 import { ReactNode } from "react";
+import { Button } from "src/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "src/components/ui/tooltip";
 
 export interface SidebarButtonsProps {

@@ -1,3 +1,3 @@
 # Assertly App
 
-Web console for assertly.
+Web & Desktop application of assertly.

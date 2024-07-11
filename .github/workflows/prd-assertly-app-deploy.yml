@@ -23,8 +23,11 @@ jobs:
 
             - name: Install dependencies
               run: cd apps/assertly-app && pnpm install
+            
+            - name: Build Library
+              run: cd libs/web-components && pnpm run build
 
-            - name: Build
+            - name: Build App
               run: cd apps/assertly-app && pnpm run build
 
             - name: Configure AWS Credentials

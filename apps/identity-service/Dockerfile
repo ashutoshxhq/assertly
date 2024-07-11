@@ -1,30 +1,28 @@
-FROM rust:1.78.0 AS build
+# Stage 1: Build the Rust application
+FROM rust:1.79.0 as build
 
-# View app name in Cargo.toml
 ARG APP_NAME=identity_service
 
-WORKDIR /build
+WORKDIR /usr/src/app
 
+# Copy only the necessary files for dependency resolution
 COPY Cargo.lock Cargo.toml ./
-RUN mkdir src \
-    && echo "// dummy file" > src/lib.rs \
-    && cargo build --release
+RUN mkdir src && echo "// dummy file" > src/lib.rs
 
-COPY src src
-RUN cargo build --locked --release
-RUN cp ./target/release/$APP_NAME /bin/server
+# Build the application
+COPY src ./src
+RUN cargo build --release
 
-FROM debian:bullseye-slim AS final
+# Stage 2: Create the final lightweight image
+FROM debian:buster-slim
 
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "10001" \
-    appuser
-USER appuser
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libpq5 \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY --from=build /bin/server /bin/
-CMD ["/bin/server"]
+# Copy the binary from the build stage
+COPY --from=build /usr/src/app/target/release/$APP_NAME /usr/local/bin/$APP_NAME
+
+# Set the entry point for the container
+CMD ["/usr/local/bin/identity_service"]

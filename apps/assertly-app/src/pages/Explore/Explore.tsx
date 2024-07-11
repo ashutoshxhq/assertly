@@ -1,8 +1,8 @@
 import { Textarea } from "src/components/ui/textarea"
-import { Button } from "../../../../../libs/web-components/dist/main"
 import { useRef } from "react";
 import { Avatar, AvatarFallback } from "src/components/ui/avatar";
 import { RiSendPlane2Line } from "react-icons/ri";
+import { Button } from "src/components/ui/button";
 
 const Explore = () => {
     const textAreaRef = useRef<any>(null);

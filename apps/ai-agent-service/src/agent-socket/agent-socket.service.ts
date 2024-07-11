@@ -1,8 +1,9 @@
-import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { Inject, Injectable } from '@nestjs/common';
 import type { Socket } from 'socket.io';
 import { ChatMessageDTO } from './dto/chat-message.dto';
-import { LanguageModelService } from 'src/language-model/language-model.service';
+import { LanguageModelService } from '../language-model/language-model.service';
 import { ConversationContext } from './dto/conversation.dto';
 import {
     generateStepsSystemPrompt,
@@ -14,7 +15,7 @@ import { Step } from './dto/step.dto';
 export class AgentSocketService {
     constructor(
         @Inject(CACHE_MANAGER) private cacheManager: Cache,
-        private llm: LanguageModelService,
+        @Inject(LanguageModelService) private llm: LanguageModelService,
     ) {}
 
     async orchestrate(client: Socket, data: ChatMessageDTO) {

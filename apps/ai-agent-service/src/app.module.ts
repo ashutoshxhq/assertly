@@ -10,7 +10,9 @@ import { CacheModule } from '@nestjs/cache-manager';
             isGlobal: true,
             envFilePath: `.env.${process.env.NODE_ENV}`,
         }),
-        CacheModule.register(),
+        CacheModule.register({
+            isGlobal: true,
+        }),
         AgentSocketModule,
         ActionModule,
     ],

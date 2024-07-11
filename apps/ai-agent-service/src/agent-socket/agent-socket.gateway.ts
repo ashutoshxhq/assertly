@@ -1,9 +1,9 @@
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
-import type { AgentSocketService } from './agent-socket.service';
-import type { Socket } from 'socket.io';
+import { AgentSocketService } from './agent-socket.service';
+import { Socket } from 'socket.io';
 import { ChatMessageDTO } from './dto/chat-message.dto';
 
-@WebSocketGateway()
+@WebSocketGateway({ transports: ['websocket'] })
 export class AgentSocketGateway {
     constructor(private readonly agentSocketService: AgentSocketService) {}
 

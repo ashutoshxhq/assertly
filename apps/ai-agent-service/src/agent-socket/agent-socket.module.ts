@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AgentSocketService } from './agent-socket.service';
 import { AgentSocketGateway } from './agent-socket.gateway';
-import { LanguageModelService } from 'src/language-model/language-model.service';
+import { LanguageModelModule } from '../language-model/language-model.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
-    providers: [AgentSocketGateway, AgentSocketService, LanguageModelService],
+    imports: [LanguageModelModule, CacheModule.register()],
+    providers: [AgentSocketGateway, AgentSocketService],
 })
 export class AgentSocketModule {}

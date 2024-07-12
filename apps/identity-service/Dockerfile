@@ -1,4 +1,4 @@
-FROM rust:1.78 as builder
+FROM rust:1.78-bullseye as builder
 
 RUN USER=root cargo new --bin identity_service
 WORKDIR ./identity_service
@@ -12,7 +12,7 @@ RUN rm ./target/release/deps/identity_service*
 RUN cargo build --release
 
 
-FROM debian:buster-slim
+FROM debian:bullseye-slim
 ARG APP=/usr/src/app
 
 RUN apt-get update \

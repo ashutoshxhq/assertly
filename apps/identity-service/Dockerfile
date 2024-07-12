@@ -1,28 +1,38 @@
-# Stage 1: Build the Rust application
-FROM rust:1.79.0 as build
+FROM rust:1.78 as builder
 
-ARG APP_NAME=identity_service
+RUN USER=root cargo new --bin identity_service
+WORKDIR ./identity_service
+COPY ./Cargo.toml ./Cargo.toml
+RUN cargo build --release
+RUN rm src/*.rs
 
-WORKDIR /usr/src/app
+ADD . ./
 
-# Copy only the necessary files for dependency resolution
-COPY Cargo.lock Cargo.toml ./
-RUN mkdir src && echo "// dummy file" > src/lib.rs
-
-# Build the application
-COPY src ./src
+RUN rm ./target/release/deps/identity_service*
 RUN cargo build --release
 
-# Stage 2: Create the final lightweight image
-FROM debian:buster-slim
 
-# Install runtime dependencies
-RUN apt-get update && apt-get install -y \
-    libpq5 \
+FROM debian:buster-slim
+ARG APP=/usr/src/app
+
+RUN apt-get update \
+    && apt-get install -y ca-certificates tzdata libpq5 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the binary from the build stage
-COPY --from=build /usr/src/app/target/release/$APP_NAME /usr/local/bin/$APP_NAME
+EXPOSE 8000
 
-# Set the entry point for the container
-CMD ["/usr/local/bin/identity_service"]
+ENV TZ=Etc/UTC \
+    APP_USER=appuser
+
+RUN groupadd $APP_USER \
+    && useradd -g $APP_USER $APP_USER \
+    && mkdir -p ${APP}
+
+COPY --from=builder /identity_service/target/release/identity_service ${APP}/identity_service
+
+RUN chown -R $APP_USER:$APP_USER ${APP}
+
+USER $APP_USER
+WORKDIR ${APP}
+
+CMD ["./identity_service"]

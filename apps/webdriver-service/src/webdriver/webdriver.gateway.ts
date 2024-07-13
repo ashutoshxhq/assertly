@@ -8,7 +8,7 @@ import { Socket } from 'socket.io';
 import { Action } from 'src/common/playwright/playwright.types';
 import { WebdriverService } from './webdriver.service';
 
-@WebSocketGateway({ transports: ['websocket'], path: 'v1' })
+@WebSocketGateway({ transports: ['websocket'], path: 'v1/socket' })
 export class WebdriverGateway
     implements OnGatewayConnection, OnGatewayDisconnect
 {

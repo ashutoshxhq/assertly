@@ -12,6 +12,10 @@ jobs:
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             CI: false
+            WEBDRIVER_SERVICE_URL: https://api.assertly.ai/v1/webdriver
+            AI_AGENT_SERVICE_URL: https://api.assertly.ai/v1/ai-agent
+            ENGINE_SERVICE_URL: https://api.assertly.ai/v1/engine
+            IDENTIY_SERVICE_URL: https://api.assertly.ai/v1/identity
         steps:
             - uses: actions/checkout@v2
             

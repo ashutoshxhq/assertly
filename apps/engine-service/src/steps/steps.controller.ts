@@ -1,15 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { StepsService } from './steps.service';
 import { CreateStepDto } from './dto/create-step.dto';
 import { UpdateStepDto } from './dto/update-step.dto';
 
-@Controller('teams/:teamId/steps')
+@Controller('v1/teams/:teamId/steps')
 export class StepsController {
   constructor(private readonly stepsService: StepsService) {}
 
   @Post()
-  async create(@Body() createStepDto: CreateStepDto, @Query('query') query: string) {
-    const created = await this.stepsService.create(createStepDto, { crudQuery: query });
+  async create(
+    @Body() createStepDto: CreateStepDto,
+    @Query('query') query: string,
+  ) {
+    const created = await this.stepsService.create(createStepDto, {
+      crudQuery: query,
+    });
     return created;
   }
 
@@ -31,7 +45,9 @@ export class StepsController {
     @Body() updateStepDto: UpdateStepDto,
     @Query('query') query: string,
   ) {
-    const updated = await this.stepsService.update(id, updateStepDto, { crudQuery: query });
+    const updated = await this.stepsService.update(id, updateStepDto, {
+      crudQuery: query,
+    });
     return updated;
   }
 

@@ -1,15 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { TestSpecsService } from './test-specs.service';
 import { CreateTestSpecDto } from './dto/create-test-spec.dto';
 import { UpdateTestSpecDto } from './dto/update-test-spec.dto';
 
-@Controller('teams/:teamId/test-specs')
+@Controller('v1/teams/:teamId/test-specs')
 export class TestSpecsController {
   constructor(private readonly testSpecsService: TestSpecsService) {}
 
   @Post()
-  async create(@Body() createTestSpecDto: CreateTestSpecDto, @Query('query') query: string) {
-    const created = await this.testSpecsService.create(createTestSpecDto, { crudQuery: query });
+  async create(
+    @Body() createTestSpecDto: CreateTestSpecDto,
+    @Query('query') query: string,
+  ) {
+    const created = await this.testSpecsService.create(createTestSpecDto, {
+      crudQuery: query,
+    });
     return created;
   }
 
@@ -31,7 +45,9 @@ export class TestSpecsController {
     @Body() updateTestSpecDto: UpdateTestSpecDto,
     @Query('query') query: string,
   ) {
-    const updated = await this.testSpecsService.update(id, updateTestSpecDto, { crudQuery: query });
+    const updated = await this.testSpecsService.update(id, updateTestSpecDto, {
+      crudQuery: query,
+    });
     return updated;
   }
 

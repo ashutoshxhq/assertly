@@ -4,6 +4,6 @@ import { ClientCredentialsController } from './client-credentials.controller';
 
 @Module({
   controllers: [ClientCredentialsController],
-  providers: [ClientCredentialsService]
+  providers: [ClientCredentialsService],
 })
 export class ClientCredentialsModule {}

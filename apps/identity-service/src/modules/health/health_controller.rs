@@ -5,7 +5,8 @@ pub async fn health() -> impl IntoResponse {
     (
         StatusCode::OK,
         Json(json!({
-            "status": "ok",
+            "status": "UP",
+            "version": "1.0.0",
         })),
     )
 }

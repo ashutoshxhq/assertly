@@ -3,7 +3,7 @@ import { UserFlowsService } from './user-flows.service';
 import { CreateUserFlowDto } from './dto/create-user-flow.dto';
 import { UpdateUserFlowDto } from './dto/update-user-flow.dto';
 
-@Controller('teams/:teamId/user-flows')
+@Controller('v1/teams/:teamId/user-flows')
 export class UserFlowsController {
   constructor(private readonly userFlowsService: UserFlowsService) {}
 

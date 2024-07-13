@@ -3,7 +3,7 @@ import { AgentSocketService } from './agent-socket.service';
 import { Socket } from 'socket.io';
 import { ChatMessageDTO } from './dto/chat-message.dto';
 
-@WebSocketGateway({ transports: ['websocket'] })
+@WebSocketGateway({ transports: ['websocket'], path: 'v1' })
 export class AgentSocketGateway {
     constructor(private readonly agentSocketService: AgentSocketService) {}
 

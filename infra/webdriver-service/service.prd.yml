@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: webdriver-service-service
+    name: webdriver-service
     labels:
-        app: webdriver-service-service
+        app: webdriver-service
 spec:
     type: ClusterIP
     selector:

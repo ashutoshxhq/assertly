@@ -9,10 +9,22 @@ import { StepsModule } from './steps/steps.module';
 import { TestRunsModule } from './test-runs/test-runs.module';
 import { IntegrationsModule } from './integrations/integrations.module';
 import { ClientCredentialsModule } from './client-credentials/client-credentials.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
-  imports: [PrismaCrudModule.register({
-    prismaService: PrismaService,
-  }), ArtifactsModule, TestSpecsModule, UserFlowsModule, TestSchedulesModule, StepsModule, TestRunsModule, ClientCredentialsModule, IntegrationsModule],
+  imports: [
+    PrismaCrudModule.register({
+      prismaService: PrismaService,
+    }),
+    ArtifactsModule,
+    TestSpecsModule,
+    UserFlowsModule,
+    TestSchedulesModule,
+    StepsModule,
+    TestRunsModule,
+    ClientCredentialsModule,
+    IntegrationsModule,
+    HealthModule,
+  ],
 })
-export class AppModule { }
+export class AppModule {}

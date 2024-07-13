@@ -41,22 +41,22 @@ async fn main() {
     }
     let mut service = GatekeeperService::new();
     service.register_external_service(
-        "http://ai-agent-service-service".to_string(),
+        "http://ai-agent-service".to_string(),
         "ai-agent".to_string(),
         "v1".to_string(),
     );
     service.register_external_service(
-        "http://engine-service-service".to_string(),
+        "http://engine-service".to_string(),
         "engine".to_string(),
         "v1".to_string(),
     );
     service.register_external_service(
-        "http://identity-service-service".to_string(),
+        "http://identity-service".to_string(),
         "identity".to_string(),
         "v1".to_string(),
     );
     service.register_external_service(
-        "http://webdriver-service-service".to_string(),
+        "http://webdriver-service".to_string(),
         "webdriver".to_string(),
         "v1".to_string(),
     );

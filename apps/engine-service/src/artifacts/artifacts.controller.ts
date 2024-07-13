@@ -1,15 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ArtifactsService } from './artifacts.service';
 import { CreateArtifactDto } from './dto/create-artifact.dto';
 import { UpdateArtifactDto } from './dto/update-artifact.dto';
 
-@Controller('teams/:teamId/artifacts')
+@Controller('v1/teams/:teamId/artifacts')
 export class ArtifactsController {
   constructor(private readonly artifactsService: ArtifactsService) {}
 
   @Post()
-  async create(@Body() createArtifactDto: CreateArtifactDto, @Query('query') query: string) {
-    const created = await this.artifactsService.create(createArtifactDto, { crudQuery: query });
+  async create(
+    @Body() createArtifactDto: CreateArtifactDto,
+    @Query('query') query: string,
+  ) {
+    const created = await this.artifactsService.create(createArtifactDto, {
+      crudQuery: query,
+    });
     return created;
   }
 
@@ -31,7 +45,9 @@ export class ArtifactsController {
     @Body() updateArtifactDto: UpdateArtifactDto,
     @Query('query') query: string,
   ) {
-    const updated = await this.artifactsService.update(id, updateArtifactDto, { crudQuery: query });
+    const updated = await this.artifactsService.update(id, updateArtifactDto, {
+      crudQuery: query,
+    });
     return updated;
   }
 

@@ -1,3 +1,4 @@
+# Build stage
 FROM node:18 AS builder
 
 WORKDIR /usr/src/app
@@ -11,11 +12,12 @@ COPY . .
 
 RUN npm run build
 
-FROM node:18-slim
+# Production stage
+FROM mcr.microsoft.com/playwright:v1.45.1-jammy
 
 WORKDIR /usr/src/app
-RUN apt-get update -y && apt-get install -y openssl
 
+# Copy node_modules and built files from the builder stage
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/dist ./dist
 

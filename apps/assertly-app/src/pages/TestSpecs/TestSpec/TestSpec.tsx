@@ -26,6 +26,7 @@ import {
 import Steps from './Steps';
 import PlannerAI from './PlannerAI';
 import { Switch } from 'src/components/ui/switch';
+import { WEBDRIVER_SERVICE_URL } from 'src/config/constants';
 
 interface StepData {
     id: string;
@@ -35,8 +36,6 @@ interface StepData {
 
 const TestSpec = () => {
     const navigate = useNavigate();
-
-    const WS_URL = `ws://localhost:3000?clientId=1`;
 
     const [_messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>(
         [],
@@ -50,7 +49,7 @@ const TestSpec = () => {
     const [livePreview, setLivePreview] = useState(false);
 
     const [lastPageURL, setLastPageURL] = useState('about:blank');
-    const { sendMessage, lastMessage } = useWebSocket(WS_URL);
+    const { sendMessage, lastMessage } = useWebSocket(WEBDRIVER_SERVICE_URL);
 
     useEffect(() => {
         if (lastMessage !== null) {

@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { UserFlowsService } from './user-flows.service';
 import { CreateUserFlowDto } from './dto/create-user-flow.dto';
 import { UpdateUserFlowDto } from './dto/update-user-flow.dto';
@@ -8,8 +17,13 @@ export class UserFlowsController {
   constructor(private readonly userFlowsService: UserFlowsService) {}
 
   @Post()
-  async create(@Body() createUserFlowDto: CreateUserFlowDto, @Query('query') query: string) {
-    const created = await this.userFlowsService.create(createUserFlowDto, { crudQuery: query });
+  async create(
+    @Body() createUserFlowDto: CreateUserFlowDto,
+    @Query('query') query: string,
+  ) {
+    const created = await this.userFlowsService.create(createUserFlowDto, {
+      crudQuery: query,
+    });
     return created;
   }
 
@@ -31,7 +45,9 @@ export class UserFlowsController {
     @Body() updateUserFlowDto: UpdateUserFlowDto,
     @Query('query') query: string,
   ) {
-    const updated = await this.userFlowsService.update(id, updateUserFlowDto, { crudQuery: query });
+    const updated = await this.userFlowsService.update(id, updateUserFlowDto, {
+      crudQuery: query,
+    });
     return updated;
   }
 

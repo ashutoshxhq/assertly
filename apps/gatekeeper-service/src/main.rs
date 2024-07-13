@@ -2,6 +2,7 @@ pub mod middleware;
 pub mod proxy_handler;
 pub mod router;
 pub mod service;
+pub mod health;
 
 use axum::Router;
 use dotenvy::dotenv;

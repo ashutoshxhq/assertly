@@ -2,9 +2,7 @@ use axum::{middleware as axum_middleware, routing::any, Extension, Router};
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 
 use crate::{
-    middleware::auth,
-    proxy_handler::{Client, GatekeeperProxyHandler},
-    service::GatekeeperService,
+    health::health, middleware::auth, proxy_handler::{Client, GatekeeperProxyHandler}, service::GatekeeperService
 };
 
 pub fn proxy_router(client: Client, service: GatekeeperService) -> Router {
@@ -20,16 +18,17 @@ pub fn proxy_router(client: Client, service: GatekeeperService) -> Router {
             "/:service/:version/health",
             any(GatekeeperProxyHandler::handle),
         )
+        .route("/gatekeeper/v1/health", any(health))
         .route(
-            "/engine/:version/authn/register",
+            "/identity/:version/authn/register",
             any(GatekeeperProxyHandler::handle),
         )
         .route(
-            "/engine/:version/authn/login",
+            "/identity/:version/authn/login",
             any(GatekeeperProxyHandler::handle),
         )
         .route(
-            "/engine/:version/authn/token",
+            "/identity/:version/authn/token",
             any(GatekeeperProxyHandler::handle),
         )
         .with_state(client)

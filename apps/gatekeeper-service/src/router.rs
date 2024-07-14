@@ -1,8 +1,10 @@
-use axum::{middleware as axum_middleware, routing::any, Extension, Router};
+use axum::{routing::any, Extension, Router};
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
 
 use crate::{
-    health::health, middleware::auth, proxy_handler::{Client, GatekeeperProxyHandler}, service::GatekeeperService
+    health::health,
+    proxy_handler::{Client, GatekeeperProxyHandler},
+    service::GatekeeperService,
 };
 
 pub fn proxy_router(client: Client, service: GatekeeperService) -> Router {
@@ -12,7 +14,7 @@ pub fn proxy_router(client: Client, service: GatekeeperService) -> Router {
             "/:service/:version/*path",
             any(GatekeeperProxyHandler::handle),
         )
-        .route_layer(axum_middleware::from_fn(auth))
+        // .route_layer(axum_middleware::from_fn(auth))
         // Public Routes go here
         .route(
             "/:service/:version/health",

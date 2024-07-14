@@ -15,10 +15,9 @@ interface StepsProps {
 const Steps: React.FC<StepsProps> = ({ runStep }) => {
     const [steps, setSteps] = useAtom(testSpecStepsAtom);
     const [currentStepIndex] = useAtom(testSpecLastExecutedStepIndexAtom);
-
     const addStep = () => {
         const newStep = {
-            id: Date.now().toString(),
+            id: steps.length.toString(),
             index: steps.length,
             type: "",
             props: {},

@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Browser, Page, chromium } from 'playwright';
 import { Socket } from 'socket.io';
 import { PlaywrightClient } from 'src/common/playwright/playwright.client';
@@ -9,7 +10,7 @@ import { Action } from 'src/common/playwright/playwright.types';
 export class WebdriverService {
     private clients: Map<string, { browser: Browser; page: Page }> = new Map();
 
-    constructor() {}
+    constructor(private configService: ConfigService) {}
 
     async setupWebdriverClient(client: Socket, id: string) {
         const browser = await chromium.launch({ headless: true });
@@ -34,11 +35,18 @@ export class WebdriverService {
         const playwrightClient = new PlaywrightClient(
             clientSession.browser,
             clientSession.page,
+            this.configService
         );
 
         for (const action of actions) {
             try {
-                await playwrightClient.execute([action]);
+                const updatedActions = await playwrightClient.execute([action]);
+                client.send(
+                    JSON.stringify({
+                        event: 'SELECTOR_UPDATE',
+                        data: updatedActions[0],
+                    }),
+                );
                 await clientSession.page.waitForLoadState('domcontentloaded');
 
                 const content = await clientSession.page.content();
@@ -72,7 +80,6 @@ export class WebdriverService {
                 );
                 break;
             }
-                    // eslint-disable-next-line prettier/prettier
-                                                                                                                                                                                                                                                                }
+        }
     }
 }

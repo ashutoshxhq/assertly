@@ -14,7 +14,6 @@ export class AgentService {
     ) {}
 
     async planSteps(data: PlannerAIDTO) {
-        console.log(data);
         const systemPrompt = generateStepsSystemPrompt();
         const userPrompt = generateStepsUserPrompt(data);
         const res = await this.llm.generate([

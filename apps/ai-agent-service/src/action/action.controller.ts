@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { ActionService } from './action.service';
 import { FindLocatorDTO } from './dto/find-locator.dto';
 
-@Controller('v1/teams/:teamId/actions')
+@Controller('v1/actions')
 export class ActionController {
     constructor(private readonly actionService: ActionService) {}
 

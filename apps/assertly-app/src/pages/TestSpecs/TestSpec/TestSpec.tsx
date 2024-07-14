@@ -9,9 +9,10 @@ import {
     RiRobot2Line,
 } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { v4 } from "uuid";
 import useWebSocket from "react-use-websocket";
 import { useAtom } from "jotai";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "src/components/ui/button";
 import {
     ResizableHandle,
@@ -38,14 +39,19 @@ const TestSpec = () => {
 
     const [, setMessageHistory] = useState<MessageEvent<any>[]>([]);
 
-    const [steps] = useAtom(testSpecStepsAtom);
+    const [steps, setSteps] = useAtom(testSpecStepsAtom);
     const [lastPageContent, setLastPageContent] = useState("");
     const [lastPageScreenshot, setLastPageScreenshot] = useState("");
     const [, setCurrentStepIndex] = useAtom(testSpecLastExecutedStepIndexAtom);
     const [livePreview, setLivePreview] = useState(false);
 
     const [lastPageURL, setLastPageURL] = useState("about:blank");
-    const { sendMessage, lastMessage } = useWebSocket(WEBDRIVER_SERVICE_URL);
+    const clientIdRef = useRef(v4());
+    const websocketUrl = useMemo(
+        () => WEBDRIVER_SERVICE_URL + "?clientId=" + clientIdRef.current,
+        [clientIdRef],
+    );
+    const { sendMessage, lastMessage } = useWebSocket(websocketUrl);
 
     useEffect(() => {
         if (lastMessage !== null) {
@@ -56,7 +62,6 @@ const TestSpec = () => {
                     parsedData.event === "ACTION_RESULT" &&
                     parsedData.data.pageContent
                 ) {
-                    console.log(parsedData.data);
                     const contentWithBase = `
                         <base href="${parsedData.data.hostname}">
                         ${parsedData.data.pageContent}
@@ -64,17 +69,30 @@ const TestSpec = () => {
                     setLastPageURL(parsedData.data.url);
                     setLastPageContent(contentWithBase);
                     setLastPageScreenshot(parsedData.data.screenshot);
+                } else if (parsedData.event === "SELECTOR_UPDATE") {
+                    if (parsedData.data.props.selector) {
+                        setSteps((prev) => [
+                            ...prev.map((step) => {
+                                if (step.id === parsedData.data.id) {
+                                    step.props.selector =
+                                        parsedData.data.props.selector;
+                                }
+                                return step;
+                            }),
+                        ]);
+                    }
                 }
             } catch (error) {
                 console.error("Error parsing WebSocket message:", error);
             }
         }
-    }, [lastMessage]);
+    }, [lastMessage, setSteps]);
     const runAllSteps = () => {
         const message = {
             event: "ACTIONS",
             data: {
                 actions: steps.map((step) => ({
+                    id: step.id,
                     type: step.type,
                     props: step.props,
                 })),
@@ -86,18 +104,17 @@ const TestSpec = () => {
     const runStep = useCallback(
         (stepIndex: number) => {
             if (stepIndex >= steps.length) {
-                console.log("not found");
                 setCurrentStepIndex(-1);
                 return;
             }
 
             const step = steps[stepIndex];
-            console.log(step);
             const message = {
                 event: "ACTIONS",
                 data: {
                     actions: [
                         {
+                            id: step.id,
                             type: step.type,
                             props: step.props,
                         },

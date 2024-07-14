@@ -22,7 +22,7 @@ interface StepProps {
         props: Record<string, any>;
     };
     updateStep: (
-        updatedStep: Partial<{ type: string; properties: Record<string, any> }>,
+        updatedStep: Partial<{ type: string; props: Record<string, any> }>,
     ) => void;
     deleteStep: () => void;
     runStep: () => void;
@@ -41,7 +41,7 @@ const Step = ({
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
     const updateProperty = (key: string, value: any) => {
-        updateStep({ properties: { ...step.props, [key]: value } });
+        updateStep({ props: { ...step.props, [key]: value } });
     };
 
     return (

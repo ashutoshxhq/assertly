@@ -45,8 +45,12 @@ const PlannerAI = () => {
             );
 
             const data = response.data;
-            console.log(data);
-            setSteps(data.data.steps);
+            setSteps(
+                data.data.steps.map((step: any, index: number) => ({
+                    ...step,
+                    id: index,
+                })),
+            );
 
             const newAiMessage: TestSpecPlannerMessage = {
                 id: messages.length,

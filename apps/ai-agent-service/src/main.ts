@@ -4,6 +4,7 @@ import { json } from 'express';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
+    app.enableCors();
     app.use(json({ limit: '50mb' }));
     await app.listen(8000);
 }

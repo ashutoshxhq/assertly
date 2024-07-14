@@ -27,12 +27,13 @@ export class AgentService {
                 content: userPrompt,
             },
         ]);
-        const steps = JSON.parse(res.message.content);
-        if (this.validateSteps(steps)) {
+        const aiRsponseData = JSON.parse(res.message.content);
+        if (this.validateSteps(aiRsponseData?.steps)) {
             return {
                 status: 'SUCCESS',
                 data: {
-                    steps: steps,
+                    steps: aiRsponseData?.steps,
+                    message: aiRsponseData?.message,
                 },
             };
         } else {

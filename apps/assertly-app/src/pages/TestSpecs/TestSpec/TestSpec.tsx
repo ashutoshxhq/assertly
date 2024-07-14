@@ -7,48 +7,44 @@ import {
     RiQuestionLine,
     RiRefreshLine,
     RiRobot2Line,
-} from 'react-icons/ri';
-import { useNavigate } from 'react-router-dom';
-import useWebSocket from 'react-use-websocket';
-import { useCallback, useEffect, useState } from 'react';
-import { Button } from 'src/components/ui/button';
+} from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
+import useWebSocket from "react-use-websocket";
+import { useAtom } from "jotai";
+import { useCallback, useEffect, useState } from "react";
+import { Button } from "src/components/ui/button";
 import {
     ResizableHandle,
     ResizablePanel,
     ResizablePanelGroup,
-} from 'src/components/ui/resizable';
+} from "src/components/ui/resizable";
 import {
     Tabs,
     TabsContent,
     TabsList,
     TabsTrigger,
-} from 'src/components/ui/tabs';
-import Steps from './Steps';
-import PlannerAI from './PlannerAI';
-import { Switch } from 'src/components/ui/switch';
-import { WEBDRIVER_SERVICE_URL } from 'src/config/constants';
-
-interface StepData {
-    id: string;
-    type: string;
-    properties: Record<string, any>;
-}
+} from "src/components/ui/tabs";
+import Steps from "./Steps";
+import PlannerAI from "./PlannerAI";
+import { Switch } from "src/components/ui/switch";
+import { WEBDRIVER_SERVICE_URL } from "src/config/constants";
+import {
+    testSpecLastExecutedStepIndexAtom,
+    testSpecStepsAtom,
+} from "src/store/test-specs/testSpecs";
 
 const TestSpec = () => {
     const navigate = useNavigate();
 
-    const [_messageHistory, setMessageHistory] = useState<MessageEvent<any>[]>(
-        [],
-    );
-    const [steps, setSteps] = useState<StepData[]>([
-        { id: '1', type: '', properties: {} },
-    ]);
-    const [lastPageContent, setLastPageContent] = useState('');
-    const [lastPageScreenshot, setLastPageScreenshot] = useState('');
-    const [currentStepIndex, setCurrentStepIndex] = useState(-1);
+    const [, setMessageHistory] = useState<MessageEvent<any>[]>([]);
+
+    const [steps] = useAtom(testSpecStepsAtom);
+    const [lastPageContent, setLastPageContent] = useState("");
+    const [lastPageScreenshot, setLastPageScreenshot] = useState("");
+    const [, setCurrentStepIndex] = useAtom(testSpecLastExecutedStepIndexAtom);
     const [livePreview, setLivePreview] = useState(false);
 
-    const [lastPageURL, setLastPageURL] = useState('about:blank');
+    const [lastPageURL, setLastPageURL] = useState("about:blank");
     const { sendMessage, lastMessage } = useWebSocket(WEBDRIVER_SERVICE_URL);
 
     useEffect(() => {
@@ -57,7 +53,7 @@ const TestSpec = () => {
             try {
                 const parsedData = JSON.parse(lastMessage.data);
                 if (
-                    parsedData.event === 'ACTION_RESULT' &&
+                    parsedData.event === "ACTION_RESULT" &&
                     parsedData.data.pageContent
                 ) {
                     console.log(parsedData.data);
@@ -70,17 +66,17 @@ const TestSpec = () => {
                     setLastPageScreenshot(parsedData.data.screenshot);
                 }
             } catch (error) {
-                console.error('Error parsing WebSocket message:', error);
+                console.error("Error parsing WebSocket message:", error);
             }
         }
     }, [lastMessage]);
     const runAllSteps = () => {
         const message = {
-            event: 'ACTIONS',
+            event: "ACTIONS",
             data: {
                 actions: steps.map((step) => ({
                     type: step.type,
-                    props: step.properties,
+                    props: step.props,
                 })),
             },
         };
@@ -90,7 +86,7 @@ const TestSpec = () => {
     const runStep = useCallback(
         (stepIndex: number) => {
             if (stepIndex >= steps.length) {
-                console.log('not found');
+                console.log("not found");
                 setCurrentStepIndex(-1);
                 return;
             }
@@ -98,12 +94,12 @@ const TestSpec = () => {
             const step = steps[stepIndex];
             console.log(step);
             const message = {
-                event: 'ACTIONS',
+                event: "ACTIONS",
                 data: {
                     actions: [
                         {
                             type: step.type,
-                            props: step.properties,
+                            props: step.props,
                         },
                     ],
                 },
@@ -114,9 +110,6 @@ const TestSpec = () => {
         [steps, sendMessage],
     );
 
-    const updateSteps = (newSteps: StepData[]) => {
-        setSteps(newSteps);
-    };
     return (
         <div className="flex flex-col py-2 gap-2">
             <div className="flex justify-between items-center px-2">
@@ -126,7 +119,7 @@ const TestSpec = () => {
                         onClick={() => navigate(-1)}
                         className="mx-0 px-0 pr-4 pl-2 text-sm"
                     >
-                        {' '}
+                        {" "}
                         <RiArrowLeftSLine className="text-xl" />
                         <span className="text-sm">Back</span>
                     </Button>
@@ -135,7 +128,7 @@ const TestSpec = () => {
                     <div className="px-4 py-2 rounded-md bg-zinc-800 text-sm text-zinc-300">
                         <span className="font-semibold lowercase">
                             assertly
-                        </span>{' '}
+                        </span>{" "}
                         / Untitled Test Spec
                     </div>
                 </div>
@@ -171,7 +164,7 @@ const TestSpec = () => {
                         >
                             <TabsList>
                                 <TabsTrigger value="steps">
-                                    {' '}
+                                    {" "}
                                     <RiListIndefinite className="mr-2" /> Steps
                                 </TabsTrigger>
                                 <TabsTrigger value="chat">
@@ -183,12 +176,7 @@ const TestSpec = () => {
                                 value="steps"
                                 className="w-full overflow-y-scroll"
                             >
-                                <Steps
-                                    steps={steps}
-                                    updateSteps={updateSteps}
-                                    runStep={runStep}
-                                    currentStepIndex={currentStepIndex}
-                                />
+                                <Steps runStep={runStep} />
                             </TabsContent>
                             <TabsContent
                                 value="chat"
@@ -221,8 +209,8 @@ const TestSpec = () => {
                                         </div>
                                         <div>
                                             <Button
-                                                size={'icon'}
-                                                variant={'ghost'}
+                                                size={"icon"}
+                                                variant={"ghost"}
                                                 className="rounded-full w-6 h-6"
                                             >
                                                 <RiRefreshLine />
@@ -245,7 +233,7 @@ const TestSpec = () => {
                                     {!livePreview && lastPageScreenshot && (
                                         <img
                                             src={
-                                                'data:image/jpeg;base64,' +
+                                                "data:image/jpeg;base64," +
                                                 lastPageScreenshot
                                             }
                                         />

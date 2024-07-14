@@ -1,8 +1,9 @@
 export const WEBDRIVER_SERVICE_URL =
-    import.meta.env.VITE_WEBDRIVER_SERVICE_URL || 'http://localhost:8000/v1/socket';
+    import.meta.env.VITE_WEBDRIVER_SERVICE_URL ||
+    "http://localhost:8001/v1/socket";
 export const AI_AGENT_SERVICE_URL =
-    import.meta.env.VITE_AI_AGENT_SERVICE_URL || 'http://localhost:8000';
+    import.meta.env.VITE_AI_AGENT_SERVICE_URL || "http://localhost:8000";
 export const ENGINE_SERVICE_URL =
-    import.meta.env.VITE_ENGINE_SERVICE_URL || 'http://localhost:8000';
+    import.meta.env.VITE_ENGINE_SERVICE_URL || "http://localhost:8000";
 export const IDENTIY_SERVICE_URL =
-    import.meta.env.VITE_IDENTIY_SERVICE_URL || 'http://localhost:8000';
+    import.meta.env.VITE_IDENTIY_SERVICE_URL || "http://localhost:8000";

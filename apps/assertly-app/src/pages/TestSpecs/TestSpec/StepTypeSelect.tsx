@@ -1,15 +1,26 @@
-import React from "react"
-import { RiArrowDownSLine, RiCheckLine } from "react-icons/ri"
-import { Button } from "src/components/ui/button"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "src/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger } from "src/components/ui/popover"
-import { cn } from "src/lib/utils"
+import React from "react";
+import { RiArrowDownSLine, RiCheckLine } from "react-icons/ri";
+import { Button } from "src/components/ui/button";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+} from "src/components/ui/command";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "src/components/ui/popover";
+import { cn } from "src/lib/utils";
 
-const StepTypeSelect = ({stepType, setStepType}: any) => {
-    const [open, setOpen] = React.useState(false)
+const StepTypeSelect = ({ stepType, setStepType }: any) => {
+    const [open, setOpen] = React.useState(false);
 
     return (
-        <Popover open={open} onOpenChange={setOpen} >
+        <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
                 <Button
                     variant="outline"
@@ -18,14 +29,23 @@ const StepTypeSelect = ({stepType, setStepType}: any) => {
                     className="justify-between"
                 >
                     {stepType
-                        ? steps.find((framework) => framework.value === stepType)?.label
+                        ? steps.find(
+                              (framework) => framework.value === stepType,
+                          )?.label
                         : "Select"}
                     <RiArrowDownSLine className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0" side="bottom" align="start">
+            <PopoverContent
+                className="w-[200px] p-0"
+                side="bottom"
+                align="start"
+            >
                 <Command>
-                    <CommandInput placeholder="Search step..." className="h-9" />
+                    <CommandInput
+                        placeholder="Search step..."
+                        className="h-9"
+                    />
                     <CommandList>
                         <CommandEmpty>No framework found.</CommandEmpty>
                         <CommandGroup>
@@ -34,15 +54,21 @@ const StepTypeSelect = ({stepType, setStepType}: any) => {
                                     key={framework.value}
                                     value={framework.value}
                                     onSelect={(currentValue) => {
-                                        setStepType(currentValue === stepType ? "" : currentValue)
-                                        setOpen(false)
+                                        setStepType(
+                                            currentValue === stepType
+                                                ? ""
+                                                : currentValue,
+                                        );
+                                        setOpen(false);
                                     }}
                                 >
                                     {framework.label}
                                     <RiCheckLine
                                         className={cn(
                                             "ml-auto h-4 w-4",
-                                            stepType === framework.value ? "opacity-100" : "opacity-0"
+                                            stepType === framework.value
+                                                ? "opacity-100"
+                                                : "opacity-0",
                                         )}
                                     />
                                 </CommandItem>
@@ -52,11 +78,10 @@ const StepTypeSelect = ({stepType, setStepType}: any) => {
                 </Command>
             </PopoverContent>
         </Popover>
-    )
-}
+    );
+};
 
-export default StepTypeSelect
-
+export default StepTypeSelect;
 
 const steps = [
     {
@@ -127,4 +152,4 @@ const steps = [
         value: "visual-assert",
         label: "Visual Diff",
     },
-]
+];

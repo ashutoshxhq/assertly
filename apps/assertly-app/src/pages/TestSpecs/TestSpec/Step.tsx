@@ -1,6 +1,15 @@
 import { useState } from "react";
-import { RiArrowDownSLine, RiArrowRightSLine, RiDeleteBin6Line, RiPlayLargeFill } from "react-icons/ri";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "src/components/ui/collapsible";
+import {
+    RiArrowDownSLine,
+    RiArrowRightSLine,
+    RiDeleteBin6Line,
+    RiPlayLargeFill,
+} from "react-icons/ri";
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "src/components/ui/collapsible";
 import { Input } from "src/components/ui/input";
 import { Button } from "src/components/ui/button";
 import StepTypeSelect from "./StepTypeSelect";
@@ -10,20 +19,29 @@ interface StepProps {
     step: {
         id: string;
         type: string;
-        properties: Record<string, any>;
+        props: Record<string, any>;
     };
-    updateStep: (updatedStep: Partial<{ type: string; properties: Record<string, any> }>) => void;
+    updateStep: (
+        updatedStep: Partial<{ type: string; properties: Record<string, any> }>,
+    ) => void;
     deleteStep: () => void;
     runStep: () => void;
     currentStepIndex: number;
     index: number;
 }
 
-const Step = ({ step, updateStep, deleteStep, runStep, currentStepIndex, index }: StepProps) => {
+const Step = ({
+    step,
+    updateStep,
+    deleteStep,
+    runStep,
+    currentStepIndex,
+    index,
+}: StepProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
 
     const updateProperty = (key: string, value: any) => {
-        updateStep({ properties: { ...step.properties, [key]: value } });
+        updateStep({ properties: { ...step.props, [key]: value } });
     };
 
     return (
@@ -49,7 +67,7 @@ const Step = ({ step, updateStep, deleteStep, runStep, currentStepIndex, index }
                     <div className="w-full flex flex-col border-t border-zinc-700/40 p-4">
                         <StepProperties
                             stepType={step.type}
-                            stepProperties={step.properties}
+                            stepProperties={step.props}
                             updateProperty={updateProperty}
                         />
                     </div>
@@ -59,13 +77,22 @@ const Step = ({ step, updateStep, deleteStep, runStep, currentStepIndex, index }
     );
 };
 
-const StepTitle = ({ isOpen, setIsOpen, stepType, deleteStep, updateStep, runStep, currentStepIndex, index }: {
-    isOpen: boolean,
-    setIsOpen: (open: boolean) => void,
-    stepType: string,
-    deleteStep: () => void,
-    updateStep: any,
-    runStep: () => void,
+const StepTitle = ({
+    isOpen,
+    setIsOpen,
+    stepType,
+    deleteStep,
+    updateStep,
+    runStep,
+    currentStepIndex,
+    index,
+}: {
+    isOpen: boolean;
+    setIsOpen: (open: boolean) => void;
+    stepType: string;
+    deleteStep: () => void;
+    updateStep: any;
+    runStep: () => void;
     currentStepIndex: number;
     index: number;
 }) => (
@@ -77,18 +104,29 @@ const StepTitle = ({ isOpen, setIsOpen, stepType, deleteStep, updateStep, runSte
                     setStepType={(type: string) => updateStep({ type })}
                 />
             </div>
-            <div className="flex-1 cursor-pointer select-none py-3" onClick={() => setIsOpen(!isOpen)}>
-            </div>
+            <div
+                className="flex-1 cursor-pointer select-none py-3"
+                onClick={() => setIsOpen(!isOpen)}
+            ></div>
         </div>
-
 
         <div className="flex justify-center items-center px-2">
             <Button
                 variant="ghost"
                 size={"icon"}
                 onClick={runStep}
-                disabled={currentStepIndex === index || currentStepIndex > index || currentStepIndex + 1 < index}
-                className={cn(!(currentStepIndex === index || currentStepIndex > index || currentStepIndex + 1 < index) && "text-green-500 dark:hover:text-green-400")}
+                disabled={
+                    currentStepIndex === index ||
+                    currentStepIndex > index ||
+                    currentStepIndex + 1 < index
+                }
+                className={cn(
+                    !(
+                        currentStepIndex === index ||
+                        currentStepIndex > index ||
+                        currentStepIndex + 1 < index
+                    ) && "text-green-500 dark:hover:text-green-400",
+                )}
             >
                 <RiPlayLargeFill className="mr-1" />
             </Button>
@@ -104,11 +142,11 @@ const StepTitle = ({ isOpen, setIsOpen, stepType, deleteStep, updateStep, runSte
                 variant="ghost"
                 size={"icon"}
                 onClick={() => setIsOpen(!isOpen)}
-                className="text-xl">
+                className="text-xl"
+            >
                 {isOpen ? <RiArrowRightSLine /> : <RiArrowDownSLine />}
             </Button>
         </div>
-
     </div>
 );
 
@@ -129,7 +167,9 @@ const StepProperties = ({
                         className="w-full p-2 bg-zinc-700 text-white rounded-md"
                         placeholder="Enter JavaScript code"
                         value={stepProperties.script || ""}
-                        onChange={(e) => updateProperty("script", e.target.value)}
+                        onChange={(e) =>
+                            updateProperty("script", e.target.value)
+                        }
                     />
                 );
             case "visual-assert":
@@ -151,8 +191,14 @@ const StepProperties = ({
                     <Input
                         className="dark:border-zinc-700"
                         placeholder="Selector"
-                        value={stepProperties.selector || ""}
-                        onChange={(e) => updateProperty("selector", e.target.value)}
+                        value={
+                            stepProperties?.selector ||
+                            stepProperties?.selectorQuery ||
+                            ""
+                        }
+                        onChange={(e) =>
+                            updateProperty("selector", e.target.value)
+                        }
                     />
                 );
             case "type":
@@ -161,14 +207,22 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 mb-2"
                             placeholder="Selector"
-                            value={stepProperties.selector || ""}
-                            onChange={(e) => updateProperty("selector", e.target.value)}
+                            value={
+                                stepProperties?.selector ||
+                                stepProperties?.selectorQuery ||
+                                ""
+                            }
+                            onChange={(e) =>
+                                updateProperty("selector", e.target.value)
+                            }
                         />
                         <Input
                             className="dark:border-zinc-700"
                             placeholder="Text to type"
                             value={stepProperties.text || ""}
-                            onChange={(e) => updateProperty("text", e.target.value)}
+                            onChange={(e) =>
+                                updateProperty("text", e.target.value)
+                            }
                         />
                     </>
                 );
@@ -178,14 +232,22 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 mb-2"
                             placeholder="Selector"
-                            value={stepProperties.selector || ""}
-                            onChange={(e) => updateProperty("selector", e.target.value)}
+                            value={
+                                stepProperties?.selector ||
+                                stepProperties?.selectorQuery ||
+                                ""
+                            }
+                            onChange={(e) =>
+                                updateProperty("selector", e.target.value)
+                            }
                         />
                         <Input
                             className="dark:border-zinc-700"
                             placeholder="Key to press"
                             value={stepProperties.key || ""}
-                            onChange={(e) => updateProperty("key", e.target.value)}
+                            onChange={(e) =>
+                                updateProperty("key", e.target.value)
+                            }
                         />
                     </>
                 );
@@ -195,14 +257,22 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 mb-2"
                             placeholder="Selector"
-                            value={stepProperties.selector || ""}
-                            onChange={(e) => updateProperty("selector", e.target.value)}
+                            value={
+                                stepProperties?.selector ||
+                                stepProperties?.selectorQuery ||
+                                ""
+                            }
+                            onChange={(e) =>
+                                updateProperty("selector", e.target.value)
+                            }
                         />
                         <Input
                             className="dark:border-zinc-700"
                             placeholder="Value to select"
                             value={stepProperties.value || ""}
-                            onChange={(e) => updateProperty("value", e.target.value)}
+                            onChange={(e) =>
+                                updateProperty("value", e.target.value)
+                            }
                         />
                     </>
                 );
@@ -212,15 +282,26 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 dark:focus-visible:ring-zinc-300 mb-2 "
                             placeholder="Selector"
-                            value={stepProperties.selector || ""}
-                            onChange={(e) => updateProperty("selector", e.target.value)}
+                            value={
+                                stepProperties?.selector ||
+                                stepProperties?.selectorQuery ||
+                                ""
+                            }
+                            onChange={(e) =>
+                                updateProperty("selector", e.target.value)
+                            }
                         />
                         <Input
                             className="dark:border-zinc-700"
                             placeholder="Timeout (ms)"
                             type="number"
                             value={stepProperties.timeout || ""}
-                            onChange={(e) => updateProperty("timeout", parseInt(e.target.value))}
+                            onChange={(e) =>
+                                updateProperty(
+                                    "timeout",
+                                    parseInt(e.target.value),
+                                )
+                            }
                         />
                     </>
                 );
@@ -230,7 +311,9 @@ const StepProperties = ({
                         <select
                             className="w-full p-2 bg-zinc-700 text-white rounded-md mb-2"
                             value={stepProperties.operation || ""}
-                            onChange={(e) => updateProperty("operation", e.target.value)}
+                            onChange={(e) =>
+                                updateProperty("operation", e.target.value)
+                            }
                         >
                             <option value="">Select operation</option>
                             <option value="set">Set</option>
@@ -240,14 +323,18 @@ const StepProperties = ({
                             className="dark:border-zinc-700 mb-2"
                             placeholder="Key"
                             value={stepProperties.key || ""}
-                            onChange={(e) => updateProperty("key", e.target.value)}
+                            onChange={(e) =>
+                                updateProperty("key", e.target.value)
+                            }
                         />
                         {stepProperties.operation === "set" && (
                             <Input
                                 className="dark:border-zinc-700"
                                 placeholder="Value"
                                 value={stepProperties.value || ""}
-                                onChange={(e) => updateProperty("value", e.target.value)}
+                                onChange={(e) =>
+                                    updateProperty("value", e.target.value)
+                                }
                             />
                         )}
                     </>
@@ -258,14 +345,25 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 mb-2"
                             placeholder="Selector"
-                            value={stepProperties.selector || ""}
-                            onChange={(e) => updateProperty("selector", e.target.value)}
+                            value={
+                                stepProperties?.selector ||
+                                stepProperties?.selectorQuery ||
+                                ""
+                            }
+                            onChange={(e) =>
+                                updateProperty("selector", e.target.value)
+                            }
                         />
                         <Input
                             className="dark:border-zinc-700"
                             placeholder="File path(s) (comma-separated for multiple)"
                             value={stepProperties.files || ""}
-                            onChange={(e) => updateProperty("files", e.target.value.split(","))}
+                            onChange={(e) =>
+                                updateProperty(
+                                    "files",
+                                    e.target.value.split(","),
+                                )
+                            }
                         />
                     </>
                 );
@@ -276,10 +374,10 @@ const StepProperties = ({
 
     return (
         <div className="w-full flex flex-col">
-            <span className="uppercase text-xs text-zinc-500 font-medium">Properties</span>
-            <div className="flex flex-col gap-1 pt-4">
-                {renderProperties()}
-            </div>
+            <span className="uppercase text-xs text-zinc-500 font-medium">
+                Properties
+            </span>
+            <div className="flex flex-col gap-1 pt-4">{renderProperties()}</div>
         </div>
     );
 };

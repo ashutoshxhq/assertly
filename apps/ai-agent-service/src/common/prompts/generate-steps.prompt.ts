@@ -12,74 +12,10 @@ Instructions:
 2. Identify the high-level actions described in the natural language input.
 3. Map each action to the appropriate StepType based on the JSON schema.
 4. Define the necessary properties for each step based on the action and context, using \`selectorQuery\` for natural language descriptions of elements.
+5. Ensure that \`selectorQuery\` is used for all element locators and is not css selector but a discriptive natural language description of the element to be located.
+5. Ensure that the steps are in the correct order and that they are logically connected.
+6. Always generate all possible steps that need to be executed to achieve the outcome specified in the user message.
 
-Example:
-Existing Steps: 
-[
-    {
-        "type": "goto",
-        "props": {
-            "url": "https://example.com"
-        }
-    }
-]
-
-Natural Language Step Description from User: 
-1. Click on the login button.
-2. Type the username and password.
-3. Press enter to log in.
-4. Wait for the dashboard to load.
-5. Verify that the user profile is visible.
-
-Output:
-[
-    {
-        "type": "goto",
-        "props": {
-            "url": "https://example.com"
-        }
-    },
-    {
-        "type": "click",
-        "props": {
-            "selectorQuery": "login button"
-        }
-    },
-    {
-        "type": "type",
-        "props": {
-            "selectorQuery": "username field",
-            "text": "myUsername"
-        }
-    },
-    {
-        "type": "type",
-        "props": {
-            "selectorQuery": "password field",
-            "text": "myPassword"
-        }
-    },
-    {
-        "type": "press",
-        "props": {
-            "selectorQuery": "password field",
-            "key": "Enter"
-        }
-    },
-    {
-        "type": "wait",
-        "props": {
-            "selectorQuery": "dashboard",
-            "timeout": 5000
-        }
-    },
-    {
-        "type": "visual-assert",
-        "props": {
-            "selectorQuery": "user profile"
-        }
-    }
-]
 `;
 };
 
@@ -88,7 +24,7 @@ export const generateStepsUserPrompt = (data: PlannerAIDTO) => {
 Given the following existing steps and user message with description of steps:
 Existing Steps:
 \`\`\`
-${JSON.stringify(data.existingSteps, null, 0)}
+${JSON.stringify(data?.existingSteps || '', null, 0)}
 \`\`\`
 Natural Language Step Description from User:
 \`\`\`

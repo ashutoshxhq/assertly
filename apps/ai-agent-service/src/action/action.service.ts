@@ -15,8 +15,7 @@ function cleanAndTrimContent(
 
         if (element !== null) {
             // Remove SVG and image elements
-            if (['svg', 'img'].includes(element.type?.toLowerCase())) {
-                console.log("Removing SVG and image elements");
+            if (['svg', 'img', 'script', 'style', 'iframe'].includes(element.type?.toLowerCase())) {
                 return null;
             }
 
@@ -77,9 +76,6 @@ export class ActionService {
     async findLocator(data: FindLocatorDTO) {
         const dom = new JSDOM(data.pageContent);
         const body = dom.window.document.body;
-        body.querySelectorAll('script, style, iframe').forEach((element) =>
-            element.remove(),
-        );
         // const bodyContent = body.innerHTML;
         const jsonBody = await HTMLToJSON(body, true);
         const trimmedJsonBody = cleanAndTrimContent(jsonBody);

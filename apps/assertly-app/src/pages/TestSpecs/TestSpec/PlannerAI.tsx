@@ -10,6 +10,7 @@ import {
     testSpecStepsAtom,
 } from "src/store/test-specs/testSpecs";
 import axios from "axios";
+import { AI_AGENT_SERVICE_URL } from "src/config/constants";
 
 const PlannerAI = () => {
     const textAreaRef = useRef<any>(null);
@@ -40,7 +41,7 @@ const PlannerAI = () => {
 
         try {
             const response = await axios.post(
-                "http://localhost:8000/v1/agents/test-planner",
+                AI_AGENT_SERVICE_URL + "v1/agents/test-planner",
                 { message, existingSteps: steps },
             );
 

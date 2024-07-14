@@ -1,4 +1,4 @@
-import { ConversationContext } from 'src/agent-socket/dto/conversation.dto';
+import { PlannerAIDTO } from 'src/agent/dto/planner.dto';
 
 export const generateStepsSystemPrompt = () => {
     return `You are an AI that generates detailed playwright steps based on a given JSON schema, existing steps, and a high-level natural language description. Follow the JSON schema to create a list of steps, ensuring that you use \`selectorQuery\` for natural language descriptions of elements.
@@ -83,15 +83,12 @@ Output:
 `;
 };
 
-export const generateStepsUserPrompt = (data: {
-    context: ConversationContext;
-    message: string;
-}) => {
+export const generateStepsUserPrompt = (data: PlannerAIDTO) => {
     return `
 Given the following existing steps and user message with description of steps:
 Existing Steps:
 \`\`\`
-${JSON.stringify(data.context.steps, null, 0)}
+${JSON.stringify(data.existingSteps, null, 0)}
 \`\`\`
 Natural Language Step Description from User:
 \`\`\`

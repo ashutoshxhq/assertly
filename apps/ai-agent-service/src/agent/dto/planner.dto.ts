@@ -1,6 +1,6 @@
 import { Step } from './step.dto';
 
-export class ChatMessageDTO {
+export class PlannerAIDTO {
     message: string;
     existingSteps: Step[];
     conversationId: string;

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AgentSocketModule } from './agent-socket/agent-socket.module';
 import { ActionModule } from './action/action.module';
 import { ConfigModule } from '@nestjs/config';
 import { CacheModule } from '@nestjs/cache-manager';
 import { HealthModule } from './health/health.module';
+import { AgentModule } from './agent/agent.module';
 
 @Module({
     imports: [
@@ -14,9 +14,9 @@ import { HealthModule } from './health/health.module';
         CacheModule.register({
             isGlobal: true,
         }),
-        AgentSocketModule,
         ActionModule,
         HealthModule,
+        AgentModule,
     ],
 })
 export class AppModule {}

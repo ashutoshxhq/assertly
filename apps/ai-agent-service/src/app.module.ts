@@ -9,7 +9,7 @@ import { AgentModule } from './agent/agent.module';
     imports: [
         ConfigModule.forRoot({
             isGlobal: true,
-            envFilePath: `.env.${process.env.NODE_ENV}`,
+            envFilePath: `.env`,
         }),
         CacheModule.register({
             isGlobal: true,

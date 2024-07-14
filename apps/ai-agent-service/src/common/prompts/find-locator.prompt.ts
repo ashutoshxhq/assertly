@@ -8,7 +8,7 @@ export const findLocatorPrompt = (data: {
 ${data.message} 
 \`\`\`
 
-# Page Content in html
+# Page Content in json of html
 \`\`\`
 ${data.pageContent}
 \`\`\`

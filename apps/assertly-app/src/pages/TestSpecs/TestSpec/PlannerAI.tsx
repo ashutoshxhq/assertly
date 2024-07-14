@@ -38,6 +38,10 @@ const PlannerAI = () => {
         };
         setMessages((prev) => [...prev, newUserMessage]);
         setMessage(""); // Clear the input after sending
+        if (textAreaRef.current) {
+            textAreaRef.current.style.height = "auto";
+            textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+        }
 
         try {
             const response = await axios.post(

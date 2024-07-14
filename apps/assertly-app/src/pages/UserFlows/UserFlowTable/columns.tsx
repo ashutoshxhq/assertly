@@ -1,10 +1,15 @@
-import { ColumnDef } from "@tanstack/react-table"
-import { UserFlow } from "./data"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "src/components/ui/dropdown-menu"
-import { Button } from "src/components/ui/button"
-import { RiMoreFill } from "react-icons/ri"
-import moment from "moment"
-import { Checkbox } from "src/components/ui/checkbox"
+import { ColumnDef } from "@tanstack/react-table";
+import { UserFlow } from "./data";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "src/components/ui/dropdown-menu";
+import { Button } from "src/components/ui/button";
+import { RiMoreFill } from "react-icons/ri";
+import moment from "moment";
+import { Checkbox } from "src/components/ui/checkbox";
 
 export const columns: ColumnDef<UserFlow>[] = [
     {
@@ -17,11 +22,12 @@ export const columns: ColumnDef<UserFlow>[] = [
                         table.getIsAllPageRowsSelected() ||
                         (table.getIsSomePageRowsSelected() && "indeterminate")
                     }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    onCheckedChange={(value) =>
+                        table.toggleAllPageRowsSelected(!!value)
+                    }
                     aria-label="Select all"
                 />
             </div>
-
         ),
         cell: ({ row }) => (
             <div className="pl-2 flex items-center justify-center">
@@ -40,7 +46,7 @@ export const columns: ColumnDef<UserFlow>[] = [
         size: 300,
         header: () => <div className="">Flow Name</div>,
         cell: ({ row }) => {
-            return <div className="">{row.original.name}</div>
+            return <div className="">{row.original.name}</div>;
         },
     },
     {
@@ -59,7 +65,7 @@ export const columns: ColumnDef<UserFlow>[] = [
         id: "actions",
         size: 60,
         cell: ({ row }) => {
-            const flow = row.original
+            const flow = row.original;
             return (
                 <div className="flex gap-4 items-end justify-end pr-8">
                     <DropdownMenu>
@@ -69,20 +75,27 @@ export const columns: ColumnDef<UserFlow>[] = [
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => console.log("Edit", flow.id)}>
+                            <DropdownMenuItem
+                                onClick={() => console.log("Edit", flow.id)}
+                            >
                                 Edit Flow
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => console.log("Create Spec", flow.id)}>
+                            <DropdownMenuItem
+                                onClick={() =>
+                                    console.log("Create Spec", flow.id)
+                                }
+                            >
                                 Create Spec
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => console.log("Delete", flow.id)}>
+                            <DropdownMenuItem
+                                onClick={() => console.log("Delete", flow.id)}
+                            >
                                 Delete Flow
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-
-            )
+            );
         },
     },
-]
+];

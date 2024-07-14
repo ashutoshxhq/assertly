@@ -41,7 +41,7 @@ const PlannerAI = () => {
 
         try {
             const response = await axios.post(
-                AI_AGENT_SERVICE_URL + "v1/agents/test-planner",
+                AI_AGENT_SERVICE_URL + "/v1/agents/test-planner",
                 { message, existingSteps: steps },
             );
 

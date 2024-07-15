@@ -32,6 +32,8 @@
     "@prisma/client": "5.16.1",
     "cache-manager": "^5.7.1",
     "express": "^4.19.2",
+    "himalaya": "^1.1.0",
+    "html-to-json": "^0.6.0",
     "html-to-json-parser": "^2.0.1",
     "jsdom": "^24.1.0",
     "openai": "^4.52.4",

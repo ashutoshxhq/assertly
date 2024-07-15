@@ -26,7 +26,7 @@ export class AgentService {
                 content: userPrompt,
             },
         ]);
-        const aiRsponseData = JSON.parse(res.message.content);
+        const aiRsponseData = JSON.parse(res.data.message.content);
         if (this.validateSteps(aiRsponseData?.steps)) {
             return {
                 status: 'SUCCESS',

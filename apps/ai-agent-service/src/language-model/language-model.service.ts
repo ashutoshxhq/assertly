@@ -35,8 +35,9 @@ export class LanguageModelService {
         }
         const completion =
             await this.client.chat.completions.create(createParams);
-
-        return completion?.choices?.length === 1 ? completion.choices[0] : null;
+        return completion?.choices?.length === 1
+            ? { data: completion.choices[0], usage: completion.usage }
+            : null;
     }
 
     async generateEmbeddings() {

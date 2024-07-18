@@ -42,17 +42,17 @@ export function DataTable<TData, TValue>({
     return (
         <div className="rounded-md">
             <Table className="border-none">
-                <TableHeader className="border-zinc-800 bg-zinc-800/50">
+                <TableHeader className="dark:border-zinc-800 dark:bg-zinc-800/50">
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow
                             key={headerGroup.id}
-                            className="border-zinc-800"
+                            className="dark:border-zinc-800"
                         >
                             {headerGroup.headers.map((header) => {
                                 return (
                                     <TableHead
                                         key={header.id}
-                                        className={cn("border-zinc-800")}
+                                        className={cn("dark:border-zinc-800")}
                                         style={{
                                             width: `${header.getSize()}px`,
                                         }}
@@ -70,15 +70,15 @@ export function DataTable<TData, TValue>({
                         </TableRow>
                     ))}
                 </TableHeader>
-                <TableBody className="border-b border-b-zinc-800">
+                <TableBody className="border-b border-b-zinc-100 dark:border-b-zinc-800">
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
                                 key={row.id}
                                 data-state={row.getIsSelected() && "selected"}
                                 className={cn(
-                                    "border-zinc-800/50",
-                                    "bg-zinc-800/20",
+                                    "dark:border-zinc-800/50",
+                                    "dark:bg-zinc-800/20",
                                 )}
                             >
                                 {row.getVisibleCells().map((cell) => (

@@ -8,7 +8,7 @@ html {
 body {
     font-family: 'Inter';
     overflow-x: hidden;
-    background-color: rgb(23, 23, 23);
+    /* background-color: rgb(23, 23, 23); */
     position: relative;
     z-index: 1;
     height: 100vh;
@@ -22,12 +22,12 @@ body {
   }
   
   ::selection {
-    color: white;
-    background: #8b8b8b !important;
+    color: transparent;
+    background: transparent !important;
   }
   
   ::-webkit-scrollbar-track {
-    background: #3b3c3f !important;
+    background: transparent !important;
   }
   
   
@@ -40,7 +40,7 @@ body {
   }
   
   ::-webkit-scrollbar-thumb {
-    background-color: #404040 !important;
+    background-color: transparent !important;
     border-radius: 10px;
     opacity: 0.5;
   }

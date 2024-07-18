@@ -11,7 +11,7 @@ const Artifacts = () => {
           </span>
           <div className="flex flex-col gap-1">
             <h2 className="text-2xl font-bold tracking-tight">Artifacts</h2>
-            <p className="text-zinc-500 text-sm">Upload and manage your artifacts here.</p>
+            <p className="dark:text-zinc-500 text-sm">Upload and manage your artifacts here.</p>
           </div>
         </div>
 
@@ -19,9 +19,9 @@ const Artifacts = () => {
           <Button variant={"brand"} className="bg-orange-500 mt-0"><RiAddLargeLine className="mx-2" />Add New Artifact</Button>
         </div>
       </div>
-      <div className="border-b border-zinc-900 my-8 mx-2"></div>
+      <div className="border-b dark:border-zinc-900 my-8 mx-2"></div>
 
-      <div className="bg-zinc-900 rounded-md">
+      <div className="dark:bg-zinc-900 rounded-md">
         
       </div>
     </div>

@@ -45,7 +45,7 @@ const Step = ({
     };
 
     return (
-        <div className="flex w-full bg-zinc-800 rounded-md">
+        <div className="flex w-full border border-zinc-300/50 dark:border-zinc-700 dark:bg-zinc-800 rounded-md">
             <Collapsible
                 className="w-full"
                 open={isOpen}
@@ -64,7 +64,7 @@ const Step = ({
                     />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="w-full">
-                    <div className="w-full flex flex-col border-t border-zinc-700/40 p-4">
+                    <div className="w-full flex flex-col border-t dark:border-zinc-700/40 p-4">
                         <StepProperties
                             stepType={step.type}
                             stepProperties={step.props}
@@ -164,7 +164,7 @@ const StepProperties = ({
             case "javascript":
                 return (
                     <textarea
-                        className="w-full p-2 bg-zinc-700 text-white rounded-md"
+                        className="w-full p-2 dark:bg-zinc-700 text-white rounded-md"
                         placeholder="Enter JavaScript code"
                         value={stepProperties.script || ""}
                         onChange={(e) =>
@@ -207,11 +207,7 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 mb-2"
                             placeholder="Selector"
-                            value={
-                                stepProperties?.selector ||
-                                stepProperties?.selectorQuery ||
-                                ""
-                            }
+                            value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
                                 updateProperty("selector", e.target.value)
                             }
@@ -232,11 +228,7 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 mb-2"
                             placeholder="Selector"
-                            value={
-                                stepProperties?.selector ||
-                                stepProperties?.selectorQuery ||
-                                ""
-                            }
+                            value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
                                 updateProperty("selector", e.target.value)
                             }
@@ -257,11 +249,7 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 mb-2"
                             placeholder="Selector"
-                            value={
-                                stepProperties?.selector ||
-                                stepProperties?.selectorQuery ||
-                                ""
-                            }
+                            value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
                                 updateProperty("selector", e.target.value)
                             }
@@ -282,11 +270,7 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 dark:focus-visible:ring-zinc-300 mb-2 "
                             placeholder="Selector"
-                            value={
-                                stepProperties?.selector ||
-                                stepProperties?.selectorQuery ||
-                                ""
-                            }
+                            value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
                                 updateProperty("selector", e.target.value)
                             }
@@ -309,7 +293,7 @@ const StepProperties = ({
                 return (
                     <>
                         <select
-                            className="w-full p-2 bg-zinc-700 text-white rounded-md mb-2"
+                            className="w-full p-2 dark:bg-zinc-700 text-white rounded-md mb-2"
                             value={stepProperties.operation || ""}
                             onChange={(e) =>
                                 updateProperty("operation", e.target.value)
@@ -345,11 +329,7 @@ const StepProperties = ({
                         <Input
                             className="dark:border-zinc-700 mb-2"
                             placeholder="Selector"
-                            value={
-                                stepProperties?.selector ||
-                                stepProperties?.selectorQuery ||
-                                ""
-                            }
+                            value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
                                 updateProperty("selector", e.target.value)
                             }
@@ -374,7 +354,7 @@ const StepProperties = ({
 
     return (
         <div className="w-full flex flex-col">
-            <span className="uppercase text-xs text-zinc-500 font-medium">
+            <span className="uppercase text-xs dark:text-zinc-500 font-medium">
                 Properties
             </span>
             <div className="flex flex-col gap-1 pt-4">{renderProperties()}</div>

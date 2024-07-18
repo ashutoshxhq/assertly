@@ -53,11 +53,11 @@ const Steps: React.FC<StepsProps> = ({ runStep }) => {
                 />
             ))}
             <div className="w-full flex justify-center items-center mt-4">
-                <div className="border-t border-zinc-800 flex-1 mr-2"></div>
-                <Button variant="brand" className="px-8" onClick={addStep}>
+                <div className="border-t dark:border-zinc-800 flex-1 mr-2"></div>
+                <Button variant="outline" className="px-8" onClick={addStep}>
                     <RiAddLargeLine className="mr-2" /> Add New Step
                 </Button>
-                <div className="border-t border-zinc-800 flex-1 ml-2"></div>
+                <div className="border-t dark:border-zinc-800 flex-1 ml-2"></div>
             </div>
         </div>
     );

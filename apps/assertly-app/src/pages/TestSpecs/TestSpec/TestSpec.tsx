@@ -141,8 +141,8 @@ const TestSpec = () => {
                         <span className="text-sm">Back</span>
                     </Button>
                 </div>
-                <div className="flex  w-[33.33%] justify-center">
-                    <div className="px-4 py-2 rounded-md bg-zinc-800 text-sm text-zinc-300">
+                <div className="flex w-[33.33%] justify-center">
+                    <div className="px-4 py-2 bg-zinc-100 rounded-md dark:bg-zinc-800 text-sm dark:text-zinc-300">
                         <span className="font-semibold lowercase">
                             assertly
                         </span>{" "}
@@ -150,21 +150,13 @@ const TestSpec = () => {
                     </div>
                 </div>
                 <div className="flex w-[33.33%] items-center justify-end gap-2">
-                    <Button
-                        variant="secondary"
-                        className="text-sm"
-                        onClick={runAllSteps}
-                    >
-                        <RiPlayLargeFill className="text-md mr-2 text-green-500" />
-                        <span className="text-sm">Run all steps</span>
+                    <Button variant="secondary" className="text-sm">
+                        <RiEqualizer2Line className="text-md mr-2" />
+                        <span className="text-sm">Environment</span>
                     </Button>
-                    <Button
-                        variant="secondary"
-                        className="text-sm"
-                        onClick={() => setCurrentStepIndex(-1)}
-                    >
-                        <RiCloseLargeFill className="text-md mr-2 text-red-500" />
-                        <span className="text-sm">Reset context</span>
+                    <Button variant="secondary" className="text-sm">
+                        <RiEqualizer2Line className="text-md mr-2" />
+                        <span className="text-sm">Schedule</span>
                     </Button>
                     <Button variant="secondary" className="text-sm">
                         <RiEqualizer2Line className="text-md mr-2" />
@@ -173,31 +165,55 @@ const TestSpec = () => {
                 </div>
             </div>
             <ResizablePanelGroup direction="horizontal" className="flex px-2">
-                <ResizablePanel className="p-[1px]" defaultSize={25}>
-                    <div className="flex rounded-lg shadow-sm ring-1 ring-zinc-950/4 dark:bg-zinc-950 dark:ring-white/5 text-zinc-300 h-[calc(100vh-62px)] overflow-y-scroll">
+                <ResizablePanel className="p-[1px]" defaultSize={35}>
+                    <div className="flex rounded-lg shadow-sm ring-1 ring-zinc-200  dark:ring-zinc-950/4 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 h-[calc(100vh-62px)] overflow-y-scroll">
                         <Tabs
                             defaultValue="steps"
                             className="flex flex-col items-center justify-start w-full p-4"
                         >
-                            <TabsList>
-                                <TabsTrigger value="steps">
-                                    {" "}
-                                    <RiListIndefinite className="mr-2" /> Steps
-                                </TabsTrigger>
-                                <TabsTrigger value="chat">
-                                    <RiRobot2Line className="mr-2" />
-                                    Planner AI
-                                </TabsTrigger>
-                            </TabsList>
+                            <div className="flex justify-between w-full">
+                                <TabsList>
+                                    <TabsTrigger value="steps">
+                                        {" "}
+                                        <RiListIndefinite className="mr-2" />{" "}
+                                        Steps
+                                    </TabsTrigger>
+                                    <TabsTrigger value="chat">
+                                        <RiRobot2Line className="mr-2" />
+                                        Planner AI
+                                    </TabsTrigger>
+                                </TabsList>
+                                <div className="flex items-center justify-end gap-2">
+                                    <Button
+                                        variant="default"
+                                        className="text-sm"
+                                        onClick={runAllSteps}
+                                    >
+                                        <RiPlayLargeFill className="text-md mr-2 text-green-500" />
+                                        <span className="text-sm">
+                                            Run steps
+                                        </span>
+                                    </Button>
+                                    <Button
+                                        variant="outline"
+                                        className="text-sm"
+                                        onClick={() => setCurrentStepIndex(-1)}
+                                    >
+                                        <RiCloseLargeFill className="text-md mr-2 text-red-500" />
+                                        <span className="text-sm">Reset</span>
+                                    </Button>
+                                </div>
+                            </div>
+
                             <TabsContent
                                 value="steps"
-                                className="w-full overflow-y-scroll"
+                                className="h-full w-full overflow-y-scroll"
                             >
                                 <Steps runStep={runStep} />
                             </TabsContent>
                             <TabsContent
                                 value="chat"
-                                className="h-full overflow-y-scroll"
+                                className="h-full w-full overflow-y-scroll"
                             >
                                 <PlannerAI />
                             </TabsContent>
@@ -205,22 +221,25 @@ const TestSpec = () => {
                     </div>
                 </ResizablePanel>
                 <ResizableHandle withHandle />
-                <ResizablePanel className="p-[1px] ml-2" defaultSize={75}>
+                <ResizablePanel className="p-[1px] ml-2" defaultSize={65}>
                     <ResizablePanelGroup
                         direction="vertical"
                         className="flex flex-col"
                     >
                         <ResizablePanel defaultSize={65} className="p-[1px]">
-                            <div className="flex flex-1 flex-col h-full grow rounded-lg shadow-sm ring-1 ring-zinc-950/4 dark:bg-zinc-950 dark:ring-white/5 text-zinc-300 overflow-y-scroll">
-                                <div className="flex justify-between items-center p-2">
-                                    <div className="flex gap-2 px-2">
-                                        <span className="bg-red-500 h-3 w-3 rounded-md"></span>
-                                        <span className="bg-yellow-500 h-3 w-3 rounded-md"></span>
-                                        <span className="bg-green-500 h-3 w-3 rounded-md"></span>
+                            <div className="flex flex-1 flex-col h-full grow rounded-lg shadow-sm ring-1 dark:ring-zinc-950/4 ring-zinc-200 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 overflow-y-scroll">
+                                <div className="flex items-center p-2 border-b ">
+                                    <div className="flex-1">
+                                        <div className="flex gap-2 px-2">
+                                            <span className="bg-red-500 h-3 w-3 rounded-md"></span>
+                                            <span className="bg-yellow-500 h-3 w-3 rounded-md"></span>
+                                            <span className="bg-green-500 h-3 w-3 rounded-md"></span>
+                                        </div>
                                     </div>
-                                    <div className="flex gap-1 items-center justify-center">
-                                        <div className="rounded-full flex items-center justify-center bg-zinc-800 px-8 py-1.5 w-80">
-                                            <span className="text-xs text-zinc-300 truncate">
+
+                                    <div className="flex flex-1 gap-1 items-center justify-center">
+                                        <div className="rounded-full flex items-center justify-center bg-zinc-200 dark:bg-zinc-800 px-8 py-1.5 w-80">
+                                            <span className="text-xs dark:text-zinc-300 truncate">
                                                 {lastPageURL}
                                             </span>
                                         </div>
@@ -234,8 +253,8 @@ const TestSpec = () => {
                                             </Button>
                                         </div>
                                     </div>
-                                    <div className="flex px-2 gap-4 items-center justify-center">
-                                        <span className="text-zinc-300 font-medium text-xs">
+                                    <div className="flex flex-1 px-2 gap-4 items-center justify-end">
+                                        <span className="dark:text-zinc-300 font-medium text-xs">
                                             Live Preview ?
                                         </span>
                                         <Switch
@@ -246,7 +265,7 @@ const TestSpec = () => {
                                         <RiQuestionLine />
                                     </div>
                                 </div>
-                                <div className="lex flex-1 bg-zinc-300 w-full h-full bg-cover overflow-y-scroll">
+                                <div className="lex flex-1 bg-zinc-100 dark:bg-zinc-300 w-full h-full bg-cover overflow-y-scroll">
                                     {!livePreview && lastPageScreenshot && (
                                         <img
                                             src={
@@ -271,7 +290,7 @@ const TestSpec = () => {
                             defaultSize={35}
                             className="p-[1px] mt-2"
                         >
-                            <div className="flex flex-1 p-2 h-full grow rounded-lg shadow-sm ring-1 ring-zinc-950/4 dark:bg-zinc-950 dark:ring-white/5 text-zinc-300 overflow-y-scroll">
+                            <div className="flex flex-1 p-2 h-full grow rounded-lg shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-950/4 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 overflow-y-scroll">
                                 <Tabs
                                     defaultValue="console"
                                     className="w-[400px]"

@@ -1,9 +1,9 @@
 import { Button } from "src/components/ui/button";
 import { columns } from "./TestSpecsTable/columns";
 import { specs } from "./TestSpecsTable/data";
-import { DataTable } from "./TestSpecsTable/data-table";
 import { RiAddLargeLine, RiFlaskLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { DataTable } from "src/components/molecules/Datatable/Datatable";
 
 const TestSpecs = () => {
     return (
@@ -17,7 +17,7 @@ const TestSpecs = () => {
                         <h2 className="text-2xl font-bold tracking-tight">
                             Test Specs
                         </h2>
-                        <p className="text-zinc-500 text-sm">
+                        <p className="dark:text-zinc-500 text-sm">
                             Manage your test specs here
                         </p>
                     </div>
@@ -34,12 +34,10 @@ const TestSpecs = () => {
                     </Button>
                 </div>
             </div>
-            <div className="border-b border-zinc-900 my-8 mx-2"></div>
+            <div className="border-b dark:border-zinc-900 my-8 mx-2"></div>
 
-            <div className="bg-zinc-900 rounded-md">
-                <div className="bg-zinc-800/50 h-4 rounded-t-md"></div>
+            <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 rounded-md py-4">
                 <DataTable columns={columns} data={specs} />
-                <div className="bg-zinc-800/50 h-8 rounded-b-md"></div>
             </div>
         </div>
     );

@@ -15,11 +15,11 @@ const Explore = () => {
     };
     
     return (
-        <div className="mx-auto max-w-6xl text-zinc-300 h-full text-sm overflow-y-scroll">
+        <div className="mx-auto max-w-6xl dark:text-zinc-300 h-full text-sm overflow-y-scroll">
             <div className="flex flex-col w-full h-full">
                 <div className="flex-1 overflow-auto p-10 space-y-4">
                     <div className="flex items-center gap-4 ">
-                        <Avatar className="w-8 h-8 border border-zinc-600">
+                        <Avatar className="w-8 h-8 border dark:border-zinc-600">
                             <AvatarFallback>AI</AvatarFallback>
                         </Avatar>
                         <div className="bg-card p-3 rounded-lg max-w-[70%]">
@@ -27,12 +27,12 @@ const Explore = () => {
                         </div>
                     </div>
                     <div className="flex items-start gap-4 justify-end">
-                        <div className="bg-primary p-3 rounded-lg max-w-[70%] bg-zinc-800">
+                        <div className="bg-primary p-3 rounded-lg max-w-[70%] dark:bg-zinc-800">
                             <p>I'm looking to create a new chat UI for my app. Can you help me with that?</p>
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
-                        <Avatar className="w-8 h-8 border border-zinc-600">
+                        <Avatar className="w-8 h-8 border dark:border-zinc-600">
                             <AvatarFallback>AI</AvatarFallback>
                         </Avatar>
                         <div className="bg-card p-3 rounded-lg max-w-[70%]">
@@ -40,7 +40,7 @@ const Explore = () => {
                         </div>
                     </div>
                     <div className="flex items-start gap-4 justify-end">
-                        <div className="bg-primary p-3 rounded-lg max-w-[70%] bg-zinc-800">
+                        <div className="bg-primary p-3 rounded-lg max-w-[70%] dark:bg-zinc-800">
                             <p>
                                 I'd like a clean and modern design, with the ability to send messages, view past conversations, and maybe
                                 even some basic formatting options.
@@ -48,7 +48,7 @@ const Explore = () => {
                         </div>
                     </div>
                 </div>
-                <div className="bg-card bottom-0 flex items-center gap-2 bg-zinc-900 rounded-[30px] min-h-14 mx-20 my-6">
+                <div className="bg-card bottom-0 flex items-center gap-2 dark:bg-zinc-900 rounded-[30px] min-h-14 mx-20 my-6">
                     <Textarea
                         ref={textAreaRef}
                         onChange={handleTextAreaChange}

@@ -40,7 +40,7 @@ const PlannerAI = () => {
         setMessage(""); // Clear the input after sending
         if (textAreaRef.current) {
             textAreaRef.current.style.height = "auto";
-            textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
+            console.log("updating height");
         }
 
         try {
@@ -78,14 +78,14 @@ const PlannerAI = () => {
                         className={`flex items-start gap-4 ${msg.role === "user" ? "justify-end" : ""}`}
                     >
                         {msg.role === "ai" && (
-                            <Avatar className="w-8 h-8 border border-zinc-600">
+                            <Avatar className="w-8 h-8 border dark:border-zinc-600">
                                 <AvatarFallback>AI</AvatarFallback>
                             </Avatar>
                         )}
                         <div
                             className={`p-3 rounded-lg max-w-[90%] ${
                                 msg.role === "user"
-                                    ? "bg-primary bg-zinc-800"
+                                    ? "bg-primary dark:bg-zinc-800"
                                     : "bg-card"
                             }`}
                         >
@@ -94,7 +94,7 @@ const PlannerAI = () => {
                     </div>
                 ))}
             </div>
-            <div className="bg-card bottom-0 flex items-center gap-2 bg-zinc-900 rounded-[30px] min-h-14 mt-2">
+            <div className="bg-card bottom-0 flex items-center gap-2 dark:bg-zinc-900 rounded-[30px] min-h-14 mt-2">
                 <Textarea
                     placeholder="Type your message..."
                     rows={1}

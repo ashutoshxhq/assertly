@@ -94,11 +94,11 @@ const PlannerAI = () => {
                     </div>
                 ))}
             </div>
-            <div className="bg-card bottom-0 flex items-center gap-2 dark:bg-zinc-900 rounded-[30px] min-h-14 mt-2">
+            <div className="bg-card bottom-0 flex items-center gap-2 bg-zinc-200 dark:bg-zinc-900 rounded-[30px] min-h-14 mt-2">
                 <Textarea
                     placeholder="Type your message..."
                     rows={1}
-                    className="flex-1 resize-none rounded-none px-8 py-4"
+                    className="flex-1 resize-none border-none rounded-none px-8 py-4"
                     ref={textAreaRef}
                     value={message}
                     onChange={handleTextAreaChange}

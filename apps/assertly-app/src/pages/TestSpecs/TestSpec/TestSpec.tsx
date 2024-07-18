@@ -175,19 +175,21 @@ const TestSpec = () => {
                             defaultValue="steps"
                             className="flex flex-col items-center justify-start w-full p-4"
                         >
-                            <div className="flex justify-between w-full">
-                                <TabsList>
-                                    <TabsTrigger value="steps">
-                                        {" "}
-                                        <RiListIndefinite className="mr-2" />{" "}
-                                        Steps
-                                    </TabsTrigger>
-                                    <TabsTrigger value="chat">
-                                        <RiRobot2Line className="mr-2" />
-                                        Planner AI
-                                    </TabsTrigger>
-                                </TabsList>
-                                <div className="flex items-center justify-end gap-2">
+                            <div className="flex flex-wrap justify-between w-full gap-4">
+                                <div className="flex">
+                                    <TabsList>
+                                        <TabsTrigger value="steps">
+                                            {" "}
+                                            <RiListIndefinite className="mr-2" />{" "}
+                                            Steps
+                                        </TabsTrigger>
+                                        <TabsTrigger value="chat">
+                                            <RiRobot2Line className="mr-2" />
+                                            Planner AI
+                                        </TabsTrigger>
+                                    </TabsList>
+                                </div>
+                                <div className="flex flex-1 items-center justify-end gap-2">
                                     <Button
                                         variant="default"
                                         className="text-sm"

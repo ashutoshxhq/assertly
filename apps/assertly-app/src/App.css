@@ -20,11 +20,7 @@ body {
     color: white;
     background-color: #cbcbcb !important;
   }
-  
-  ::selection {
-    color: transparent;
-    background: transparent !important;
-  }
+
   
   ::-webkit-scrollbar-track {
     background: transparent !important;

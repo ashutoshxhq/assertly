@@ -165,7 +165,11 @@ const TestSpec = () => {
                 </div>
             </div>
             <ResizablePanelGroup direction="horizontal" className="flex px-2">
-                <ResizablePanel className="p-[1px]" defaultSize={35}>
+                <ResizablePanel
+                    className="p-[1px]"
+                    minSize={35}
+                    defaultSize={35}
+                >
                     <div className="flex rounded-lg shadow-sm ring-1 ring-zinc-200  dark:ring-zinc-950/4 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 h-[calc(100vh-62px)] overflow-y-scroll">
                         <Tabs
                             defaultValue="steps"

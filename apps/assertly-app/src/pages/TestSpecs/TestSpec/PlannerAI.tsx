@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { RiSendPlane2Line } from "react-icons/ri";
 import { Avatar, AvatarFallback } from "src/components/ui/avatar";
 import { Button } from "src/components/ui/button";
@@ -13,7 +13,7 @@ import axios from "axios";
 import { AI_AGENT_SERVICE_URL } from "src/config/constants";
 
 const PlannerAI = () => {
-    const textAreaRef = useRef<any>(null);
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const [steps, setSteps] = useAtom(testSpecStepsAtom);
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useAtom(testSpecPlannerConversationAtom);
@@ -28,7 +28,7 @@ const PlannerAI = () => {
         }
     };
 
-    const handleSubmit = async () => {
+    const sendMessage = useCallback(async () => {
         if (!message.trim()) return;
 
         const newUserMessage: TestSpecPlannerMessage = {
@@ -67,6 +67,18 @@ const PlannerAI = () => {
         } catch (error) {
             console.error("Error fetching steps:", error);
         }
+    }, [message, messages, steps, setMessages, setSteps]);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        sendMessage();
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+            e.preventDefault();
+            sendMessage();
+        }
     };
 
     return (
@@ -83,9 +95,9 @@ const PlannerAI = () => {
                             </Avatar>
                         )}
                         <div
-                            className={`p-3 rounded-lg max-w-[90%] ${
+                            className={`px-3 rounded-lg max-w-[90%] ${
                                 msg.role === "user"
-                                    ? "bg-primary dark:bg-zinc-800"
+                                    ? "bg-zinc-200 dark:bg-zinc-800 py-2 px-4"
                                     : "bg-card"
                             }`}
                         >
@@ -94,7 +106,10 @@ const PlannerAI = () => {
                     </div>
                 ))}
             </div>
-            <div className="bg-card bottom-0 flex items-center gap-2 bg-zinc-200 dark:bg-zinc-900 rounded-[30px] min-h-14 mt-2">
+            <form
+                onSubmit={handleSubmit}
+                className="bg-card bottom-0 flex items-center gap-2 bg-zinc-200 dark:bg-zinc-900 rounded-[30px] min-h-14 mt-2"
+            >
                 <Textarea
                     placeholder="Type your message..."
                     rows={1}
@@ -102,18 +117,19 @@ const PlannerAI = () => {
                     ref={textAreaRef}
                     value={message}
                     onChange={handleTextAreaChange}
+                    onKeyDown={handleKeyDown}
                 />
                 <div className="flex items-end justify-center h-full p-3">
                     <Button
                         variant="default"
                         size="icon"
                         className="rounded-[30px]"
-                        onClick={handleSubmit}
+                        type="submit"
                     >
                         <RiSendPlane2Line className="w-5 h-5" />
                     </Button>
                 </div>
-            </div>
+            </form>
         </div>
     );
 };

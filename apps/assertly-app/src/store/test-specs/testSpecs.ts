@@ -39,7 +39,7 @@ export type TestSpecQuery = {
     pageSize?: number;
 };
 export const testSpecsQueryAtom = atom<TestSpecQuery>({});
-export const testSpecAtom = atomWithInfiniteQuery((get) => ({
+export const testSpecsAtom = atomWithInfiniteQuery((get) => ({
     queryKey: ["test-specs"],
     queryFn: async ({ pageParam }) => {
         const teamId = get(teamIdAtom);
@@ -54,7 +54,7 @@ export const testSpecAtom = atomWithInfiniteQuery((get) => ({
             page: pageParam as number,
         };
         const res = await axios.get(
-            `${ENGINE_SERVICE_URL}/teams/${teamId}/test-specs?query=${query}`,
+            `${ENGINE_SERVICE_URL}/teams/${teamId}/test-specs?query=${JSON.stringify(query)}`,
         );
         return res.data;
     },

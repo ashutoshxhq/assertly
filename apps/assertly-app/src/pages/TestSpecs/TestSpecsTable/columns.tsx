@@ -1,10 +1,18 @@
-import { ColumnDef } from "@tanstack/react-table"
-import { TestSpec } from "./data"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "src/components/ui/dropdown-menu"
-import { Button } from "src/components/ui/button"
-import { RiMoreFill, RiPlayLargeFill } from "react-icons/ri"
-import moment from "moment"
-import { Checkbox } from "src/components/ui/checkbox"
+import { ColumnDef } from "@tanstack/react-table";
+import { TestSpec } from "./data";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "src/components/ui/dropdown-menu";
+import { Button } from "src/components/ui/button";
+import { RiMoreFill, RiPlayLargeFill } from "react-icons/ri";
+import moment from "moment";
+import { Checkbox } from "src/components/ui/checkbox";
+import { Badge } from "src/components/ui/badge";
+import { Link } from "react-router-dom";
 
 export const columns: ColumnDef<TestSpec>[] = [
     {
@@ -17,11 +25,12 @@ export const columns: ColumnDef<TestSpec>[] = [
                         table.getIsAllPageRowsSelected() ||
                         (table.getIsSomePageRowsSelected() && "indeterminate")
                     }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    onCheckedChange={(value) =>
+                        table.toggleAllPageRowsSelected(!!value)
+                    }
                     aria-label="Select all"
                 />
             </div>
-
         ),
         cell: ({ row }) => (
             <div className="pl-2 flex items-center justify-center">
@@ -40,30 +49,44 @@ export const columns: ColumnDef<TestSpec>[] = [
         size: 300,
         header: () => <div className="">Name</div>,
         cell: ({ row }) => {
-            return <div className="">{row.original.name}</div>
-        },
-    },
-    {
-        accessorKey: "status",
-        header: "Status",
-    },
-    {
-        accessorKey: "lastRanAt",
-        header: "Last Run",
-        size: 60,
-        cell: ({ row }) => {
-            return (moment(row.original.lastRanAt).fromNow())
+            return (
+                <Link
+                    to={"/specs/" + row.original.id}
+                    className="hover:underline"
+                >
+                    {row.original.name}
+                </Link>
+            );
         },
     },
     {
         id: "actions",
         size: 20,
         cell: ({ row }) => {
-            const spec = row.original
+            const spec = row.original;
             return (
                 <div className="flex gap-4 items-end justify-end pr-8">
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                        <RiPlayLargeFill className="h-4 w-4 " />
+                    <div className="flex items-center justify-between gap-2">
+                        {row.original.status === "failed" && (
+                            <Badge variant="outline">
+                                <div className="rounded-full bg-red-500 w-2 h-2 mr-2"></div>
+                                Failed
+                            </Badge>
+                        )}
+
+                        {row.original.status === "success" && (
+                            <Badge variant="outline">
+                                <div className="rounded-full bg-green-500 w-2 h-2 mr-2"></div>
+                                Passed
+                            </Badge>
+                        )}
+                        <span className="mx-2">
+                            {moment(row.original.updatedAt).fromNow()}
+                        </span>
+                    </div>
+                    <Button variant="secondary" size={"sm"}>
+                        <RiPlayLargeFill className="h-4 w-4 text-green-500 mr-2" />
+                        <span>Run</span>
                     </Button>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -74,7 +97,9 @@ export const columns: ColumnDef<TestSpec>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuItem>Run Test</DropdownMenuItem>
                             <DropdownMenuItem
-                                onClick={() => navigator.clipboard.writeText(spec.id)}
+                                onClick={() =>
+                                    navigator.clipboard.writeText(spec.id)
+                                }
                             >
                                 Copy Link
                             </DropdownMenuItem>
@@ -85,7 +110,7 @@ export const columns: ColumnDef<TestSpec>[] = [
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
-            )
+            );
         },
     },
-]
+];

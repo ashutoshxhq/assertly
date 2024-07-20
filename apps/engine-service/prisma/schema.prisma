@@ -16,7 +16,7 @@ model TestSpec {
   metadata      Json          
   teamId        String        
   steps         Step[]
-  testRuns      TestRuns[]
+  testRuns      TestRun[]
   testSchedules TestSchedule[]
   lastRunAt     DateTime      
   createdAt     DateTime       @default(now())
@@ -68,7 +68,7 @@ model Step {
   @@map("steps")
 }
 
-model TestRuns {
+model TestRun {
   id             String   @id @default(uuid())
   title          String  
   status         String  
@@ -87,7 +87,7 @@ model TestRuns {
   @@map("test_runs")
 }
 
-model ClientCredentials {
+model ClientCredential {
   id           String   @id @default(uuid())
   clientId     String  
   clientSecret String  
@@ -99,7 +99,7 @@ model ClientCredentials {
   @@map("client_credentials")
 }
 
-model Artifacts {
+model Artifact {
   id            String   @id @default(uuid())
   name          String  
   artifactType String  

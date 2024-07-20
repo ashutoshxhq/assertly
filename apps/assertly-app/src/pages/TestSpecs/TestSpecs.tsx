@@ -4,8 +4,12 @@ import { specs } from "./TestSpecsTable/data";
 import { RiAddLargeLine, RiFlaskLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { DataTable } from "src/components/molecules/Datatable/Datatable";
+import { testSpecsAtom } from "src/store/test-specs/testSpecs";
+import { useAtom } from "jotai";
 
 const TestSpecs = () => {
+    const [{ data, isPending, isError }] = useAtom(testSpecsAtom);
+    console.log({ data, isPending, isError });
     return (
         <div className="p-8">
             <div className="flex items-center justify-between px-4">

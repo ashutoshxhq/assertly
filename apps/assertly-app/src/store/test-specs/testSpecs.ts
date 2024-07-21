@@ -20,6 +20,7 @@ export interface TestStep {
 
 export const testSpecStepsAtom = atom<TestStep[]>([]);
 export const testSpecLastExecutedStepIndexAtom = atom<number>(-1);
+export const testSpecCurrentlyOpenStepIndexAtom = atom<number>(-1);
 
 export const testSpecPlannerConversationAtom = atom<TestSpecPlannerMessage[]>(
     [],
@@ -64,6 +65,24 @@ export const testSpecsAtom = atomWithQuery((get) => {
             };
             const res = await axios.get(
                 `${ENGINE_SERVICE_URL}/teams/${teamId}/test-specs?query=${JSON.stringify(query)}`,
+            );
+            return res.data;
+        },
+    };
+});
+
+export const selectedTestSpecIdAtom = atom<string>("");
+export const selectedTestSpecAtom = atomWithQuery((get) => {
+    const teamId = get(teamIdAtom);
+    const selectedTestSpecId = get(selectedTestSpecIdAtom);
+    return {
+        queryKey: [teamId, "test-specs", selectedTestSpecId],
+        queryFn: async () => {
+            if (!selectedTestSpecId) {
+                return null;
+            }
+            const res = await axios.get(
+                `${ENGINE_SERVICE_URL}/teams/${teamId}/test-specs/${selectedTestSpecId}`,
             );
             return res.data;
         },

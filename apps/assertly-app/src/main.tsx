@@ -77,7 +77,7 @@ const router = createBrowserRouter([
                 ],
             },
             {
-                path: "specs/:specid",
+                path: "specs/:specId",
                 element: <TestSpec />,
             },
         ],

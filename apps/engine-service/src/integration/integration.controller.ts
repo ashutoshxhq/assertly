@@ -28,10 +28,8 @@ export class IntegrationController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Query('query') query: string) {
-    const match = await this.integrationService.findOne(
-      JSON.parse(query)?.where,
-    );
+  async findOne(@Param('id') id: string) {
+    const match = await this.integrationService.findOne({ id });
     return match;
   }
 

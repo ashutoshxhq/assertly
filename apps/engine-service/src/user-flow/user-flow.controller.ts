@@ -28,8 +28,8 @@ export class UserFlowController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Query('query') query: string) {
-    const match = await this.userFlowService.findOne(JSON.parse(query)?.where);
+  async findOne(@Param('id') id: string) {
+    const match = await this.userFlowService.findOne({ id });
     return match;
   }
 

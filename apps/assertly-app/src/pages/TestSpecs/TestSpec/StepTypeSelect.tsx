@@ -32,7 +32,7 @@ const StepTypeSelect = ({ stepType, setStepType }: any) => {
                         ? steps.find(
                               (framework) => framework.value === stepType,
                           )?.label
-                        : "Select"}
+                        : "Select Step"}
                     <RiArrowDownSLine className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>

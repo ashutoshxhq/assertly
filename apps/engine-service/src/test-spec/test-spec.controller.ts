@@ -28,8 +28,8 @@ export class TestSpecController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Query('query') query: string) {
-    const match = await this.testSpecService.findOne(JSON.parse(query)?.where);
+  async findOne(@Param('id') id: string) {
+    const match = await this.testSpecService.findOne({ id });
     return match;
   }
 

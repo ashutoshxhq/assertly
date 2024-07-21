@@ -14,7 +14,10 @@ import { Badge } from "src/components/ui/badge";
 import { Link } from "react-router-dom";
 import { TestSpec } from "../TestSpecs";
 import { useAtom } from "jotai";
-import { deleteTestSpecAtom } from "src/store/test-specs/testSpecs";
+import {
+    deleteTestSpecAtom,
+    selectedTestSpecIdAtom,
+} from "src/store/test-specs/testSpecs";
 import { useEffect, useState } from "react";
 
 export const columns: ColumnDef<TestSpec>[] = [
@@ -52,9 +55,11 @@ export const columns: ColumnDef<TestSpec>[] = [
         size: 300,
         header: () => <div className="">Name</div>,
         cell: ({ row }) => {
+            const [, setSelectedTestSpecId] = useAtom(selectedTestSpecIdAtom);
             return (
                 <Link
                     to={"/specs/" + row.original.id}
+                    onClick={() => setSelectedTestSpecId(row.original.id)}
                     className="hover:underline font-medium"
                 >
                     {row.original.name}

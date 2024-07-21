@@ -34,10 +34,8 @@ export class ClientCredentialController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Query('query') query: string) {
-    const match = await this.clientCredentialService.findOne(
-      JSON.parse(query)?.where,
-    );
+  async findOne(@Param('id') id: string) {
+    const match = await this.clientCredentialService.findOne({ id });
     return match;
   }
 

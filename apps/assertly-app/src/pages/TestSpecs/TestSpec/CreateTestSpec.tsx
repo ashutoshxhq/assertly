@@ -46,20 +46,25 @@ export function CreateTestSpec() {
     return (
         <Dialog open={open} onOpenChange={(o) => setOpen(o)}>
             <DialogTrigger asChild>
-                <Button variant={"brand"} className="bg-orange-500 mt-0">
+                <Button variant={"brand"} className="mt-0">
                     <RiAddLargeLine className="mx-2" /> New Test Spec
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] top-[30%] dark:text-zinc-200">
                 <DialogHeader>
-                    <DialogTitle>Create New Test</DialogTitle>
+                    <DialogTitle className="dark:text-zinc-200">
+                        Create New Test
+                    </DialogTitle>
                     <DialogDescription>
                         Fill in the form below to create a new test
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex w-full py-4">
                     <div className="flex flex-col w-full items-start gap-4">
-                        <Label htmlFor="name" className="text-right">
+                        <Label
+                            htmlFor="name"
+                            className="text-right dark:text-zinc-200"
+                        >
                             Name
                         </Label>
                         <Input
@@ -67,6 +72,7 @@ export function CreateTestSpec() {
                             value={testName}
                             onChange={(e) => setTestName(e.target.value)}
                             className="col-span-3 w-full"
+                            placeholder="Enter test name"
                         />
                     </div>
                 </div>

@@ -28,8 +28,8 @@ export class ArtifactController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Query('query') query: string) {
-    const match = await this.artifactService.findOne(JSON.parse(query)?.where);
+  async findOne(@Param('id') id: string) {
+    const match = await this.artifactService.findOne({ id });
     return match;
   }
 

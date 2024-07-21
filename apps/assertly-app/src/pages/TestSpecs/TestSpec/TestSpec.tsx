@@ -8,7 +8,7 @@ import {
     RiRefreshLine,
     RiRobot2Line,
 } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 } from "uuid";
 import useWebSocket from "react-use-websocket";
 import { useAtom } from "jotai";
@@ -30,13 +30,17 @@ import PlannerAI from "./PlannerAI";
 import { Switch } from "src/components/ui/switch";
 import { WEBDRIVER_SERVICE_URL } from "src/config/constants";
 import {
+    selectedTestSpecAtom,
+    selectedTestSpecIdAtom,
     testSpecLastExecutedStepIndexAtom,
     testSpecStepsAtom,
 } from "src/store/test-specs/testSpecs";
 
 const TestSpec = () => {
+    const { specId } = useParams();
     const navigate = useNavigate();
-
+    const [, setSelectedTestSpecId] = useAtom(selectedTestSpecIdAtom);
+    const [{ data, status }] = useAtom(selectedTestSpecAtom);
     const [, setMessageHistory] = useState<MessageEvent<any>[]>([]);
 
     const [steps, setSteps] = useAtom(testSpecStepsAtom);
@@ -52,6 +56,12 @@ const TestSpec = () => {
         [clientIdRef],
     );
     const { sendMessage, lastMessage } = useWebSocket(websocketUrl);
+
+    useEffect(() => {
+        if (specId) {
+            setSelectedTestSpecId(specId);
+        }
+    }, [specId]);
 
     useEffect(() => {
         if (lastMessage !== null) {
@@ -127,6 +137,14 @@ const TestSpec = () => {
         [steps, sendMessage],
     );
 
+    if (status === "pending") {
+        return <div>Loading...</div>;
+    }
+
+    if (status === "error") {
+        return <div>Error loading test spec</div>;
+    }
+
     return (
         <div className="flex flex-col py-2 gap-2">
             <div className="flex justify-between items-center px-2">
@@ -146,7 +164,7 @@ const TestSpec = () => {
                         <span className="font-semibold lowercase">
                             assertly
                         </span>{" "}
-                        / Untitled Test Spec
+                        / {data?.name}
                     </div>
                 </div>
                 <div className="flex w-[33.33%] items-center justify-end gap-2">

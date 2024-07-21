@@ -2,6 +2,7 @@ import { RiAddLargeLine } from "react-icons/ri";
 import { Button } from "src/components/ui/button";
 import Step from "./Step";
 import {
+    testSpecCurrentlyOpenStepIndexAtom,
     testSpecLastExecutedStepIndexAtom,
     testSpecStepsAtom,
     TestStep,
@@ -14,6 +15,9 @@ interface StepsProps {
 
 const Steps: React.FC<StepsProps> = ({ runStep }) => {
     const [steps, setSteps] = useAtom(testSpecStepsAtom);
+    const [openStepIndex, setOpenStepIndex] = useAtom(
+        testSpecCurrentlyOpenStepIndexAtom,
+    );
     const [currentStepIndex] = useAtom(testSpecLastExecutedStepIndexAtom);
     const addStep = () => {
         const newStep = {
@@ -23,9 +27,11 @@ const Steps: React.FC<StepsProps> = ({ runStep }) => {
             props: {},
         };
         setSteps([...steps, newStep]);
+        setOpenStepIndex(steps.length);
     };
 
     const updateStep = (id: string, updatedStep: Partial<TestStep>) => {
+        console.log(id);
         setSteps(
             steps.map((step) =>
                 step.id === id ? { ...step, ...updatedStep } : step,
@@ -38,7 +44,7 @@ const Steps: React.FC<StepsProps> = ({ runStep }) => {
     };
 
     return (
-        <div className="py-4 pb-0 flex flex-col gap-2 w-full">
+        <div className="py-4 pb-0 flex flex-col gap-4 w-full">
             {steps.map((step, index) => (
                 <Step
                     key={step.id}
@@ -50,6 +56,10 @@ const Steps: React.FC<StepsProps> = ({ runStep }) => {
                     runStep={() => runStep(index)}
                     currentStepIndex={currentStepIndex}
                     index={index}
+                    isOpen={index === openStepIndex}
+                    setIsOpen={(o) =>
+                        o ? setOpenStepIndex(index) : setOpenStepIndex(-1)
+                    }
                 />
             ))}
             <div className="w-full flex justify-center items-center mt-4">

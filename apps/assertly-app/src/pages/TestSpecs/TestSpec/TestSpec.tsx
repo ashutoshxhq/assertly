@@ -157,7 +157,7 @@ const TestSpec = () => {
                     </Button>
                 </div>
                 <div className="flex w-[33.33%] justify-center">
-                    <div className="px-4 py-2 bg-zinc-100 rounded-md dark:bg-zinc-800 text-sm dark:text-zinc-300">
+                    <div className="px-4 py-2 bg-zinc-100 rounded-md shadow dark:bg-zinc-800 text-sm dark:text-zinc-300">
                         <span className="font-semibold lowercase">
                             assertly
                         </span>{" "}
@@ -185,7 +185,7 @@ const TestSpec = () => {
                     minSize={30}
                     defaultSize={40}
                 >
-                    <div className="flex rounded-lg shadow-sm ring-1 ring-zinc-200  dark:ring-zinc-950/4 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 h-[calc(100vh-62px)] overflow-y-scroll">
+                    <div className="flex rounded-lg shadow ring-1 ring-zinc-200  dark:ring-zinc-950/4 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 h-[calc(100vh-62px)] overflow-y-scroll">
                         <Tabs
                             defaultValue="steps"
                             className="flex flex-col items-center justify-start w-full p-4"
@@ -250,7 +250,7 @@ const TestSpec = () => {
                         className="flex flex-col"
                     >
                         <ResizablePanel defaultSize={65} className="p-[1px]">
-                            <div className="flex flex-1 flex-col h-full grow rounded-lg shadow-sm ring-1 dark:ring-zinc-950/4 ring-zinc-200 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 overflow-y-scroll">
+                            <div className="flex flex-1 flex-col h-full grow rounded-lg shadow ring-1 dark:ring-zinc-950/4 ring-zinc-200 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 overflow-y-scroll">
                                 <div className="flex items-center p-2 border-b ">
                                     <div className="flex-1">
                                         <div className="flex gap-2 px-2">
@@ -313,7 +313,7 @@ const TestSpec = () => {
                             defaultSize={35}
                             className="p-[1px] mt-2"
                         >
-                            <div className="flex flex-1 p-2 h-full grow rounded-lg shadow-sm ring-1 ring-zinc-200 dark:ring-zinc-950/4 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 overflow-y-scroll">
+                            <div className="flex flex-1 p-2 h-full grow rounded-lg shadow ring-1 ring-zinc-200 dark:ring-zinc-950/4 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 overflow-y-scroll">
                                 <Tabs
                                     defaultValue="console"
                                     className="w-[400px]"

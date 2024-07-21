@@ -39,7 +39,7 @@ const TestSpecs = () => {
             </div>
             <div className="border-b dark:border-zinc-900 my-8 mx-2"></div>
 
-            <div className="bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 rounded-md py-4">
+            <div className="bg-zinc-50 dark:bg-zinc-800/50 shadow border border-zinc-200 dark:border-zinc-800 rounded-md py-4">
                 <DataTable columns={columns} data={(data || []) as any} />
             </div>
         </div>

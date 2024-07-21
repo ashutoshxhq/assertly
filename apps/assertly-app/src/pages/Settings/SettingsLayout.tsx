@@ -1,4 +1,4 @@
-import { RiBellLine, RiOrganizationChart, RiSettings2Line, RiTeamFill } from "react-icons/ri";
+import { RiBellLine, RiOrganizationChart } from "react-icons/ri";
 import { MdManageAccounts } from "react-icons/md";
 import { GoWorkflow } from "react-icons/go";
 import {
@@ -9,7 +9,6 @@ import {
 } from "src/components/ui/tabs";
 import Account from "./Account/Account";
 import Integrations from "./Integrations/Integrations";
-import TeamMembers from "./TeamMembers/TeamMembers";
 import Organization from "./Organization/Organization";
 import Notification from "./Notification/Notification";
 
@@ -31,19 +30,15 @@ const SettingsLayout = () => {
                     </div>
                 </div>
             </div>
-            <Tabs defaultValue="user-profile" className="w-full p-4">
+            <Tabs defaultValue="organization" className="w-full p-4">
                 <TabsList className="bg-gray-200">
-                    <TabsTrigger value="user-profile">
-                        <MdManageAccounts className="mr-2" />
-                        User Profile
-                    </TabsTrigger>
                     <TabsTrigger value="organization">
                         <RiOrganizationChart className="mr-2" />
                         Organization
                     </TabsTrigger>
-                    <TabsTrigger value="teamMembers">
-                        <RiTeamFill className="mr-2" />
-                        Team Members
+                    <TabsTrigger value="user-profile">
+                        <MdManageAccounts className="mr-2" />
+                        User Profile
                     </TabsTrigger>
                     <TabsTrigger value="integrations">
                         <GoWorkflow className="mr-2" />
@@ -55,14 +50,11 @@ const SettingsLayout = () => {
                     </TabsTrigger>
                 </TabsList>
                 <div className="border-b-2 dark:border-zinc-900 my-4 mx-2"></div>
-                <TabsContent value="user-profile">
-                    <Account />
-                </TabsContent>
                 <TabsContent value="organization">
                     <Organization />
                 </TabsContent>
-                <TabsContent value="teamMembers">
-                    <TeamMembers />
+                <TabsContent value="user-profile">
+                    <Account />
                 </TabsContent>
                 <TabsContent value="integrations">
                     <Integrations />

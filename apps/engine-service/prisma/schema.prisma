@@ -11,14 +11,14 @@ generator client {
 
 model TestSpec {
   id            String         @id @default(uuid())
-  title         String        
-  status        String        
-  metadata      Json          
-  teamId        String        
+  name          String
+  status        String?
+  metadata      Json?
+  teamId        String
   steps         Step[]
   testRuns      TestRun[]
   testSchedules TestSchedule[]
-  lastRunAt     DateTime      
+  lastRunAt     DateTime?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -27,10 +27,10 @@ model TestSpec {
 
 model UserFlow {
   id        String   @id @default(uuid())
-  title     String  
-  status    String  
-  metadata  Json    
-  teamId    String  
+  name      String
+  status    String?
+  metadata  Json?
+  teamId    String
   steps     Step[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -40,10 +40,10 @@ model UserFlow {
 
 model TestSchedule {
   id        String   @id @default(uuid())
-  teamId    String  
-  schedule  Json    
+  teamId    String
+  schedule  Json
   spec      TestSpec @relation(fields: [specId], references: [id])
-  specId    String  
+  specId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -52,16 +52,15 @@ model TestSchedule {
 
 model Step {
   id         String    @id @default(uuid())
-  title      String   
-  stepType   String   
-  properties Json     
-  status     String   
-  teamId     String   
+  title      String?
+  stepType   String?
+  props      Json?
+  status     String?
+  teamId     String
   spec       TestSpec? @relation(fields: [specId], references: [id])
-  specId     String?  
+  specId     String?
   userFlow   UserFlow? @relation(fields: [userFlowId], references: [id])
   userFlowId String?
-  finishedAt DateTime 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
@@ -69,30 +68,28 @@ model Step {
 }
 
 model TestRun {
-  id             String   @id @default(uuid())
-  title          String  
-  status         String  
-  metadata       Json    
-  stepContext    Json    
-  consoleContext Json    
-  networkContext Json    
-  spec           TestSpec @relation(fields: [specId], references: [id])
+  id             String    @id @default(uuid())
+  status         String?
+  metadata       Json?
+  stepContext    Json?
+  consoleContext Json?
+  networkContext Json?
+  spec           TestSpec  @relation(fields: [specId], references: [id])
   specId         String
-  startedAt      DateTime
-  finishedAt     DateTime
-  teamId         String  
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  finishedAt     DateTime?
+  teamId         String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   @@map("test_runs")
 }
 
 model ClientCredential {
   id           String   @id @default(uuid())
-  clientId     String  
-  clientSecret String  
-  permissions  Json    
-  teamId       String  
+  clientId     String
+  clientSecret String
+  permissions  Json
+  teamId       String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -100,26 +97,26 @@ model ClientCredential {
 }
 
 model Artifact {
-  id            String   @id @default(uuid())
-  name          String  
-  artifactType String  
-  artifactUrl  String  
-  metadata      Json    
-  teamId        String  
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(uuid())
+  name         String
+  artifactType String
+  artifactUrl  String
+  metadata     Json
+  teamId       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map("artifacts")
 }
 
 model Integration {
-  id               String   @id @default(uuid())
-  name             String  
-  integrationType String  
-  credentials      Json    
-  teamId           String  
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id              String   @id @default(uuid())
+  name            String
+  integrationType String
+  credentials     Json
+  teamId          String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@map("integrations")
 }

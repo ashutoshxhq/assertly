@@ -1,6 +1,6 @@
 import axios from "axios";
 import { atom } from "jotai";
-import { atomWithInfiniteQuery, atomWithMutation } from "jotai-tanstack-query";
+import { atomWithMutation, atomWithQuery } from "jotai-tanstack-query";
 import { ENGINE_SERVICE_URL } from "src/config/constants";
 import { teamIdAtom } from "../auth/auth";
 
@@ -18,9 +18,7 @@ export interface TestStep {
     props: Record<string, any>;
 }
 
-export const testSpecStepsAtom = atom<TestStep[]>([
-    { id: "1", index: 0, type: "", props: {} },
-]);
+export const testSpecStepsAtom = atom<TestStep[]>([]);
 export const testSpecLastExecutedStepIndexAtom = atom<number>(-1);
 
 export const testSpecPlannerConversationAtom = atom<TestSpecPlannerMessage[]>(
@@ -35,33 +33,43 @@ export type TestSpecQuery = {
         except?: string[];
     };
     orderBy?: any[];
-    page?: number;
-    pageSize?: number;
+    take?: number;
+    skip?: number;
+};
+
+export type TestSpecPagination = {
+    take?: number;
+    skip?: number;
 };
 export const testSpecsQueryAtom = atom<TestSpecQuery>({});
-export const testSpecsAtom = atomWithInfiniteQuery((get) => ({
-    queryKey: ["test-specs"],
-    queryFn: async ({ pageParam }) => {
-        const teamId = get(teamIdAtom);
-        let query = get(testSpecsQueryAtom);
-        query = {
-            ...query,
-            where: {
-                ...query.where,
-                teamId,
-            },
-            pageSize: 10,
-            page: pageParam as number,
-        };
-        const res = await axios.get(
-            `${ENGINE_SERVICE_URL}/teams/${teamId}/test-specs?query=${JSON.stringify(query)}`,
-        );
-        return res.data;
-    },
-    getNextPageParam: (_lastPage, _allPages, lastPageParam: number) =>
-        lastPageParam + 1,
-    initialPageParam: 1,
-}));
+
+export const testSpecsPaginationAtom = atom<TestSpecPagination>({
+    take: 10,
+    skip: 0,
+});
+export const testSpecsAtom = atomWithQuery((get) => {
+    const teamId = get(teamIdAtom);
+    return {
+        queryKey: [teamId, "test-specs", get(testSpecsPaginationAtom)],
+        queryFn: async ({ queryKey: [, , pagination] }: any) => {
+            let query = get(testSpecsQueryAtom);
+            query = {
+                ...query,
+                where: {
+                    ...query.where,
+                    teamId,
+                },
+                take: pagination.take,
+                skip: pagination.skip,
+            };
+            const res = await axios.get(
+                `${ENGINE_SERVICE_URL}/teams/${teamId}/test-specs?query=${JSON.stringify(query)}`,
+            );
+            return res.data;
+        },
+    };
+});
+
 export const createTestSpecAtom = atomWithMutation((get) => {
     const teamId = get(teamIdAtom);
 
@@ -73,6 +81,27 @@ export const createTestSpecAtom = atomWithMutation((get) => {
                 data,
             );
             return res.data;
+        },
+        onSuccess: () => {
+            get(testSpecsAtom).refetch();
+        },
+    };
+});
+
+export const deleteTestSpecAtom = atomWithMutation((get) => {
+    const teamId = get(teamIdAtom);
+
+    return {
+        mutationKey: [teamId, "test-specs"],
+        mutationFn: async ({ id, where }: any) => {
+            const res = await axios.delete(
+                `${ENGINE_SERVICE_URL}/teams/${teamId}/test-specs/${id}`,
+                { data: { where } },
+            );
+            return res.data;
+        },
+        onSuccess: () => {
+            get(testSpecsAtom).refetch();
         },
     };
 });

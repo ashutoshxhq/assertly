@@ -2,9 +2,18 @@ import { Outlet } from "react-router-dom";
 import { cn } from "./lib/utils";
 import { useAtom } from "jotai";
 import { isDarkMode } from "./store/app/app";
+import { useEffect } from "react";
 
 function PrivateLayout() {
     const [darkMode] = useAtom(isDarkMode);
+
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
+    }, [darkMode]);
 
     return (
         <div className={cn(darkMode && "dark")}>

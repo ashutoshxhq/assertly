@@ -1,5 +1,4 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { TestSpec } from "./data";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -13,6 +12,10 @@ import moment from "moment";
 import { Checkbox } from "src/components/ui/checkbox";
 import { Badge } from "src/components/ui/badge";
 import { Link } from "react-router-dom";
+import { TestSpec } from "../TestSpecs";
+import { useAtom } from "jotai";
+import { deleteTestSpecAtom } from "src/store/test-specs/testSpecs";
+import { useEffect, useState } from "react";
 
 export const columns: ColumnDef<TestSpec>[] = [
     {
@@ -52,7 +55,7 @@ export const columns: ColumnDef<TestSpec>[] = [
             return (
                 <Link
                     to={"/specs/" + row.original.id}
-                    className="hover:underline"
+                    className="hover:underline font-medium"
                 >
                     {row.original.name}
                 </Link>
@@ -63,9 +66,29 @@ export const columns: ColumnDef<TestSpec>[] = [
         id: "actions",
         size: 20,
         cell: ({ row }) => {
+            const [{ mutate, status }] = useAtom(deleteTestSpecAtom);
+            const [open, setOpen] = useState(false);
             const spec = row.original;
+            const handleDelete = async () => {
+                try {
+                    mutate({
+                        id: spec.id,
+                        where: {
+                            id: row.original.id,
+                        },
+                    });
+                } catch (e) {
+                    console.error(e);
+                }
+            };
+            useEffect(() => {
+                if (status === "success" || status === "error") {
+                    setOpen(false);
+                }
+            }, [status]);
+
             return (
-                <div className="flex gap-4 items-end justify-end pr-8">
+                <div className="flex gap-4 items-center justify-end pr-8">
                     <div className="flex items-center justify-between gap-2">
                         {row.original.status === "failed" && (
                             <Badge variant="outline">
@@ -84,13 +107,19 @@ export const columns: ColumnDef<TestSpec>[] = [
                             {moment(row.original.updatedAt).fromNow()}
                         </span>
                     </div>
-                    <Button variant="secondary" size={"sm"}>
-                        <RiPlayLargeFill className="h-4 w-4 text-green-500 mr-2" />
+                    <Button variant="outline" size={"sm"}>
+                        <RiPlayLargeFill className="text-green-500 mr-2" />
                         <span>Run</span>
                     </Button>
-                    <DropdownMenu>
+                    <DropdownMenu
+                        open={open}
+                        onOpenChange={(o) => {
+                            if (status === "pending") return;
+                            setOpen(o);
+                        }}
+                    >
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0">
+                            <Button variant="outline" className="h-8 w-8 p-0">
                                 <RiMoreFill className="h-4 w-4" />
                             </Button>
                         </DropdownMenuTrigger>
@@ -106,7 +135,11 @@ export const columns: ColumnDef<TestSpec>[] = [
                             <DropdownMenuSeparator />
                             <DropdownMenuItem>Clone Spec</DropdownMenuItem>
                             <DropdownMenuItem>Edit Spec</DropdownMenuItem>
-                            <DropdownMenuItem>Delete Spec</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleDelete}>
+                                {status === "pending"
+                                    ? "Deleting..."
+                                    : "Delete"}
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

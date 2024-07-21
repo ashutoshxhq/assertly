@@ -45,7 +45,7 @@ export class IntegrationController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Query('query') query: string) {
-    return this.integrationService.remove(JSON.parse(query)?.where);
+  async remove(@Param('id') id: string) {
+    return this.integrationService.remove({ id });
   }
 }

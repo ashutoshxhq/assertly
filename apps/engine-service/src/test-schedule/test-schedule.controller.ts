@@ -48,7 +48,7 @@ export class TestScheduleController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Query('query') query: string) {
-    return this.testSchedulesService.remove(JSON.parse(query)?.where);
+  async remove(@Param('id') id: string) {
+    return this.testSchedulesService.remove({ id });
   }
 }

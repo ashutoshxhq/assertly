@@ -53,7 +53,7 @@ export class ClientCredentialController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Query('query') query: string) {
-    return this.clientCredentialService.remove(JSON.parse(query)?.where);
+  async remove(@Param('id') id: string) {
+    return this.clientCredentialService.remove({ id });
   }
 }

@@ -11,7 +11,7 @@ import {
 import { TestSpecService } from './test-spec.service';
 import { Prisma } from '@prisma/client';
 
-@Controller('v1/teams/:teamId/test-runs')
+@Controller('v1/teams/:teamId/test-specs')
 export class TestSpecController {
   constructor(private readonly testSpecService: TestSpecService) {}
 
@@ -43,7 +43,7 @@ export class TestSpecController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Query('query') query: string) {
-    return this.testSpecService.remove(JSON.parse(query)?.where);
+  async remove(@Param('id') id: string) {
+    return this.testSpecService.remove({ id });
   }
 }

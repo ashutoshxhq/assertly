@@ -43,7 +43,7 @@ export class ArtifactController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Query('query') query: string) {
-    return this.artifactService.remove(JSON.parse(query)?.where);
+  async remove(@Param('id') id: string) {
+    return this.artifactService.remove({ id });
   }
 }

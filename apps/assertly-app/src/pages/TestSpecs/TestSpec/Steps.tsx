@@ -31,7 +31,6 @@ const Steps: React.FC<StepsProps> = ({ runStep }) => {
     };
 
     const updateStep = (id: string, updatedStep: Partial<TestStep>) => {
-        console.log(id);
         setSteps(
             steps.map((step) =>
                 step.id === id ? { ...step, ...updatedStep } : step,

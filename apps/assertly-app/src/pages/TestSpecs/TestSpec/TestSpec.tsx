@@ -35,6 +35,7 @@ import {
     testSpecLastExecutedStepIndexAtom,
     testSpecStepsAtom,
 } from "src/store/test-specs/testSpecs";
+import Loader from "src/components/molecules/Loader";
 
 const TestSpec = () => {
     const { specId } = useParams();
@@ -138,11 +139,7 @@ const TestSpec = () => {
     );
 
     if (status === "pending") {
-        return <div>Loading...</div>;
-    }
-
-    if (status === "error") {
-        return <div>Error loading test spec</div>;
+        return <Loader />;
     }
 
     return (

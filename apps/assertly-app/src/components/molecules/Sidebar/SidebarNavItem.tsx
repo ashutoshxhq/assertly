@@ -27,7 +27,7 @@ const SidebarNavItem = ({ icon, title, to }: SidebarNavItemProps) => {
                                     className={cn(
                                         "flex w-full items-center justify-center gap-3 rounded-lg px-3 py-3.5 text-left text-base/6 font-medium text-zinc-950 border border-transparent sm:py-2 sm:text-sm/5  dark:text-white dark:hover:bg-white/5",
                                         isActive &&
-                                            "bg-zinc-100 dark:bg-white/10 border border-zinc-300 dark:border-zinc-600",
+                                            "bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700",
                                     )}
                                 >
                                     <span

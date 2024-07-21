@@ -22,77 +22,84 @@ import UserFlows from "./pages/UserFlows/UserFlows";
 import TestSpec from "./pages/TestSpecs/TestSpec/TestSpec";
 import PrivateLayout from "./PrivateLayout";
 import ApplicationWithSidebarLayout from "./ApplicationWithSidebarLayout";
+import AppLayout from "./AppLayout";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <PrivateLayout />,
+        element: <AppLayout />,
         children: [
             {
                 path: "/",
-                element: <ApplicationWithSidebarLayout />,
+                element: <PrivateLayout />,
                 children: [
                     {
                         path: "/",
-                        element: <Navigate to="specs" />,
-                    },
-                    {
-                        path: "specs",
-                        element: <TestSpecs />,
-                    },
-                    {
-                        path: "runs",
-                        element: <TestRuns />,
-                    },
-                    {
-                        path: "user-flows",
-                        element: <UserFlows />,
-                    },
-                    {
-                        path: "artifacts",
-                        element: <Artifacts />,
-                    },
-                    {
-                        path: "api-keys",
-                        element: <ApiKeys />,
-                    },
-                    {
-                        path: "settings",
-                        element: <SettingsLayout />,
+                        element: <ApplicationWithSidebarLayout />,
                         children: [
                             {
-                                path: "account",
-                                element: <Account />,
+                                path: "/",
+                                element: <Navigate to="specs" />,
                             },
                             {
-                                path: "team-members",
-                                element: <TeamMembers />,
+                                path: "specs",
+                                element: <TestSpecs />,
                             },
                             {
-                                path: "integrations",
-                                element: <Integrations />,
+                                path: "runs",
+                                element: <TestRuns />,
+                            },
+                            {
+                                path: "user-flows",
+                                element: <UserFlows />,
+                            },
+                            {
+                                path: "artifacts",
+                                element: <Artifacts />,
+                            },
+                            {
+                                path: "api-keys",
+                                element: <ApiKeys />,
+                            },
+                            {
+                                path: "settings",
+                                element: <SettingsLayout />,
+                                children: [
+                                    {
+                                        path: "account",
+                                        element: <Account />,
+                                    },
+                                    {
+                                        path: "team-members",
+                                        element: <TeamMembers />,
+                                    },
+                                    {
+                                        path: "integrations",
+                                        element: <Integrations />,
+                                    },
+                                ],
                             },
                         ],
+                    },
+                    {
+                        path: "specs/:specId",
+                        element: <TestSpec />,
                     },
                 ],
             },
             {
-                path: "specs/:specId",
-                element: <TestSpec />,
-            },
-        ],
-    },
-    {
-        path: "/auth/",
-        element: <PublicLayout />,
-        children: [
-            {
-                path: "login",
-                element: <Login />,
-            },
-            {
-                path: "register",
-                element: <Register />,
+                path: "/auth/",
+                element: <PublicLayout />,
+                children: [
+                    {
+                        path: "login",
+                        element: <Login />,
+                    },
+                    {
+                        path: "register",
+                        element: <Register />,
+                    },
+                ],
             },
         ],
     },

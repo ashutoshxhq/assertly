@@ -40,7 +40,6 @@ const PlannerAI = () => {
         setMessage(""); // Clear the input after sending
         if (textAreaRef.current) {
             textAreaRef.current.style.height = "auto";
-            console.log("updating height");
         }
 
         try {

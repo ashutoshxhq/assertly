@@ -16,8 +16,7 @@ export type TestSpec = {
 };
 
 const TestSpecs = () => {
-    const [{ data, isPending, isError }] = useAtom(testSpecsAtom);
-    console.log({ data, isPending, isError });
+    const [{ data }] = useAtom(testSpecsAtom);
     return (
         <div className="p-8">
             <div className="flex items-center justify-between px-4">

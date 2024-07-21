@@ -11,9 +11,24 @@ import {
 import { Switch } from "src/components/ui/switch";
 import { isDarkMode } from "src/store/app/app";
 import { useAtom } from "jotai";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "src/components/ui/dropdown-menu";
+import { authAtom } from "src/store/auth/auth";
+import { currentUserNameAtom } from "src/store/users/users";
 
 const Sidebar = () => {
     const [darkMode, setDarkMode] = useAtom(isDarkMode);
+    const [currentUserName] = useAtom(currentUserNameAtom);
+    const [, setAuthState] = useAtom(authAtom);
+
+    const handleLogout = () => {
+        setAuthState(null);
+    };
 
     return (
         <div
@@ -104,11 +119,30 @@ const Sidebar = () => {
                         />
                     </div>
                     <div className="flex items-center justify-center rounded-full mt-4 mb-4">
-                        <Avatar className="h-8 w-8">
-                            <AvatarFallback className="dark:bg-orange-300">
-                                A
-                            </AvatarFallback>
-                        </Avatar>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Avatar className="h-8 w-8 cursor-pointer">
+                                    <AvatarFallback className="bg-orange-300 dark:bg-orange-300">
+                                        {currentUserName?.firstname?.charAt(
+                                            0,
+                                        ) || "X"}
+                                    </AvatarFallback>
+                                </Avatar>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" side="right">
+                                <DropdownMenuItem onClick={handleLogout}>
+                                    Logout
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>Account</DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    Integrations
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    Team Members
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
             </nav>

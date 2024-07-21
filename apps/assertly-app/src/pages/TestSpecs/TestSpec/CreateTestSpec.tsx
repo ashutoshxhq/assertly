@@ -21,7 +21,6 @@ export function CreateTestSpec() {
     const [open, setOpen] = useState(false);
     const [teamId] = useAtom(teamIdAtom);
     const [{ mutate, status }] = useAtom(createTestSpecAtom);
-    console.log({ status });
 
     const handleCreate = async () => {
         try {

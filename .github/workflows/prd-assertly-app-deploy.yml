@@ -13,9 +13,9 @@ jobs:
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             CI: false
             VITE_WEBDRIVER_SERVICE_URL: wss://api.webdriver.assertly.ai/v1/socket
-            VITE_AI_AGENT_SERVICE_URL: https://api.assertly.ai/ai-agent
-            VITE_ENGINE_SERVICE_URL: https://api.assertly.ai/engine
-            VITE_IDENTIY_SERVICE_URL: https://api.assertly.ai/identity
+            VITE_AI_AGENT_SERVICE_URL: https://api.assertly.ai/ai-agent/v1
+            VITE_ENGINE_SERVICE_URL: https://api.assertly.ai/engine/v1
+            VITE_IDENTIY_SERVICE_URL: https://api.assertly.ai/identity/v1
         steps:
             - uses: actions/checkout@v2
             

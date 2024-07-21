@@ -60,7 +60,6 @@ function PrivateLayout() {
                 },
             );
         } else {
-            console.log(authState);
             if (
                 !localStorage.getItem("auth_state") ||
                 localStorage.getItem("auth_state") === "null"
@@ -78,7 +77,6 @@ function PrivateLayout() {
     ) {
         return <Loader />;
     }
-    console.log(authState);
     return (
         authState.isAuthenticated && (
             <div className={cn(darkMode && "dark")}>

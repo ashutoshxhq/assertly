@@ -22,21 +22,21 @@ const Organization = () => {
                     <form>
                         <div className="grid w-full items-center gap-4">
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="orgId">Organization ID</Label>
-                                <div className="flex gap-1 items-center">
-                                    <Input
-                                        id="orgId"
-                                        value="0c691884-3204-451c-8020-d0d3ffbaf97a"
-                                        disabled
-                                    />
+                                <div className="flex gap-2 items-center">
+                                    <Label htmlFor="orgId">Organization ID</Label>
                                     <Button
                                         size="icon"
                                         variant="outline"
-                                        className="h-8 w-8 opacity-100"
+                                        className="h-6 w-6 opacity-100"
                                     >
                                         <CopyIcon className="h-4 w-4" />
                                     </Button>
                                 </div>
+                                <Input
+                                    id="orgId"
+                                    value="0c691884-3204-451c-8020-d0d3ffbaf97a"
+                                    disabled
+                                />
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="orgName">

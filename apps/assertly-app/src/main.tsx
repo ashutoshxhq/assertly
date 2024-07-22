@@ -7,8 +7,7 @@ import {
 } from "react-router-dom";
 import "./globals.css";
 import "./App.css";
-import TestSpecs from "./pages/TestSpecs/TestSpecs";
-import TestRuns from "./pages/TestRuns/TestRuns";
+import TestRuns from "./pages/Applications/TestRuns/TestRuns";
 import Account from "./pages/Settings/Account/Account";
 import Integrations from "./pages/Settings/Integrations/Integrations";
 import TeamMembers from "./pages/Settings/TeamMembers/TeamMembers";
@@ -18,11 +17,11 @@ import PublicLayout from "./PublicLayout";
 import SettingsLayout from "./pages/Settings/SettingsLayout";
 import Artifacts from "./pages/Artifacts/Artifacts";
 import ApiKeys from "./pages/ApiKeys/ApiKeys";
-import UserFlows from "./pages/UserFlows/UserFlows";
-import TestSpec from "./pages/TestSpecs/TestSpec/TestSpec";
+import TestSpec from "./pages/Applications/TestSpecs/TestSpec/TestSpec";
 import PrivateLayout from "./PrivateLayout";
 import ApplicationWithSidebarLayout from "./ApplicationWithSidebarLayout";
 import AppLayout from "./AppLayout";
+import Applications from "./pages/Applications/Applications";
 
 const router = createBrowserRouter([
     {
@@ -39,19 +38,15 @@ const router = createBrowserRouter([
                         children: [
                             {
                                 path: "/",
-                                element: <Navigate to="specs" />,
+                                element: <Navigate to="applications" />,
                             },
                             {
-                                path: "specs",
-                                element: <TestSpecs />,
+                                path: "/applications",
+                                element: <Applications />,
                             },
                             {
                                 path: "runs",
                                 element: <TestRuns />,
-                            },
-                            {
-                                path: "user-flows",
-                                element: <UserFlows />,
                             },
                             {
                                 path: "artifacts",

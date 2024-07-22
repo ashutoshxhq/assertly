@@ -1,11 +1,25 @@
 -- CreateTable
+CREATE TABLE "applications" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "status" TEXT,
+    "metadata" JSONB,
+    "teamId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "applications_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "test_specs" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
-    "metadata" JSONB NOT NULL,
+    "name" TEXT NOT NULL,
+    "status" TEXT,
+    "metadata" JSONB,
     "teamId" TEXT NOT NULL,
-    "lastRunAt" TIMESTAMP(3) NOT NULL,
+    "applicationId" TEXT NOT NULL,
+    "lastRunAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -15,10 +29,11 @@ CREATE TABLE "test_specs" (
 -- CreateTable
 CREATE TABLE "user_flows" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
-    "metadata" JSONB NOT NULL,
+    "name" TEXT NOT NULL,
+    "status" TEXT,
+    "metadata" JSONB,
     "teamId" TEXT NOT NULL,
+    "applicationId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -40,14 +55,13 @@ CREATE TABLE "test_schedules" (
 -- CreateTable
 CREATE TABLE "steps" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "stepType" TEXT NOT NULL,
-    "properties" JSONB NOT NULL,
-    "status" TEXT NOT NULL,
+    "title" TEXT,
+    "stepType" TEXT,
+    "props" JSONB,
+    "status" TEXT,
     "teamId" TEXT NOT NULL,
     "specId" TEXT,
     "userFlowId" TEXT,
-    "finishedAt" TIMESTAMP(3) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -57,15 +71,14 @@ CREATE TABLE "steps" (
 -- CreateTable
 CREATE TABLE "test_runs" (
     "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
-    "metadata" JSONB NOT NULL,
-    "stepContext" JSONB NOT NULL,
-    "consoleContext" JSONB NOT NULL,
-    "networkContext" JSONB NOT NULL,
+    "status" TEXT,
+    "metadata" JSONB,
+    "stepContext" JSONB,
+    "consoleContext" JSONB,
+    "networkContext" JSONB,
     "specId" TEXT NOT NULL,
-    "startedAt" TIMESTAMP(3) NOT NULL,
-    "finishedAt" TIMESTAMP(3) NOT NULL,
+    "applicationId" TEXT NOT NULL,
+    "finishedAt" TIMESTAMP(3),
     "teamId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -114,6 +127,12 @@ CREATE TABLE "integrations" (
 );
 
 -- AddForeignKey
+ALTER TABLE "test_specs" ADD CONSTRAINT "test_specs_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "applications"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_flows" ADD CONSTRAINT "user_flows_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "applications"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "test_schedules" ADD CONSTRAINT "test_schedules_specId_fkey" FOREIGN KEY ("specId") REFERENCES "test_specs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -124,3 +143,6 @@ ALTER TABLE "steps" ADD CONSTRAINT "steps_userFlowId_fkey" FOREIGN KEY ("userFlo
 
 -- AddForeignKey
 ALTER TABLE "test_runs" ADD CONSTRAINT "test_runs_specId_fkey" FOREIGN KEY ("specId") REFERENCES "test_specs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "test_runs" ADD CONSTRAINT "test_runs_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "applications"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

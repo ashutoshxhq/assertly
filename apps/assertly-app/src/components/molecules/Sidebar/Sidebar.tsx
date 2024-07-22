@@ -1,13 +1,6 @@
 import { Avatar, AvatarFallback } from "src/components/ui/avatar";
 import SidebarNavItem from "./SidebarNavItem";
-import {
-    RiListCheck3,
-    RiSettings2Line,
-    RiFlaskLine,
-    RiKeyLine,
-    RiFolderCloudLine,
-    RiHashtag,
-} from "react-icons/ri";
+import { RiListCheck3, RiSettings2Line, RiAppsLine } from "react-icons/ri";
 import { Switch } from "src/components/ui/switch";
 import { isDarkMode } from "src/store/app/app";
 import { useAtom } from "jotai";
@@ -61,29 +54,14 @@ const Sidebar = () => {
                         data-tauri-drag-region
                     >
                         <SidebarNavItem
-                            to="specs"
-                            icon={<RiFlaskLine />}
-                            title="Test Specs"
-                        />
-                        <SidebarNavItem
-                            to="user-flows"
-                            icon={<RiHashtag />}
-                            title="User Flows"
+                            to="applications"
+                            icon={<RiAppsLine />}
+                            title="Applications"
                         />
                         <SidebarNavItem
                             to="runs"
                             icon={<RiListCheck3 />}
                             title="Test Runs"
-                        />
-                        <SidebarNavItem
-                            to="artifacts"
-                            icon={<RiFolderCloudLine />}
-                            title="Data & Artifacts"
-                        />
-                        <SidebarNavItem
-                            to="api-keys"
-                            icon={<RiKeyLine />}
-                            title="Api Keys"
                         />
                         <SidebarNavItem
                             to="settings"

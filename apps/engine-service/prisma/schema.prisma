@@ -9,12 +9,29 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Application {
+  id        String     @id @default(uuid())
+  name      String
+  status    String?
+  metadata  Json?
+  teamId    String
+  testSpecs TestSpec[]
+  userFlows UserFlow[]
+  testRuns  TestRun[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("applications")
+}
+
 model TestSpec {
   id            String         @id @default(uuid())
   name          String
   status        String?
   metadata      Json?
   teamId        String
+  application   Application    @relation(fields: [applicationId], references: [id])
+  applicationId String
   steps         Step[]
   testRuns      TestRun[]
   testSchedules TestSchedule[]
@@ -26,14 +43,16 @@ model TestSpec {
 }
 
 model UserFlow {
-  id        String   @id @default(uuid())
-  name      String
-  status    String?
-  metadata  Json?
-  teamId    String
-  steps     Step[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String      @id @default(uuid())
+  name          String
+  status        String?
+  metadata      Json?
+  teamId        String
+  application   Application @relation(fields: [applicationId], references: [id])
+  applicationId String
+  steps         Step[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@map("user_flows")
 }
@@ -68,18 +87,20 @@ model Step {
 }
 
 model TestRun {
-  id             String    @id @default(uuid())
+  id             String      @id @default(uuid())
   status         String?
   metadata       Json?
   stepContext    Json?
   consoleContext Json?
   networkContext Json?
-  spec           TestSpec  @relation(fields: [specId], references: [id])
+  spec           TestSpec    @relation(fields: [specId], references: [id])
   specId         String
+  application    Application @relation(fields: [applicationId], references: [id])
+  applicationId  String
   finishedAt     DateTime?
   teamId         String
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
 
   @@map("test_runs")
 }

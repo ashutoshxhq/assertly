@@ -46,7 +46,7 @@ export function CreateTestSpec() {
         <Dialog open={open} onOpenChange={(o) => setOpen(o)}>
             <DialogTrigger asChild>
                 <Button variant={"brand"} className="mt-0">
-                    <RiAddLargeLine className="mx-2" /> New Test Spec
+                    <RiAddLargeLine className="mx-2" /> Create New Test
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] top-[30%] dark:text-zinc-200">

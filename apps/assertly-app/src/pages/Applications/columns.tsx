@@ -13,11 +13,11 @@ import { Checkbox } from "src/components/ui/checkbox";
 import { Badge } from "src/components/ui/badge";
 import { Link } from "react-router-dom";
 import { useAtom } from "jotai";
-import {
-    deleteTestSpecAtom,
-    selectedTestSpecIdAtom,
-} from "src/store/test-specs/testSpecs";
 import { useEffect, useState } from "react";
+import {
+    deleteApplicationAtom,
+    selectedApplicationIdAtom,
+} from "src/store/applications/applications";
 
 export type Application = {
     id: string;
@@ -63,11 +63,13 @@ export const columns: ColumnDef<Application>[] = [
         size: 300,
         header: () => <div className="">Name</div>,
         cell: ({ row }) => {
-            const [, setSelectedTestSpecId] = useAtom(selectedTestSpecIdAtom);
+            const [, setSelectedApplicationId] = useAtom(
+                selectedApplicationIdAtom,
+            );
             return (
                 <Link
-                    to={"/specs/" + row.original.id}
-                    onClick={() => setSelectedTestSpecId(row.original.id)}
+                    to={"/applications/" + row.original.id}
+                    onClick={() => setSelectedApplicationId(row.original.id)}
                     className="hover:underline font-medium"
                 >
                     {row.original.name}
@@ -79,7 +81,7 @@ export const columns: ColumnDef<Application>[] = [
         id: "actions",
         size: 20,
         cell: ({ row }) => {
-            const [{ mutate, status }] = useAtom(deleteTestSpecAtom);
+            const [{ mutate, status }] = useAtom(deleteApplicationAtom);
             const [open, setOpen] = useState(false);
             const spec = row.original;
             const handleDelete = async () => {
@@ -137,7 +139,6 @@ export const columns: ColumnDef<Application>[] = [
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Run Test</DropdownMenuItem>
                             <DropdownMenuItem
                                 onClick={() =>
                                     navigator.clipboard.writeText(spec.id)
@@ -146,8 +147,7 @@ export const columns: ColumnDef<Application>[] = [
                                 Copy Link
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Clone Spec</DropdownMenuItem>
-                            <DropdownMenuItem>Edit Spec</DropdownMenuItem>
+                            <DropdownMenuItem>Edit App</DropdownMenuItem>
                             <DropdownMenuItem onClick={handleDelete}>
                                 {status === "pending"
                                     ? "Deleting..."

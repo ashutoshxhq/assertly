@@ -22,6 +22,7 @@ import PrivateLayout from "./PrivateLayout";
 import ApplicationWithSidebarLayout from "./ApplicationWithSidebarLayout";
 import AppLayout from "./AppLayout";
 import Applications from "./pages/Applications/Applications";
+import Application from "./pages/Applications/Application";
 
 const router = createBrowserRouter([
     {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
                             {
                                 path: "/applications",
                                 element: <Applications />,
+                            },
+                            {
+                                path: "/applications/:applicationId",
+                                element: <Application />,
                             },
                             {
                                 path: "runs",

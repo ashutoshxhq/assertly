@@ -13,6 +13,7 @@ import {
 } from "src/components/ui/dialog";
 import { Input } from "src/components/ui/input";
 import { Label } from "src/components/ui/label";
+import { selectedApplicationIdAtom } from "src/store/applications/applications";
 import { teamIdAtom } from "src/store/auth/auth";
 import { createTestSpecAtom } from "src/store/test-specs/testSpecs";
 
@@ -20,6 +21,7 @@ export function CreateTestSpec() {
     const [testName, setTestName] = useState("");
     const [open, setOpen] = useState(false);
     const [teamId] = useAtom(teamIdAtom);
+    const [selectedApplicationId] = useAtom(selectedApplicationIdAtom);
     const [{ mutate, status }] = useAtom(createTestSpecAtom);
 
     const handleCreate = async () => {
@@ -27,6 +29,7 @@ export function CreateTestSpec() {
             mutate({
                 data: {
                     name: testName,
+                    applicationId: selectedApplicationId,
                     teamId,
                 },
             });

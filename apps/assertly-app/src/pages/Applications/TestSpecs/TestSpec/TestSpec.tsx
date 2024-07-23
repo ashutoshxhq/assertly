@@ -136,6 +136,9 @@ const TestSpec = () => {
                 toast.success("All steps completed");
                 setIsStepsRunning(false);
                 break;
+            case "SCREENSHOT":
+                setLastPageScreenshot(parsedData.data.screenshot);
+                break;
             case "ERROR":
                 console.error(parsedData.data);
                 toast.error(parsedData.data.message);

@@ -39,26 +39,25 @@ export class WebdriverService {
         );
 
         let isRunning = true;
-        const takeScreenshot = async () => {
-            if (!isRunning) return;
 
-            const screenshot = (await clientSession.page.screenshot()).toString(
-                'base64',
-            );
-            client.send(
-                JSON.stringify({
-                    event: 'SCREENSHOT',
-                    data: screenshot,
-                }),
-            );
-
-            if (isRunning) {
-                setTimeout(takeScreenshot, 50);
+        // Separate async function for taking screenshots
+        const screenshotProcess = async () => {
+            while (isRunning) {
+                const screenshot = (
+                    await clientSession.page.screenshot()
+                ).toString('base64');
+                client.send(
+                    JSON.stringify({
+                        event: 'SCREENSHOT',
+                        data: screenshot,
+                    }),
+                );
+                await new Promise((resolve) => setTimeout(resolve, 50));
             }
         };
 
-        // Start the screenshot process
-        takeScreenshot();
+        // Start the screenshot process without awaiting it
+        const screenshotPromise = screenshotProcess();
 
         try {
             for (const action of actions) {
@@ -74,9 +73,6 @@ export class WebdriverService {
                     );
 
                     const content = await clientSession.page.content();
-                    const screenshot = (
-                        await clientSession.page.screenshot()
-                    ).toString('base64');
                     const url = clientSession.page.url();
                     const hostname = new URL(url).hostname;
                     client.send(
@@ -85,7 +81,6 @@ export class WebdriverService {
                             data: {
                                 actionType: action.type,
                                 pageContent: content,
-                                screenshot: screenshot,
                                 url: url,
                                 hostname: hostname,
                                 step: action,
@@ -106,9 +101,11 @@ export class WebdriverService {
                 }
             }
         } finally {
-            // Clear the interval when the function is done or if an error occurs
+            // Stop the screenshot process
             isRunning = false;
-            await new Promise(resolve => setTimeout(resolve, 100));
+            // Wait for the screenshot process to finish
+            await screenshotPromise;
+
             client.send(
                 JSON.stringify({
                     event: 'ACTIONS_COMPLETED',

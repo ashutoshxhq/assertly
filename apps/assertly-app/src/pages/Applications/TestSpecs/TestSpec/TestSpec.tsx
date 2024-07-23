@@ -133,7 +133,6 @@ const TestSpec = () => {
                 }
                 break;
             case "ACTIONS_COMPLETED":
-                toast.success("All steps completed");
                 setIsStepsRunning(false);
                 break;
             case "SCREENSHOT":
@@ -367,11 +366,8 @@ const TestSpec = () => {
                                 </div>
                                 <div className="lex flex-1 bg-zinc-100 dark:bg-zinc-300 w-full h-full bg-cover overflow-y-scroll">
                                     {!livePreview && lastPageScreenshot && (
-                                        <img
-                                            src={
-                                                "data:image/jpeg;base64," +
-                                                lastPageScreenshot
-                                            }
+                                        <StreamedImage
+                                            imageData={lastPageScreenshot}
                                         />
                                     )}
                                     {livePreview && (
@@ -426,3 +422,32 @@ const TestSpec = () => {
 };
 
 export default TestSpec;
+
+const StreamedImage: React.FC<{ imageData: string }> = ({ imageData }) => {
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return; // Early return if canvas is null
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return; // Early return if context is null
+
+        if (imageData) {
+            const img = new Image();
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+            };
+            img.src = `data:image/jpeg;base64,${imageData}`;
+        }
+    }, [imageData]);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            className="border border-orange-500 dark:border-zinc-800 border-dashed rounded-sm w-full"
+        />
+    );
+};

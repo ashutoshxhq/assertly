@@ -10,6 +10,7 @@ import { Input } from "src/components/ui/input";
 import { Label } from "src/components/ui/label";
 import { Button } from "src/components/ui/button";
 import { CopyIcon } from "@radix-ui/react-icons";
+import TeamMembers from "../TeamMembers/TeamMembers";
 
 const Organization = () => {
     return (
@@ -68,7 +69,9 @@ const Organization = () => {
                 <CardHeader>
                     <CardTitle>Team Members</CardTitle>
                 </CardHeader>
-                <CardContent>{/* table here */}</CardContent>
+                <CardContent>
+                    <TeamMembers />
+                </CardContent>
             </Card>
         </div>
     );

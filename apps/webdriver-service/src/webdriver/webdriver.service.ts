@@ -8,22 +8,59 @@ import { Action } from 'src/common/playwright/playwright.types';
 
 @Injectable()
 export class WebdriverService {
-    private clients: Map<string, { browser: Browser; page: Page }> = new Map();
+    private clients: Map<
+        string,
+        {
+            browser: Browser;
+            page: Page;
+            isScreenshotRunning: boolean;
+        }
+    > = new Map();
 
     constructor(private configService: ConfigService) {}
 
     async setupWebdriverClient(client: Socket, id: string) {
         const browser = await chromium.launch({ headless: true });
         const page = await browser.newPage();
-        this.clients.set(id, { browser, page });
+        this.clients.set(id, {
+            browser,
+            page,
+            isScreenshotRunning: true,
+        });
+
+        // Start the screenshot process immediately
+        this.startScreenshotProcess(client, id);
     }
 
-    async cleanupWebdriverClient(id: string) {
+    private async startScreenshotProcess(client: Socket, id: string) {
         const clientSession = this.clients.get(id);
-        if (clientSession) {
-            await clientSession.browser.close();
-            this.clients.delete(id);
+        if (!clientSession) {
+            throw new Error('Client session not found');
         }
+
+        const screenshotProcess = async () => {
+            while (clientSession.isScreenshotRunning) {
+                try {
+                    const screenshot = (
+                        await clientSession.page.screenshot()
+                    ).toString('base64');
+                    client.send(
+                        JSON.stringify({
+                            event: 'SCREENSHOT',
+                            data: screenshot,
+                        }),
+                    );
+                } catch (error) {
+                    console.error('Error taking screenshot:', error);
+                }
+                await new Promise((resolve) => setTimeout(resolve, 50));
+            }
+        };
+
+        screenshotProcess().catch((error) => {
+            console.error('Screenshot process error:', error);
+            clientSession.isScreenshotRunning = false;
+        });
     }
 
     async executeActions(client: Socket, id: string, actions: Action[]) {
@@ -37,27 +74,6 @@ export class WebdriverService {
             clientSession.page,
             this.configService,
         );
-
-        let isRunning = true;
-
-        // Separate async function for taking screenshots
-        const screenshotProcess = async () => {
-            while (isRunning) {
-                const screenshot = (
-                    await clientSession.page.screenshot()
-                ).toString('base64');
-                client.send(
-                    JSON.stringify({
-                        event: 'SCREENSHOT',
-                        data: screenshot,
-                    }),
-                );
-                await new Promise((resolve) => setTimeout(resolve, 50));
-            }
-        };
-
-        // Start the screenshot process without awaiting it
-        const screenshotPromise = screenshotProcess();
 
         try {
             for (const action of actions) {
@@ -101,17 +117,21 @@ export class WebdriverService {
                 }
             }
         } finally {
-            // Stop the screenshot process
-            isRunning = false;
-            // Wait for the screenshot process to finish
-            await screenshotPromise;
-
             client.send(
                 JSON.stringify({
                     event: 'ACTIONS_COMPLETED',
                     data: {},
                 }),
             );
+        }
+    }
+
+    async cleanupWebdriverClient(id: string) {
+        const clientSession = this.clients.get(id);
+        if (clientSession) {
+            clientSession.isScreenshotRunning = false;
+            await clientSession.browser.close();
+            this.clients.delete(id);
         }
     }
 }

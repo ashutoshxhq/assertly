@@ -80,6 +80,7 @@ export class WebdriverService {
                 try {
                     const updatedAction =
                         await playwrightClient.executeAction(action);
+                    await clientSession.page.waitForLoadState('domcontentloaded');
 
                     client.send(
                         JSON.stringify({

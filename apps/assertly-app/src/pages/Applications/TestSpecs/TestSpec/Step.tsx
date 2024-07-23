@@ -39,6 +39,11 @@ const Step = ({
     setIsOpen,
 }: StepProps) => {
     const updateProperty = (key: string, value: any) => {
+        if (key === "selectorQuery") {
+            updateStep({
+                props: { ...step.props, [key]: value, selector: "" },
+            });
+        }
         updateStep({ props: { ...step.props, [key]: value } });
     };
 

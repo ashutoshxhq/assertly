@@ -447,7 +447,7 @@ const StreamedImage: React.FC<{ imageData: string }> = ({ imageData }) => {
     return (
         <canvas
             ref={canvasRef}
-            className="border border-orange-500 dark:border-zinc-800 border-dashed rounded-sm w-full"
+            className="border border-zinc-300 dark:border-zinc-800 rounded-sm w-full"
         />
     );
 };

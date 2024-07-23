@@ -38,7 +38,10 @@ export class WebdriverService {
             this.configService,
         );
 
-        const intervalId = setInterval(async () => {
+        let isRunning = true;
+        const takeScreenshot = async () => {
+            if (!isRunning) return;
+
             const screenshot = (await clientSession.page.screenshot()).toString(
                 'base64',
             );
@@ -48,7 +51,14 @@ export class WebdriverService {
                     data: screenshot,
                 }),
             );
-        }, 100);
+
+            if (isRunning) {
+                setTimeout(takeScreenshot, 50);
+            }
+        };
+
+        // Start the screenshot process
+        takeScreenshot();
 
         try {
             for (const action of actions) {
@@ -97,7 +107,8 @@ export class WebdriverService {
             }
         } finally {
             // Clear the interval when the function is done or if an error occurs
-            clearInterval(intervalId);
+            isRunning = false;
+            await new Promise(resolve => setTimeout(resolve, 100));
             client.send(
                 JSON.stringify({
                     event: 'ACTIONS_COMPLETED',

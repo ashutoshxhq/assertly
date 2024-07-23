@@ -38,54 +38,76 @@ export class WebdriverService {
             this.configService,
         );
 
-        for (const action of actions) {
-            try {
-                const updatedActions = await playwrightClient.execute([action]);
-                client.send(
-                    JSON.stringify({
-                        event: 'SELECTOR_UPDATE',
-                        data: updatedActions[0],
-                    }),
-                );
-                await clientSession.page.waitForLoadState('domcontentloaded');
+        const intervalId = setInterval(async () => {
+            const screenshot = (await clientSession.page.screenshot()).toString(
+                'base64',
+            );
+            client.send(
+                JSON.stringify({
+                    event: 'SCREENSHOT',
+                    data: screenshot,
+                }),
+            );
+        }, 50);
 
-                const content = await clientSession.page.content();
-                const screenshot = (
-                    await clientSession.page.screenshot()
-                ).toString('base64');
-                const url = clientSession.page.url();
-                const hostname = new URL(url).hostname;
-                client.send(
-                    JSON.stringify({
-                        event: 'ACTION_RESULT',
-                        data: {
-                            actionType: action.type,
-                            pageContent: content,
-                            screenshot: screenshot,
-                            url: url,
-                            hostname: hostname,
-                            step: action,
-                        },
-                    }),
-                );
-                await clientSession.page.waitForTimeout(1000);
-            } catch (error) {
-                client.send(
-                    JSON.stringify({
-                        event: 'ERROR',
-                        data: {
-                            message: `Error executing action: ${error.message}`,
-                            actionType: action.type,
-                        },
-                    }),
-                );
-                break;
+        try {
+            for (const action of actions) {
+                try {
+                    const updatedActions = await playwrightClient.execute([
+                        action,
+                    ]);
+                    client.send(
+                        JSON.stringify({
+                            event: 'SELECTOR_UPDATE',
+                            data: updatedActions[0],
+                        }),
+                    );
+                    await clientSession.page.waitForLoadState(
+                        'domcontentloaded',
+                    );
+
+                    const content = await clientSession.page.content();
+                    const screenshot = (
+                        await clientSession.page.screenshot()
+                    ).toString('base64');
+                    const url = clientSession.page.url();
+                    const hostname = new URL(url).hostname;
+                    client.send(
+                        JSON.stringify({
+                            event: 'ACTION_RESULT',
+                            data: {
+                                actionType: action.type,
+                                pageContent: content,
+                                screenshot: screenshot,
+                                url: url,
+                                hostname: hostname,
+                                step: action,
+                            },
+                        }),
+                    );
+                    await clientSession.page.waitForTimeout(1000);
+                } catch (error) {
+                    client.send(
+                        JSON.stringify({
+                            event: 'ERROR',
+                            data: {
+                                message: `Error executing action: ${error.message}`,
+                                actionType: action.type,
+                            },
+                        }),
+                    );
+                    break;
+                }
             }
+        } finally {
+            // Clear the interval when the function is done or if an error occurs
+            clearInterval(intervalId);
+            client.send(
+                JSON.stringify({
+                    event: 'ACTIONS_COMPLETED',
+                    data: {},
+                }),
+            );
         }
-
-        JSON.stringify({
-            event: 'ACTIONS_COMPLETED',
-            data: {},
-        });
     }
 }

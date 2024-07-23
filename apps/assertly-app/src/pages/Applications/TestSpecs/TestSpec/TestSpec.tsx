@@ -140,6 +140,7 @@ const TestSpec = () => {
                 console.error(parsedData.data);
                 toast.error(parsedData.data.message);
                 setIsStepsRunning(false);
+                setTestSpecExecutedStepIds([]);
                 break;
         }
     };

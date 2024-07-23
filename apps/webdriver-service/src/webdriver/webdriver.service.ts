@@ -48,7 +48,7 @@ export class WebdriverService {
                     data: screenshot,
                 }),
             );
-        }, 50);
+        }, 100);
 
         try {
             for (const action of actions) {

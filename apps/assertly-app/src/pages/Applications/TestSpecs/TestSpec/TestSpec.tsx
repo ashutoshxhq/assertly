@@ -137,7 +137,7 @@ const TestSpec = () => {
                 setIsStepsRunning(false);
                 break;
             case "SCREENSHOT":
-                setLastPageScreenshot(parsedData.data.screenshot);
+                setLastPageScreenshot(parsedData.data);
                 break;
             case "ERROR":
                 console.error(parsedData.data);

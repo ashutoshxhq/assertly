@@ -14,7 +14,7 @@ import Notification from "./Notification/Notification";
 
 const SettingsLayout = () => {
     return (
-        <div className="p-8">
+        <div className="p-12">
             <div className="flex items-center justify-between px-6">
                 <div className="flex items-center justify-between gap-4">
                     {/* <span className="text-2xl">

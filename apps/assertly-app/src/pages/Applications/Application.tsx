@@ -12,7 +12,7 @@ import {
 } from "src/components/ui/tabs";
 import TestSpecs from "./TestSpecs/TestSpecs";
 import Modules from "./Modules/Modules";
-import TestRuns from "./TestRuns/TestRuns";
+import TestRuns from "./ApplicationTestRuns/ApplicationTestRuns";
 import ApplicationSettings from "./ApplicationSettings/ApplicationSettings";
 import { CreateTestSpec } from "./TestSpecs/TestSpec/CreateTestSpec";
 import { Link } from "react-router-dom";
@@ -51,15 +51,15 @@ const Application = () => {
                     <TabsList className="bg-gray-200">
                         <TabsTrigger value="tests">
                             <RiFlaskLine className="mr-2" />
-                            Tests
+                            Test Specs
                         </TabsTrigger>
                         <TabsTrigger value="modules">
                             <RiHashtag className="mr-2" />
-                            Modules
+                            User Flows
                         </TabsTrigger>
                         <TabsTrigger value="test-runs">
                             <RiListCheck3 className="mr-2" />
-                            Runs
+                            Test Runs
                         </TabsTrigger>
                         <TabsTrigger value="settings">
                             <RiSettings3Line className="mr-2" />

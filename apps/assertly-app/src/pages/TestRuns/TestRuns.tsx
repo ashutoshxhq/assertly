@@ -6,7 +6,7 @@ import { DataTable } from "src/components/molecules/Datatable/Datatable";
 
 const TestRuns = () => {
     return (
-        <div className="p-8">
+        <div className="p-12">
             <div className="flex items-center justify-between px-4">
                 <div className="flex items-center justify-between gap-4">
                     <span className="text-4xl">

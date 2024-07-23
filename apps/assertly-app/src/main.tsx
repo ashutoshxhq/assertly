@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import "./globals.css";
 import "./App.css";
-import TestRuns from "./pages/Applications/TestRuns/TestRuns";
 import Account from "./pages/Settings/Account/Account";
 import Integrations from "./pages/Settings/Integrations/Integrations";
 import TeamMembers from "./pages/Settings/TeamMembers/TeamMembers";
@@ -23,6 +22,7 @@ import ApplicationWithSidebarLayout from "./ApplicationWithSidebarLayout";
 import AppLayout from "./AppLayout";
 import Applications from "./pages/Applications/Applications";
 import Application from "./pages/Applications/Application";
+import TestRuns from "./pages/TestRuns/TestRuns";
 
 const router = createBrowserRouter([
     {

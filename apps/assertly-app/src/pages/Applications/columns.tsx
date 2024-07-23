@@ -7,7 +7,7 @@ import {
     DropdownMenuTrigger,
 } from "src/components/ui/dropdown-menu";
 import { Button } from "src/components/ui/button";
-import { RiMoreFill, RiPlayLargeFill } from "react-icons/ri";
+import { RiMoreFill } from "react-icons/ri";
 import moment from "moment";
 import { Checkbox } from "src/components/ui/checkbox";
 import { Badge } from "src/components/ui/badge";
@@ -122,10 +122,7 @@ export const columns: ColumnDef<Application>[] = [
                             {moment(row.original.updatedAt).fromNow()}
                         </span>
                     </div>
-                    <Button variant="outline" size={"sm"}>
-                        <RiPlayLargeFill className="text-green-500 mr-2" />
-                        <span>Run</span>
-                    </Button>
+
                     <DropdownMenu
                         open={open}
                         onOpenChange={(o) => {

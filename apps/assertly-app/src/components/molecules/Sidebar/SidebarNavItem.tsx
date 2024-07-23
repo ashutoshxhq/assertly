@@ -16,7 +16,7 @@ export interface SidebarNavItemProps {
 
 const SidebarNavItem = ({ icon, title, to }: SidebarNavItemProps) => {
     return (
-        <NavLink to={to} end>
+        <NavLink to={to}>
             {({ isActive }) => (
                 <TooltipProvider>
                     <Tooltip>

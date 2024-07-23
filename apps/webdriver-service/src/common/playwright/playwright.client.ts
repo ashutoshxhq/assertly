@@ -26,7 +26,7 @@ export class PlaywrightClient {
         return actions;
     }
 
-    private async executeAction(action: Action) {
+    async executeAction(action: Action) {
         if (!this.page) {
             throw new Error(
                 'PlaywrightClient not initialized. Call initialize() first.',

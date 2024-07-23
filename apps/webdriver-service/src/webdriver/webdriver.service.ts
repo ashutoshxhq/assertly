@@ -53,17 +53,14 @@ export class WebdriverService {
         try {
             for (const action of actions) {
                 try {
-                    const updatedActions = await playwrightClient.execute([
-                        action,
-                    ]);
+                    const updatedAction =
+                        await playwrightClient.executeAction(action);
+
                     client.send(
                         JSON.stringify({
                             event: 'SELECTOR_UPDATE',
-                            data: updatedActions[0],
+                            data: updatedAction,
                         }),
-                    );
-                    await clientSession.page.waitForLoadState(
-                        'domcontentloaded',
                     );
 
                     const content = await clientSession.page.content();
@@ -85,7 +82,6 @@ export class WebdriverService {
                             },
                         }),
                     );
-                    await clientSession.page.waitForTimeout(1000);
                 } catch (error) {
                     client.send(
                         JSON.stringify({

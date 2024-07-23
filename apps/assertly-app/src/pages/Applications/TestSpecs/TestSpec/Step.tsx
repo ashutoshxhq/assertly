@@ -13,20 +13,19 @@ import { Input } from "src/components/ui/input";
 import { Button } from "src/components/ui/button";
 import StepTypeSelect from "./StepTypeSelect";
 import { cn } from "src/lib/utils";
+import { useAtom } from "jotai";
+import {
+    Step as TestStep,
+    testSpecExecutedStepIdsAtom,
+    testSpecStepsAtom,
+} from "src/store/test-specs/steps";
+import { useEffect, useState } from "react";
 
 interface StepProps {
-    step: {
-        id: string;
-        type: string;
-        props: Record<string, any>;
-    };
-    updateStep: (
-        updatedStep: Partial<{ type: string; props: Record<string, any> }>,
-    ) => void;
+    step: TestStep;
+    updateStep: (updatedStep: Partial<TestStep>) => void;
     deleteStep: () => void;
     runStep: () => void;
-    currentStepIndex: number;
-    index: number;
     isOpen: boolean;
     setIsOpen: (open: boolean) => void;
 }
@@ -36,8 +35,6 @@ const Step = ({
     updateStep,
     deleteStep,
     runStep,
-    currentStepIndex,
-    index,
     isOpen,
     setIsOpen,
 }: StepProps) => {
@@ -55,14 +52,13 @@ const Step = ({
                 <CollapsibleTrigger asChild className="w-full">
                     <StepTitle
                         isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                        stepId={step.id}
                         stepType={step.type}
                         stepProperties={step.props}
-                        deleteStep={deleteStep}
-                        setIsOpen={setIsOpen}
-                        updateStep={updateStep}
                         runStep={runStep}
-                        currentStepIndex={currentStepIndex}
-                        index={index}
+                        updateStep={updateStep}
+                        deleteStep={deleteStep}
                     />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="w-full">
@@ -91,15 +87,15 @@ const getStepDescription = (
         case "goto":
             return `Navigate to ${stepProperties.url || "a URL"}`;
         case "click":
-            return `Click on ${stepProperties.selector || "an element"}`;
+            return `Click on ${stepProperties.selectorQuery || "an element"}`;
         case "hover":
-            return `Hover over ${stepProperties.selector || "an element"}`;
+            return `Hover over ${stepProperties.selectorQuery || "an element"}`;
         case "scroll":
-            return `Scroll to ${stepProperties.selector || "an element"}`;
+            return `Scroll to ${stepProperties.selectorQuery || "an element"}`;
         case "type":
             return `Type "${stepProperties.text || "text"}" into ${stepProperties.selectorQuery || "an input field"}`;
         case "press":
-            return `Press the ${stepProperties.key || "a key"} key`;
+            return `Press the ${stepProperties.key || "a key"} key on ${stepProperties.selectorQuery || "an element"}`;
         case "select":
             return `Select "${stepProperties.value || "a value"}" from ${stepProperties.selectorQuery || "a dropdown"}`;
         case "wait":
@@ -116,24 +112,35 @@ const getStepDescription = (
 const StepTitle = ({
     isOpen,
     setIsOpen,
+    stepId,
     stepType,
     stepProperties,
     deleteStep,
     updateStep,
     runStep,
-    currentStepIndex,
-    index,
 }: {
     isOpen: boolean;
     setIsOpen: (open: boolean) => void;
-    stepType: string;
+    stepId: string;
+    stepType?: string;
     stepProperties: Record<string, any>;
     deleteStep: () => void;
     updateStep: any;
     runStep: () => void;
-    currentStepIndex: number;
-    index: number;
 }) => {
+    const [testSpecExecutedStepIds] = useAtom(testSpecExecutedStepIdsAtom);
+    const [steps] = useAtom(testSpecStepsAtom);
+    const [firstRemainingStepId, setFirstRemainingStepId] = useState<
+        string | null
+    >(steps[0]?.id || null);
+
+    useEffect(() => {
+        const remainingSteps = steps.filter(
+            (step) => !testSpecExecutedStepIds.find((id) => id === step.id),
+        );
+        setFirstRemainingStepId(remainingSteps[0]?.id || null);
+    }, [steps, testSpecExecutedStepIds]);
+
     return (
         <div className="flex justify-between items-center w-full ">
             <div className="flex flex-1 h-full px-2">
@@ -153,7 +160,10 @@ const StepTitle = ({
                         <div className="px-2">
                             <span className="text-sm font-medium">
                                 {" "}
-                                {getStepDescription(stepType, stepProperties)}
+                                {getStepDescription(
+                                    stepType || "",
+                                    stepProperties,
+                                )}
                             </span>
                         </div>
                     )}
@@ -165,17 +175,10 @@ const StepTitle = ({
                     variant="ghost"
                     size={"icon"}
                     onClick={runStep}
-                    disabled={
-                        currentStepIndex === index ||
-                        currentStepIndex > index ||
-                        currentStepIndex + 1 < index
-                    }
+                    disabled={firstRemainingStepId !== stepId}
                     className={cn(
-                        !(
-                            currentStepIndex === index ||
-                            currentStepIndex > index ||
-                            currentStepIndex + 1 < index
-                        ) && "text-green-500 dark:hover:text-green-400",
+                        firstRemainingStepId === stepId &&
+                            "text-green-500 dark:hover:text-green-400",
                     )}
                 >
                     <RiPlayLargeFill className="mr-1" />
@@ -206,7 +209,7 @@ const StepProperties = ({
     stepProperties,
     updateProperty,
 }: {
-    stepType: string;
+    stepType?: string;
     stepProperties: Record<string, any>;
     updateProperty: (key: string, value: any) => void;
 }) => {
@@ -270,13 +273,9 @@ const StepProperties = ({
                             id="selector"
                             className="border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/50"
                             placeholder="Selector"
-                            value={
-                                stepProperties?.selector ||
-                                stepProperties?.selectorQuery ||
-                                ""
-                            }
+                            value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
-                                updateProperty("selector", e.target.value)
+                                updateProperty("selectorQuery", e.target.value)
                             }
                         />
                     </>
@@ -296,7 +295,7 @@ const StepProperties = ({
                             placeholder="Selector"
                             value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
-                                updateProperty("selector", e.target.value)
+                                updateProperty("selectorQuery", e.target.value)
                             }
                         />
                         <label
@@ -331,7 +330,7 @@ const StepProperties = ({
                             placeholder="Selector"
                             value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
-                                updateProperty("selector", e.target.value)
+                                updateProperty("selectorQuery", e.target.value)
                             }
                         />
                         <label
@@ -366,7 +365,7 @@ const StepProperties = ({
                             placeholder="Selector"
                             value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
-                                updateProperty("selector", e.target.value)
+                                updateProperty("selectorQuery", e.target.value)
                             }
                         />
                         <label
@@ -401,7 +400,7 @@ const StepProperties = ({
                             placeholder="Selector"
                             value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
-                                updateProperty("selector", e.target.value)
+                                updateProperty("selectorQuery", e.target.value)
                             }
                         />
                         <label
@@ -497,7 +496,7 @@ const StepProperties = ({
                             placeholder="Selector"
                             value={stepProperties?.selectorQuery || ""}
                             onChange={(e) =>
-                                updateProperty("selector", e.target.value)
+                                updateProperty("selectorQuery", e.target.value)
                             }
                         />
                         <label

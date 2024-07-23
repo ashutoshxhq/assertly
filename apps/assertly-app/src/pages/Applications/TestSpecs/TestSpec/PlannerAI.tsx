@@ -7,10 +7,10 @@ import { Textarea } from "src/components/ui/textarea";
 import {
     testSpecPlannerConversationAtom,
     TestSpecPlannerMessage,
-    testSpecStepsAtom,
 } from "src/store/test-specs/testSpecs";
 import axios from "axios";
 import { AI_AGENT_SERVICE_URL } from "src/config/constants";
+import { testSpecStepsAtom } from "src/store/test-specs/steps";
 
 const PlannerAI = () => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);

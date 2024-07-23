@@ -7,12 +7,13 @@ import {
     RiQuestionLine,
     RiRefreshLine,
     RiRobot2Line,
+    RiSave2Line,
 } from "react-icons/ri";
 import { useNavigate, useParams } from "react-router-dom";
 import { v4 } from "uuid";
 import useWebSocket from "react-use-websocket";
 import { useAtom } from "jotai";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "src/components/ui/button";
 import {
     ResizableHandle,
@@ -32,26 +33,34 @@ import { WEBDRIVER_SERVICE_URL } from "src/config/constants";
 import {
     selectedTestSpecAtom,
     selectedTestSpecIdAtom,
-    testSpecLastExecutedStepIndexAtom,
-    testSpecStepsAtom,
+    updateTestSpecMutationAtom,
 } from "src/store/test-specs/testSpecs";
 import Loader from "src/components/molecules/Loader";
+import { toast } from "sonner";
+import {
+    Step,
+    testSpecExecutedStepIdsAtom,
+    testSpecStepsAtom,
+} from "src/store/test-specs/steps";
 
 const TestSpec = () => {
     const { specId } = useParams();
     const navigate = useNavigate();
-    const [, setSelectedTestSpecId] = useAtom(selectedTestSpecIdAtom);
     const [{ data, status }] = useAtom(selectedTestSpecAtom);
-    const [, setMessageHistory] = useState<MessageEvent<any>[]>([]);
-
+    const [, setTestSpecExecutedStepIds] = useAtom(testSpecExecutedStepIdsAtom);
+    const [, setsSelectedTestSpecIdAtom] = useAtom(selectedTestSpecIdAtom);
     const [steps, setSteps] = useAtom(testSpecStepsAtom);
+    const [{ mutate, status: updateStatus }] = useAtom(
+        updateTestSpecMutationAtom,
+    );
+
+    const [isStepsRunning, setIsStepsRunning] = useState(false);
     const [lastPageContent, setLastPageContent] = useState("");
     const [lastPageScreenshot, setLastPageScreenshot] = useState("");
-    const [, setCurrentStepIndex] = useAtom(testSpecLastExecutedStepIndexAtom);
     const [livePreview, setLivePreview] = useState(false);
-
     const [lastPageURL, setLastPageURL] = useState("about:blank");
     const clientIdRef = useRef(v4());
+
     const websocketUrl = useMemo(
         () => WEBDRIVER_SERVICE_URL + "?clientId=" + clientIdRef.current,
         [clientIdRef],
@@ -59,50 +68,88 @@ const TestSpec = () => {
     const { sendMessage, lastMessage } = useWebSocket(websocketUrl);
 
     useEffect(() => {
-        if (specId) {
-            setSelectedTestSpecId(specId);
-        }
-    }, [specId]);
-
-    useEffect(() => {
         if (lastMessage !== null) {
-            setMessageHistory((prev) => prev.concat(lastMessage));
             try {
-                const parsedData = JSON.parse(lastMessage.data);
-                if (
-                    parsedData.event === "ACTION_RESULT" &&
-                    parsedData.data.pageContent
-                ) {
-                    const contentWithBase = `
-                        <base href="${parsedData.data.hostname}">
-                        ${parsedData.data.pageContent}
-                    `;
-                    setLastPageURL(parsedData.data.url);
-                    setLastPageContent(contentWithBase);
-                    setLastPageScreenshot(parsedData.data.screenshot);
-                } else if (parsedData.event === "SELECTOR_UPDATE") {
-                    if (parsedData.data.props.selector) {
-                        setSteps((prev) => [
-                            ...prev.map((step) => {
-                                if (step.id === parsedData.data.id) {
-                                    step.props.selector =
-                                        parsedData.data.props.selector;
-                                }
-                                return step;
-                            }),
-                        ]);
-                    }
-                }
+                handleWebSocketMessage(lastMessage);
             } catch (error) {
                 console.error("Error parsing WebSocket message:", error);
             }
         }
-    }, [lastMessage, setSteps]);
+    }, [lastMessage]);
+
+    useEffect(() => {
+        if (data?.metadata?.steps) {
+            setSteps(data.metadata.steps);
+        }
+    }, [data]);
+
+    useEffect(() => {
+        if (specId) {
+            setsSelectedTestSpecIdAtom(specId);
+        }
+    }, [specId]);
+
+    useEffect(() => {
+        return () => {
+            setSteps([]);
+            setTestSpecExecutedStepIds([]);
+        };
+    }, []);
+
+    const handleWebSocketMessage = (message: any) => {
+        const parsedData = JSON.parse(message.data);
+        switch (parsedData.event) {
+            case "ACTION_RESULT":
+                if (parsedData.data.pageContent) {
+                    const contentWithBase = `
+                                <base href="${parsedData.data.hostname}">
+                                ${parsedData.data.pageContent}
+                            `;
+                    setLastPageURL(parsedData.data.url);
+                    setLastPageContent(contentWithBase);
+                    setLastPageScreenshot(parsedData.data.screenshot);
+                    setTestSpecExecutedStepIds((prev) => [
+                        ...prev,
+                        parsedData.data.step.id,
+                    ]);
+                }
+                break;
+            case "SELECTOR_UPDATE":
+                if (parsedData.data.props.selector) {
+                    setSteps((prev) => [
+                        ...prev.map((step) =>
+                            step.id === parsedData.data.id
+                                ? {
+                                      ...step,
+                                      props: {
+                                          ...step.props,
+                                          selector:
+                                              parsedData.data.props.selector,
+                                      },
+                                  }
+                                : step,
+                        ),
+                    ]);
+                }
+                break;
+            case "ACTIONS_COMPLETED":
+                toast.success("All steps completed");
+                setIsStepsRunning(false);
+                break;
+            case "ERROR":
+                console.error(parsedData.data);
+                toast.error(parsedData.data.message);
+                setIsStepsRunning(false);
+                break;
+        }
+    };
+
     const runAllSteps = () => {
+        setIsStepsRunning(true);
         const message = {
             event: "ACTIONS",
             data: {
-                actions: steps.map((step) => ({
+                actions: steps.map((step: Step) => ({
                     id: step.id,
                     type: step.type,
                     props: step.props,
@@ -112,31 +159,40 @@ const TestSpec = () => {
         sendMessage(JSON.stringify(message));
     };
 
-    const runStep = useCallback(
-        (stepIndex: number) => {
-            if (stepIndex >= steps.length) {
-                setCurrentStepIndex(-1);
-                return;
-            }
+    const runStepById = (stepId: string) => {
+        const step = steps.find((step: Step) => step.id === stepId);
+        if (!step) {
+            toast.error("Step not found to run");
+            return;
+        }
+        const message = {
+            event: "ACTIONS",
+            data: {
+                actions: [
+                    {
+                        id: step.id,
+                        type: step.type,
+                        props: step.props,
+                    },
+                ],
+            },
+        };
+        sendMessage(JSON.stringify(message));
+    };
 
-            const step = steps[stepIndex];
-            const message = {
-                event: "ACTIONS",
-                data: {
-                    actions: [
-                        {
-                            id: step.id,
-                            type: step.type,
-                            props: step.props,
-                        },
-                    ],
+    const saveTestSpec = () => {
+        console.log("saving");
+        mutate({
+            where: {
+                id: specId,
+            },
+            data: {
+                metadata: {
+                    steps: steps,
                 },
-            };
-            sendMessage(JSON.stringify(message));
-            setCurrentStepIndex(stepIndex);
-        },
-        [steps, sendMessage],
-    );
+            },
+        });
+    };
 
     if (status === "pending") {
         return <Loader />;
@@ -165,13 +221,21 @@ const TestSpec = () => {
                     </div>
                 </div>
                 <div className="flex w-[33.33%] items-center justify-end gap-2">
-                    <Button variant="secondary" className="text-sm">
-                        <RiEqualizer2Line className="text-md mr-2" />
-                        <span className="text-sm">Environment</span>
-                    </Button>
-                    <Button variant="secondary" className="text-sm">
-                        <RiEqualizer2Line className="text-md mr-2" />
-                        <span className="text-sm">Schedule</span>
+                    <Button
+                        variant="secondary"
+                        size={"sm"}
+                        className="text-sm"
+                        disabled={updateStatus === "pending"}
+                        onClick={saveTestSpec}
+                    >
+                        {updateStatus === "pending" ? (
+                            "Saving..."
+                        ) : (
+                            <>
+                                <RiSave2Line className="text-md mr-2" />
+                                <span className="text-sm">Save</span>
+                            </>
+                        )}
                     </Button>
                     <Button variant="secondary" className="text-sm">
                         <RiEqualizer2Line className="text-md mr-2" />
@@ -209,18 +273,27 @@ const TestSpec = () => {
                                         variant="default"
                                         size={"sm"}
                                         className="text-sm"
+                                        disabled={isStepsRunning}
                                         onClick={runAllSteps}
                                     >
-                                        <RiPlayLargeFill className="text-md mr-2 text-green-500" />
-                                        <span className="text-sm">
-                                            Run steps
-                                        </span>
+                                        {isStepsRunning ? (
+                                            "Running..."
+                                        ) : (
+                                            <>
+                                                <RiPlayLargeFill className="text-md mr-2 text-green-500" />
+                                                <span className="text-sm">
+                                                    Run steps
+                                                </span>
+                                            </>
+                                        )}
                                     </Button>
                                     <Button
                                         variant="outline"
                                         size={"sm"}
                                         className="text-sm"
-                                        onClick={() => setCurrentStepIndex(-1)}
+                                        onClick={() =>
+                                            setTestSpecExecutedStepIds([])
+                                        }
                                     >
                                         <RiCloseLargeFill className="text-md mr-2 text-red-500" />
                                         <span className="text-sm">Reset</span>
@@ -232,7 +305,7 @@ const TestSpec = () => {
                                 value="steps"
                                 className="h-full w-full overflow-y-scroll"
                             >
-                                <Steps runStep={runStep} />
+                                <Steps runStepById={runStepById} />
                             </TabsContent>
                             <TabsContent
                                 value="chat"

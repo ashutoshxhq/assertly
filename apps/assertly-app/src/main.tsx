@@ -14,8 +14,6 @@ import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register/Register";
 import PublicLayout from "./PublicLayout";
 import SettingsLayout from "./pages/Settings/SettingsLayout";
-import Artifacts from "./pages/Artifacts/Artifacts";
-import ApiKeys from "./pages/ApiKeys/ApiKeys";
 import TestSpec from "./pages/Applications/TestSpecs/TestSpec/TestSpec";
 import PrivateLayout from "./PrivateLayout";
 import ApplicationWithSidebarLayout from "./ApplicationWithSidebarLayout";
@@ -50,16 +48,8 @@ const router = createBrowserRouter([
                                 element: <Application />,
                             },
                             {
-                                path: "runs",
+                                path: "/runs",
                                 element: <TestRuns />,
-                            },
-                            {
-                                path: "artifacts",
-                                element: <Artifacts />,
-                            },
-                            {
-                                path: "api-keys",
-                                element: <ApiKeys />,
                             },
                             {
                                 path: "settings",

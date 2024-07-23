@@ -11,17 +11,6 @@ export type TestSpecPlannerMessage = {
     steps?: Record<string, any>[];
 };
 
-export interface TestStep {
-    id: string;
-    index: number;
-    type: string;
-    props: Record<string, any>;
-}
-
-export const testSpecStepsAtom = atom<TestStep[]>([]);
-export const testSpecLastExecutedStepIndexAtom = atom<number>(-1);
-export const testSpecCurrentlyOpenStepIndexAtom = atom<number>(-1);
-
 export const testSpecPlannerConversationAtom = atom<TestSpecPlannerMessage[]>(
     [],
 );
@@ -97,6 +86,23 @@ export const createTestSpecAtom = atomWithMutation((get) => {
         mutationFn: async (data: any) => {
             const res = await axios.post(
                 `${ENGINE_SERVICE_URL}/teams/${teamId}/test-specs`,
+                data,
+            );
+            return res.data;
+        },
+        onSuccess: () => {
+            get(testSpecsAtom).refetch();
+        },
+    };
+});
+
+export const updateTestSpecMutationAtom = atomWithMutation((get) => {
+    const teamId = get(teamIdAtom);
+    return {
+        mutationKey: [teamId, "test-specs"],
+        mutationFn: async (data: any) => {
+            const res = await axios.patch(
+                `${ENGINE_SERVICE_URL}/teams/${teamId}/test-specs/${data.where.id}`,
                 data,
             );
             return res.data;

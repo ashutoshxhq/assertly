@@ -35,7 +35,7 @@ export class WebdriverService {
         const playwrightClient = new PlaywrightClient(
             clientSession.browser,
             clientSession.page,
-            this.configService
+            this.configService,
         );
 
         for (const action of actions) {
@@ -64,6 +64,7 @@ export class WebdriverService {
                             screenshot: screenshot,
                             url: url,
                             hostname: hostname,
+                            step: action,
                         },
                     }),
                 );
@@ -81,5 +82,10 @@ export class WebdriverService {
                 break;
             }
         }
+
+        JSON.stringify({
+            event: 'ACTIONS_COMPLETED',
+            data: {},
+        });
     }
 }

@@ -31,7 +31,7 @@ const SettingsLayout = () => {
                 </div>
             </div>
             <Tabs defaultValue="organization" className="w-full p-4">
-                <TabsList className="bg-gray-200">
+                <TabsList className="bg-zinc-200">
                     <TabsTrigger value="organization">
                         <RiOrganizationChart className="mr-2" />
                         Organization

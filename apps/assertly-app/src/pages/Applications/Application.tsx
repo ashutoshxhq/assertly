@@ -48,7 +48,7 @@ const Application = () => {
                 </div>
 
                 <Tabs defaultValue="tests" className="w-full">
-                    <TabsList className="bg-gray-200">
+                    <TabsList className="bg-zinc-200">
                         <TabsTrigger value="tests">
                             <RiFlaskLine className="mr-2" />
                             Test Specs

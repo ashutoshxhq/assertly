@@ -2,6 +2,7 @@ import { Browser, Page } from 'playwright';
 import { Action } from './playwright.types';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+import * as FormData from 'form-data';
 
 export class PlaywrightClient {
     private browser: Browser;
@@ -127,11 +128,18 @@ export class PlaywrightClient {
             if (action?.props?.selector) {
                 return action.props.selector;
             } else if (action?.props?.selectorQuery) {
+                const formData = new FormData();
+                formData.append('message', action.props.selectorQuery);
+                formData.append('pageContent', await this.page.content());
+
                 const response = await axios.post(
                     `${this.configService.get('AI_AGENT_SERVICE_URL', 'http://localhost:8000')}/v1/actions/find-locator`,
+                    formData,
                     {
-                        message: action.props.selectorQuery,
-                        pageContent: await this.page.content(),
+                        headers: {
+                            ...formData.getHeaders(),
+                        },
+                        maxBodyLength: Infinity,
                     },
                 );
                 return response.data.locator;

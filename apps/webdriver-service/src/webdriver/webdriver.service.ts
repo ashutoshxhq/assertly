@@ -30,6 +30,52 @@ export class WebdriverService {
 
         // Start the screenshot process immediately
         this.startScreenshotProcess(client, id);
+        this.setupConsoleLogs(client, page);
+        this.setupNetworkLogs(client, page);
+    }
+
+    private setupConsoleLogs(client: Socket, page: Page) {
+        page.on('console', (msg) => {
+            client.send(
+                JSON.stringify({
+                    event: 'CONSOLE_LOG',
+                    data: {
+                        type: msg.type(),
+                        text: msg.text(),
+                    },
+                }),
+            );
+        });
+    }
+
+    private setupNetworkLogs(client: Socket, page: Page) {
+        page.on('request', (request) => {
+            client.send(
+                JSON.stringify({
+                    event: 'NETWORK_REQUEST',
+                    data: {
+                        url: request.url(),
+                        method: request.method(),
+                        headers: request.headers(),
+                        body: request.postData(),
+                        timing: request.timing(),
+                    },
+                }),
+            );
+        });
+
+        page.on('response', (response) => {
+            client.send(
+                JSON.stringify({
+                    event: 'NETWORK_RESPONSE',
+                    data: {
+                        url: response.url(),
+                        status: response.status(),
+                        headers: response.headers(),
+                    },
+                }),
+            );
+        });
     }
 
     private async startScreenshotProcess(client: Socket, id: string) {
@@ -39,7 +85,10 @@ export class WebdriverService {
         }
 
         const screenshotProcess = async () => {
-            while (clientSession.isScreenshotRunning) {
+            while (
+                clientSession.isScreenshotRunning &&
+                clientSession.page.isClosed() === false
+            ) {
                 try {
                     const screenshot = (
                         await clientSession.page.screenshot()
@@ -53,7 +102,7 @@ export class WebdriverService {
                 } catch (error) {
                     console.error('Error taking screenshot:', error);
                 }
-                await new Promise((resolve) => setTimeout(resolve, 100));
+                await new Promise((resolve) => setTimeout(resolve, 200));
             }
         };
 
@@ -80,7 +129,9 @@ export class WebdriverService {
                 try {
                     const updatedAction =
                         await playwrightClient.executeAction(action);
-                    await clientSession.page.waitForLoadState('domcontentloaded');
+                    await clientSession.page.waitForLoadState(
+                        'domcontentloaded',
+                    );
 
                     client.send(
                         JSON.stringify({
@@ -89,7 +140,9 @@ export class WebdriverService {
                         }),
                     );
 
-                    const content = await clientSession.page.content();
+                    const screenshot = (
+                        await clientSession.page.screenshot()
+                    ).toString('base64');
                     const url = clientSession.page.url();
                     const hostname = new URL(url).hostname;
                     client.send(
@@ -97,7 +150,7 @@ export class WebdriverService {
                             event: 'ACTION_RESULT',
                             data: {
                                 actionType: action.type,
-                                pageContent: content,
+                                screenshot: screenshot,
                                 url: url,
                                 hostname: hostname,
                                 step: action,
@@ -111,6 +164,7 @@ export class WebdriverService {
                             data: {
                                 message: `Error executing action: ${error.message}`,
                                 actionType: action.type,
+                                step: action,
                             },
                         }),
                     );
@@ -130,7 +184,6 @@ export class WebdriverService {
     async cleanupWebdriverClient(id: string) {
         const clientSession = this.clients.get(id);
         if (clientSession) {
-            clientSession.isScreenshotRunning = false;
             await clientSession.browser.close();
             this.clients.delete(id);
         }

@@ -1,8 +1,10 @@
 import {
     RiArrowDownSLine,
     RiArrowRightSLine,
+    RiCheckboxCircleLine,
+    RiCloseCircleLine,
     RiDeleteBin6Line,
-    RiPlayLargeFill,
+    RiPlayFill,
 } from "react-icons/ri";
 import {
     Collapsible,
@@ -60,6 +62,7 @@ const Step = ({
                         setIsOpen={setIsOpen}
                         stepId={step.id}
                         stepType={step.type}
+                        stepStatus={step.status}
                         stepProperties={step.props}
                         runStep={runStep}
                         updateStep={updateStep}
@@ -119,6 +122,7 @@ const StepTitle = ({
     setIsOpen,
     stepId,
     stepType,
+    stepStatus,
     stepProperties,
     deleteStep,
     updateStep,
@@ -128,6 +132,7 @@ const StepTitle = ({
     setIsOpen: (open: boolean) => void;
     stepId: string;
     stepType?: string;
+    stepStatus?: string;
     stepProperties: Record<string, any>;
     deleteStep: () => void;
     updateStep: any;
@@ -176,17 +181,27 @@ const StepTitle = ({
             </div>
 
             <div className="flex justify-center items-center px-2">
+                {stepStatus === "failure" && (
+                    <div className="flex justify-center items-center p-2 text-2xl">
+                        <RiCloseCircleLine className="text-red-500" />{" "}
+                    </div>
+                )}
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     size={"icon"}
                     onClick={runStep}
                     disabled={firstRemainingStepId !== stepId}
                     className={cn(
+                        "text-lg",
                         firstRemainingStepId === stepId &&
-                            "text-green-500 dark:hover:text-green-400",
+                            "text-green-500 hover:text-green-400 dark:hover:text-green-400",
                     )}
                 >
-                    <RiPlayLargeFill className="mr-1" />
+                    {stepStatus === "success" && (
+                        <RiCheckboxCircleLine className="text-green-500" />
+                    )}
+
+                    {stepStatus !== "success" && <RiPlayFill />}
                 </Button>
                 <Button
                     variant="ghost"

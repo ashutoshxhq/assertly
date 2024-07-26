@@ -8,17 +8,28 @@ import {
     testSpecStepsAtom,
 } from "src/store/test-specs/steps";
 import { v4 } from "uuid";
+import { selectedTestSpecAtom } from "src/store/test-specs/testSpecs";
+import { useEffect } from "react";
 
 interface StepsProps {
     runStepById: (stepId: string) => void;
 }
 
 const Steps: React.FC<StepsProps> = ({ runStepById }) => {
+    const [{ data }] = useAtom(selectedTestSpecAtom);
     const [steps, setSteps] = useAtom(testSpecStepsAtom);
+    console.log("Steps -> steps", steps);
 
     const [testSpecOpenStepId, setTestSpecOpenStepId] = useAtom(
         testSpecOpenStepIdAtom,
     );
+
+    useEffect(() => {
+        if (data?.metadata?.steps) {
+            console.log("setting steps", data.metadata.steps);
+            setSteps(data.metadata.steps);
+        }
+    }, [data.metadata?.steps, setSteps]);
 
     const createStep = () => {
         const id = v4().toString();

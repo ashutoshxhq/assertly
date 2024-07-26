@@ -50,6 +50,14 @@ export class WebdriverService {
 
     private setupNetworkLogs(client: Socket, page: Page) {
         page.on('request', (request) => {
+            let body = request.postData();
+            try {
+                body = JSON.parse(body);
+            } catch (error) {
+                // Ignore error
+                body = null;
+            }
+
             client.send(
                 JSON.stringify({
                     event: 'NETWORK_REQUEST',
@@ -57,7 +65,7 @@ export class WebdriverService {
                         url: request.url(),
                         method: request.method(),
                         headers: request.headers(),
-                        body: request.postData(),
+                        body: body,
                         timing: request.timing(),
                     },
                 }),

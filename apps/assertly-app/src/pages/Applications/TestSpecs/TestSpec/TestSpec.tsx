@@ -19,27 +19,21 @@ import {
 } from "src/store/test-specs/testSpecs";
 import Loader from "src/components/molecules/Loader";
 import { testSpecStepsAtom } from "src/store/test-specs/steps";
-import { useWebdriver } from "src/hooks/webdriver";
 import StepBuilder from "./StepBuilder";
 import PreviewWindow from "./PreviewWindow";
 import PreviewContext from "./PreviewContext";
 
 const TestSpec = () => {
+    console.log("TestSpec");
     const { specId } = useParams();
     const navigate = useNavigate();
     const [{ data, status }] = useAtom(selectedTestSpecAtom);
     const [, setsSelectedTestSpecId] = useAtom(selectedTestSpecIdAtom);
-    const [steps, setSteps] = useAtom(testSpecStepsAtom);
+    const [steps] = useAtom(testSpecStepsAtom);
     const [{ mutate, status: updateStatus }] = useAtom(
         updateTestSpecMutationAtom,
     );
-    const { runAllSteps, runStepById } = useWebdriver();
-
-    useEffect(() => {
-        if (data?.metadata?.steps) {
-            setSteps(data.metadata.steps);
-        }
-    }, [data, setSteps]);
+    console.log("TestSpec -> steps", steps);
 
     useEffect(() => {
         if (specId) {
@@ -115,10 +109,7 @@ const TestSpec = () => {
                     minSize={30}
                     defaultSize={40}
                 >
-                    <StepBuilder
-                        runAllSteps={runAllSteps}
-                        runStepById={runStepById}
-                    />
+                    <StepBuilder />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel className="p-[1px] ml-2" defaultSize={60}>

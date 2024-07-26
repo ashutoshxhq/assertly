@@ -1,6 +1,7 @@
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
-import { RiRefreshLine } from "react-icons/ri";
+import { RiFileCopy2Line } from "react-icons/ri";
+import { toast } from "sonner";
 import { Button } from "src/components/ui/button";
 import {
     currentTestSpecExecutionPageURLAtom,
@@ -37,8 +38,17 @@ const PreviewWindow = () => {
                             size={"icon"}
                             variant={"ghost"}
                             className="rounded-full w-6 h-6"
+                            onClick={() => {
+                                navigator.clipboard.writeText(
+                                    currentTestSpecExecutionPageURL,
+                                );
+                                toast("Current page url copied to clipboard", {
+                                    dismissible: true,
+                                    closeButton: true,
+                                });
+                            }}
                         >
-                            <RiRefreshLine />
+                            <RiFileCopy2Line />
                         </Button>
                     </div>
                 </div>

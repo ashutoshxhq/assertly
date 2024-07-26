@@ -21,14 +21,10 @@ import {
     testSpecStepsAtom,
 } from "src/store/test-specs/steps";
 import { useAtom } from "jotai";
+import { useWebdriver } from "src/hooks/webdriver";
 
-const StepBuilder = ({
-    runAllSteps,
-    runStepById,
-}: {
-    runAllSteps: () => void;
-    runStepById: (id: string) => void;
-}) => {
+const StepBuilder = () => {
+    const { runAllSteps, runStepById } = useWebdriver();
     const [, setTestSpecExecutedStepIds] = useAtom(testSpecExecutedStepIdsAtom);
     const [isStepsRunning] = useAtom(isTestSpecRunningAtom);
     const [, setSteps] = useAtom(testSpecStepsAtom);
@@ -57,7 +53,7 @@ const StepBuilder = ({
             >
                 <div className="flex flex-wrap justify-between w-full gap-4">
                     <div className="flex">
-                        <TabsList>
+                        <TabsList className="w-full">
                             <TabsTrigger value="steps">
                                 {" "}
                                 <RiListIndefinite className="mr-2" /> Steps

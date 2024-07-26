@@ -19,7 +19,7 @@ export type NetworkLog = {
         url: string;
         method: string;
         headers: Record<string, string>;
-        body?: string;
+        body?: any;
     };
     response?: {
         status: number;
@@ -35,5 +35,5 @@ export const currentTestSpecExecutionHtmlContentAtom = atom<string>("");
 export const currentTestSpecExecutionScreenshotAtom = atom<string>("");
 export const currentTestSpecExecutionLogsAtom = atom<any[]>([]);
 export const currentTestSpecExecutionNetworkLogsAtom = atom<NetworkLog[]>([]);
-export const currentTestSpecExecutionPageURLAtom = atom<string>("");
+export const currentTestSpecExecutionPageURLAtom = atom<string>("about:blank");
 export const currentTestSpecPreviewMode = atom<string>("SCREENSHOT");

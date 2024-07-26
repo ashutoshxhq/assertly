@@ -170,6 +170,18 @@ export const useWebdriver = () => {
     );
 
     useEffect(() => {
+        return () => {
+            setSteps([]);
+            setTestSpecExecutedStepIds([]);
+            setLastPageURL("about:blank");
+            setLastPageContent("");
+            setLastPageScreenshot("");
+            setcurrentTestSpecExecutionLogs([]);
+            setcurrentTestSpecExecutionNetworkLogs([]);
+        };
+    }, []);
+
+    useEffect(() => {
         if (lastMessage !== null) {
             try {
                 handleWebSocketMessage(lastMessage);

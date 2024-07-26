@@ -29,7 +29,7 @@ const Steps: React.FC<StepsProps> = ({ runStepById }) => {
             console.log("setting steps", data.metadata.steps);
             setSteps(data.metadata.steps);
         }
-    }, [data.metadata?.steps, setSteps]);
+    }, [data, setSteps]);
 
     const createStep = () => {
         const id = v4().toString();

@@ -22,6 +22,7 @@ import { testSpecStepsAtom } from "src/store/test-specs/steps";
 import StepBuilder from "./StepBuilder";
 import PreviewWindow from "./PreviewWindow";
 import PreviewContext from "./PreviewContext";
+import { EditTestSpec } from "./EditTestSpec";
 
 const TestSpec = () => {
     console.log("TestSpec");
@@ -73,12 +74,14 @@ const TestSpec = () => {
                     </Button>
                 </div>
                 <div className="flex w-[33.33%] justify-center">
-                    <div className="px-4 py-2 bg-zinc-100 rounded-md shadow dark:bg-zinc-800 text-sm dark:text-zinc-300">
-                        <span className="font-semibold lowercase">
-                            assertly
-                        </span>{" "}
-                        / {data?.name}
-                    </div>
+                    <EditTestSpec>
+                        <div className="px-4 py-2 bg-zinc-100 rounded-md shadow dark:bg-zinc-800 text-sm dark:text-zinc-300">
+                            <span className="font-semibold lowercase">
+                                assertly
+                            </span>{" "}
+                            / {data?.name}
+                        </div>
+                    </EditTestSpec>
                 </div>
                 <div className="flex w-[33.33%] items-center justify-end gap-2">
                     <Button

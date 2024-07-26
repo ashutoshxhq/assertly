@@ -109,6 +109,7 @@ export const updateTestSpecMutationAtom = atomWithMutation((get) => {
         },
         onSuccess: () => {
             get(testSpecsAtom).refetch();
+            get(selectedTestSpecAtom).refetch();
         },
     };
 });

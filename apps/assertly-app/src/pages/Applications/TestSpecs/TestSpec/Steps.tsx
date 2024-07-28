@@ -2,6 +2,7 @@ import { RiAddLargeLine } from "react-icons/ri";
 import { Button } from "src/components/ui/button";
 import Step from "./Step";
 import { useAtom } from "jotai";
+import { Reorder } from "framer-motion";
 import {
     Step as TestSpecStep,
     testSpecOpenStepIdAtom,
@@ -18,7 +19,6 @@ interface StepsProps {
 const Steps: React.FC<StepsProps> = ({ runStepById }) => {
     const [{ data }] = useAtom(selectedTestSpecAtom);
     const [steps, setSteps] = useAtom(testSpecStepsAtom);
-    console.log("Steps -> steps", steps);
 
     const [testSpecOpenStepId, setTestSpecOpenStepId] = useAtom(
         testSpecOpenStepIdAtom,
@@ -26,7 +26,6 @@ const Steps: React.FC<StepsProps> = ({ runStepById }) => {
 
     useEffect(() => {
         if (data?.metadata?.steps) {
-            console.log("setting steps", data.metadata.steps);
             setSteps(data.metadata.steps);
         }
     }, [data, setSteps]);
@@ -58,23 +57,30 @@ const Steps: React.FC<StepsProps> = ({ runStepById }) => {
 
     return (
         <div className="py-4 pb-0 flex flex-col gap-4 w-full">
-            {steps.map((step: TestSpecStep) => (
-                <Step
-                    key={step.id}
-                    step={step}
-                    updateStep={(updatedStep) =>
-                        updateStep(step.id, { ...step, ...updatedStep })
-                    }
-                    deleteStep={() => deleteStep(step.id)}
-                    runStep={() => runStepById(step.id)}
-                    isOpen={testSpecOpenStepId === step.id}
-                    setIsOpen={(open) =>
-                        open
-                            ? setTestSpecOpenStepId(step.id)
-                            : setTestSpecOpenStepId("")
-                    }
-                />
-            ))}
+            <Reorder.Group
+                axis="y"
+                values={steps}
+                onReorder={setSteps}
+                className="py-4 pb-0 flex flex-col gap-4 w-full"
+            >
+                {steps.map((step) => (
+                    <Step
+                        key={step.id}
+                        step={step}
+                        updateStep={(updatedStep) =>
+                            updateStep(step.id, { ...step, ...updatedStep })
+                        }
+                        deleteStep={() => deleteStep(step.id)}
+                        runStep={() => runStepById(step.id)}
+                        isOpen={testSpecOpenStepId === step.id}
+                        setIsOpen={(open) =>
+                            open
+                                ? setTestSpecOpenStepId(step.id)
+                                : setTestSpecOpenStepId("")
+                        }
+                    />
+                ))}
+            </Reorder.Group>
             <div className="w-full flex justify-center items-center mt-4">
                 <div className="border-t dark:border-zinc-800 flex-1 mr-2"></div>
                 <Button variant="outline" className="px-8" onClick={createStep}>

@@ -162,6 +162,10 @@ export class WebdriverService {
                                 url: url,
                                 hostname: hostname,
                                 step: action,
+                                nextStepId:
+                                    actions.length > actions.indexOf(action) + 1
+                                        ? actions[actions.indexOf(action) + 1].id
+                                        : "",
                             },
                         }),
                     );
@@ -192,8 +196,10 @@ export class WebdriverService {
     async cleanupWebdriverClient(id: string) {
         const clientSession = this.clients.get(id);
         if (clientSession) {
+            await clientSession.page.close();
             await clientSession.browser.close();
             this.clients.delete(id);
+            console.log('Client session cleaned up:', id);
         }
     }
 }

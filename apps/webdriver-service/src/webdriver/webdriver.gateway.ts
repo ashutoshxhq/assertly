@@ -25,6 +25,7 @@ export class WebdriverGateway
 
     async handleDisconnect(client: Socket) {
         if (client.data.id) {
+            console.log('Cleaning up client', client.data.id);
             await this.webdriverService.cleanupWebdriverClient(client.data.id);
         }
     }

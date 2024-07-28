@@ -17,7 +17,7 @@ const PreviewWindow = () => {
     );
 
     return (
-        <div className="flex flex-1 flex-col h-full grow rounded-lg shadow ring-1 dark:ring-zinc-950/4 ring-zinc-200 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 overflow-y-scroll">
+        <div className="flex flex-1 flex-col h-full grow rounded-lg shadow ring-1 dark:ring-zinc-950/4 ring-zinc-200 bg-white dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 overflow-y-scroll">
             <div className="flex items-center p-2 border-b ">
                 <div className="flex-1">
                     <div className="flex gap-2 px-2">

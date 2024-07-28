@@ -31,6 +31,7 @@ export const testSpecStepsAtom = atom<Step[]>([]);
 export const testSpecExecutedStepIdsAtom = atom<string[]>([]);
 export const testSpecOpenStepIdAtom = atom<string>("");
 export const isTestSpecRunningAtom = atom<boolean>(false);
+export const currentRunningStepIdAtom = atom<string>("");
 export const currentTestSpecExecutionHtmlContentAtom = atom<string>("");
 export const currentTestSpecExecutionScreenshotAtom = atom<string>("");
 export const currentTestSpecExecutionLogsAtom = atom<any[]>([]);

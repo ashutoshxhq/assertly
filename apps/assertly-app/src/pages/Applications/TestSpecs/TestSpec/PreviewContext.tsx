@@ -20,13 +20,8 @@ const PreviewContext = () => {
     const [currentTestSpecExecutionNetworkLogs] = useAtom(
         currentTestSpecExecutionNetworkLogsAtom,
     );
-    console.log(
-        "PreviewContext",
-        currentTestSpecExecutionLogs,
-        currentTestSpecExecutionNetworkLogs,
-    );
     return (
-        <div className="flex flex-1 p-2 h-full w-full grow rounded-lg shadow ring-1 ring-zinc-200 dark:ring-zinc-950/4 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300">
+        <div className="flex flex-1 p-2 h-full w-full grow rounded-lg shadow ring-1 ring-zinc-200 dark:ring-zinc-950/4 bg-white dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300">
             <Tabs defaultValue="console" className="w-full">
                 <TabsList>
                     <TabsTrigger value="console">Console</TabsTrigger>

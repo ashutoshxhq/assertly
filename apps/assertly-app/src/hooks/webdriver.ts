@@ -4,6 +4,7 @@ import useWebSocket from "react-use-websocket";
 import { toast } from "sonner";
 import { WEBDRIVER_SERVICE_URL } from "src/config/constants";
 import {
+    currentRunningStepIdAtom,
     currentTestSpecExecutionHtmlContentAtom,
     currentTestSpecExecutionLogsAtom,
     currentTestSpecExecutionNetworkLogsAtom,
@@ -21,6 +22,7 @@ export const useWebdriver = () => {
     const [steps, setSteps] = useAtom(testSpecStepsAtom);
     const [, setTestSpecExecutedStepIds] = useAtom(testSpecExecutedStepIdsAtom);
     const [, setIsStepsRunning] = useAtom(isTestSpecRunningAtom);
+    const [, setCurrentRunningStepId] = useAtom(currentRunningStepIdAtom);
     const [, setLastPageContent] = useAtom(
         currentTestSpecExecutionHtmlContentAtom,
     );
@@ -49,6 +51,7 @@ export const useWebdriver = () => {
             switch (parsedData.event) {
                 case "ACTION_RESULT":
                     if (parsedData.data) {
+                        console.log("ACTION_RESULT", parsedData.data);
                         // update step status to success or failure
                         setSteps((prev) => {
                             return prev.map((step) =>
@@ -78,6 +81,7 @@ export const useWebdriver = () => {
                             }
                             return prev;
                         });
+                        setCurrentRunningStepId(parsedData.data.nextStepId);
                     }
                     break;
                 case "SELECTOR_UPDATE":
@@ -200,6 +204,7 @@ export const useWebdriver = () => {
 
     const runAllSteps = useCallback(() => {
         setIsStepsRunning(true);
+        steps.length > 0 && setCurrentRunningStepId(steps[0].id);
         const message = {
             event: "ACTIONS",
             data: {
@@ -215,6 +220,7 @@ export const useWebdriver = () => {
 
     const runStepById = useCallback(
         (stepId: string) => {
+            setCurrentRunningStepId(stepId);
             const step = steps.find((step: Step) => step.id === stepId);
             if (!step) {
                 toast.error("Step not found to run");

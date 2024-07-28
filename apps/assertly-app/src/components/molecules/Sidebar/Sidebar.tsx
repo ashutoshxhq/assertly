@@ -1,8 +1,12 @@
 import { Avatar, AvatarFallback } from "src/components/ui/avatar";
 import SidebarNavItem from "./SidebarNavItem";
-import { RiListCheck3, RiSettings2Line, RiAppsLine } from "react-icons/ri";
-import { Switch } from "src/components/ui/switch";
-import { isDarkMode } from "src/store/app/app";
+import {
+    RiListCheck3,
+    RiSettings2Line,
+    RiAppsLine,
+    RiChat1Line,
+    RiDatabase2Line,
+} from "react-icons/ri";
 import { useAtom } from "jotai";
 import {
     DropdownMenu,
@@ -15,7 +19,6 @@ import { authAtom } from "src/store/auth/auth";
 import { currentUserNameAtom } from "src/store/users/users";
 
 const Sidebar = () => {
-    const [darkMode, setDarkMode] = useAtom(isDarkMode);
     const [currentUserName] = useAtom(currentUserNameAtom);
     const [, setAuthState] = useAtom(authAtom);
 
@@ -32,7 +35,7 @@ const Sidebar = () => {
                 className="flex h-full min-h-0 flex-col"
                 data-tauri-drag-region
             >
-                <div className="flex flex-col p-4 mt-4">
+                <div className="flex flex-col p-4 my-4">
                     <span
                         className="absolute left-1/2 top-1/2 size-[max(100%,2.75rem)] -tranzinc-x-1/2 -tranzinc-y-1/2 [@media(pointer:fine)]:hidden"
                         aria-hidden="true"
@@ -54,6 +57,11 @@ const Sidebar = () => {
                         data-tauri-drag-region
                     >
                         <SidebarNavItem
+                            to="explore"
+                            icon={<RiChat1Line />}
+                            title="Explore"
+                        />
+                        <SidebarNavItem
                             to="applications"
                             icon={<RiAppsLine />}
                             title="Applications"
@@ -64,17 +72,16 @@ const Sidebar = () => {
                             title="Test Runs"
                         />
                         <SidebarNavItem
+                            to="knowledge"
+                            icon={<RiDatabase2Line />}
+                            title="Knowledge"
+                        />
+                        <SidebarNavItem
                             to="settings"
                             icon={<RiSettings2Line />}
                             title="Settings"
                         />
                     </div>
-
-                    <div
-                        aria-hidden="true"
-                        className="mt-8 flex-1"
-                        data-tauri-drag-region
-                    ></div>
                 </div>
                 <div
                     className="flex flex-col gap-2 p-4 border-t border-zinc-950/5  dark:border-white/5 [&amp;>[data-slot=section]+[data-slot=section]]:mt-2.5"
@@ -90,12 +97,6 @@ const Sidebar = () => {
                         icon={<RiCommandLine />}
                         title="Search"
                     /> */}
-                    <div className="pt-2">
-                        <Switch
-                            checked={darkMode}
-                            onCheckedChange={setDarkMode}
-                        />
-                    </div>
                     <div className="flex items-center justify-center rounded-full mt-4 mb-4">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

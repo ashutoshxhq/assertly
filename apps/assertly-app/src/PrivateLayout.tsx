@@ -14,7 +14,6 @@ import Loader from "./components/molecules/Loader";
 import { currentUserAtom } from "./store/users/users";
 
 function PrivateLayout() {
-    console.log("PrivateLayout");
     const [darkMode] = useAtom(isDarkMode);
     const [{ mutate, isPending }] = useAtom(refreshTokenMutationAtom);
     const [{ status }] = useAtom(currentUserAtom);

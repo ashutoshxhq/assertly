@@ -21,6 +21,8 @@ import AppLayout from "./AppLayout";
 import Applications from "./pages/Applications/Applications";
 import Application from "./pages/Applications/Application";
 import TestRuns from "./pages/TestRuns/TestRuns";
+import Explore from "./pages/Explore/Explore";
+import Knowledge from "./pages/Knowledge/Knowledge";
 
 const router = createBrowserRouter([
     {
@@ -40,6 +42,10 @@ const router = createBrowserRouter([
                                 element: <Navigate to="applications" />,
                             },
                             {
+                                path: "/explore",
+                                element: <Explore />,
+                            },
+                            {
                                 path: "/applications",
                                 element: <Applications />,
                             },
@@ -50,6 +56,10 @@ const router = createBrowserRouter([
                             {
                                 path: "/runs",
                                 element: <TestRuns />,
+                            },
+                            {
+                                path: "/knowledge",
+                                element: <Knowledge />,
                             },
                             {
                                 path: "settings",

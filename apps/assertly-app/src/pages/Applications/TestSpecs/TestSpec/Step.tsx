@@ -1,9 +1,8 @@
 import {
-    RiArrowDownSLine,
-    RiArrowRightSLine,
     RiCheckboxCircleLine,
     RiCloseCircleLine,
     RiDeleteBin6Line,
+    RiDraggable,
     RiPlayFill,
 } from "react-icons/ri";
 import {
@@ -18,10 +17,12 @@ import { cn } from "src/lib/utils";
 import { useAtom } from "jotai";
 import {
     Step as TestStep,
+    currentRunningStepIdAtom,
     testSpecExecutedStepIdsAtom,
     testSpecStepsAtom,
 } from "src/store/test-specs/steps";
 import { useEffect, useState } from "react";
+import { motion, Reorder, useDragControls } from "framer-motion";
 
 interface StepProps {
     step: TestStep;
@@ -40,6 +41,8 @@ const Step = ({
     isOpen,
     setIsOpen,
 }: StepProps) => {
+    const controls = useDragControls();
+
     const updateProperty = (key: string, value: any) => {
         if (key === "selectorQuery") {
             updateStep({
@@ -50,36 +53,50 @@ const Step = ({
     };
 
     return (
-        <div className="flex w-full border border-zinc-300/50 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 rounded-md">
-            <Collapsible
-                className="w-full"
-                open={isOpen}
-                onOpenChange={(open) => setIsOpen(open)}
+        <Reorder.Item
+            key={step.id}
+            initial={false}
+            value={step}
+            dragListener={false}
+            dragControls={controls}
+            translate="no"
+            className="translate-x-0 translate-y-0 translate-z-0 transition-none"
+        >
+            <motion.div
+                className="flex w-full border border-zinc-300/50 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 rounded-md"
+                layout={false}
             >
-                <CollapsibleTrigger asChild className="w-full">
-                    <StepTitle
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        stepId={step.id}
-                        stepType={step.type}
-                        stepStatus={step.status}
-                        stepProperties={step.props}
-                        runStep={runStep}
-                        updateStep={updateStep}
-                        deleteStep={deleteStep}
-                    />
-                </CollapsibleTrigger>
-                <CollapsibleContent className="w-full">
-                    <div className="w-full flex flex-col border-t dark:border-zinc-700/40 p-4">
-                        <StepProperties
+                <Collapsible
+                    className="w-full"
+                    open={isOpen}
+                    onOpenChange={(open) => setIsOpen(open)}
+                >
+                    <CollapsibleTrigger asChild className="w-full">
+                        <StepTitle
+                            isOpen={isOpen}
+                            setIsOpen={setIsOpen}
+                            stepId={step.id}
                             stepType={step.type}
+                            stepStatus={step.status}
                             stepProperties={step.props}
-                            updateProperty={updateProperty}
+                            runStep={runStep}
+                            updateStep={updateStep}
+                            deleteStep={deleteStep}
+                            onPointerDown={(e) => controls.start(e)}
                         />
-                    </div>
-                </CollapsibleContent>
-            </Collapsible>
-        </div>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="w-full">
+                        <div className="w-full flex flex-col border-t dark:border-zinc-700/40 p-4">
+                            <StepProperties
+                                stepType={step.type}
+                                stepProperties={step.props}
+                                updateProperty={updateProperty}
+                            />
+                        </div>
+                    </CollapsibleContent>
+                </Collapsible>
+            </motion.div>
+        </Reorder.Item>
     );
 };
 
@@ -127,6 +144,7 @@ const StepTitle = ({
     deleteStep,
     updateStep,
     runStep,
+    onPointerDown,
 }: {
     isOpen: boolean;
     setIsOpen: (open: boolean) => void;
@@ -137,7 +155,9 @@ const StepTitle = ({
     deleteStep: () => void;
     updateStep: any;
     runStep: () => void;
+    onPointerDown?: (e: React.PointerEvent) => void;
 }) => {
+    const [currentRunningStepId] = useAtom(currentRunningStepIdAtom);
     const [testSpecExecutedStepIds] = useAtom(testSpecExecutedStepIdsAtom);
     const [steps] = useAtom(testSpecStepsAtom);
     const [firstRemainingStepId, setFirstRemainingStepId] = useState<
@@ -152,8 +172,11 @@ const StepTitle = ({
     }, [steps, testSpecExecutedStepIds]);
 
     return (
-        <div className="flex justify-between items-center w-full ">
-            <div className="flex flex-1 h-full px-2">
+        <motion.div
+            layout={false}
+            className="flex justify-between items-center w-full transition-none"
+        >
+            <div className="flex flex-1 h-full px-2 transition-none">
                 {isOpen && (
                     <div className="py-2">
                         <StepTypeSelect
@@ -180,7 +203,7 @@ const StepTitle = ({
                 </div>
             </div>
 
-            <div className="flex justify-center items-center px-2">
+            <div className="flex justify-center items-center px-2 gap-2">
                 {stepStatus === "failure" && (
                     <div className="flex justify-center items-center p-2 text-2xl">
                         <RiCloseCircleLine className="text-red-500" />{" "}
@@ -190,21 +213,34 @@ const StepTitle = ({
                     variant="outline"
                     size={"icon"}
                     onClick={runStep}
-                    disabled={firstRemainingStepId !== stepId}
+                    disabled={
+                        firstRemainingStepId !== stepId ||
+                        currentRunningStepId === stepId
+                    }
                     className={cn(
                         "text-lg",
                         firstRemainingStepId === stepId &&
                             "text-green-500 hover:text-green-400 dark:hover:text-green-400",
                     )}
                 >
-                    {stepStatus === "success" && (
-                        <RiCheckboxCircleLine className="text-green-500" />
-                    )}
+                    {stepStatus === "success" &&
+                        currentRunningStepId !== stepId && (
+                            <RiCheckboxCircleLine className="text-green-500" />
+                        )}
 
-                    {stepStatus !== "success" && <RiPlayFill />}
+                    {stepStatus !== "success" &&
+                        currentRunningStepId !== stepId && <RiPlayFill />}
+
+                    {currentRunningStepId === stepId && (
+                        <div className="flex justify-center items-center gap-0.5">
+                            <div className="h-1.5 w-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                            <div className="h-1.5 w-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                            <div className="h-1.5 w-1.5 bg-zinc-600 rounded-full animate-bounce"></div>
+                        </div>
+                    )}
                 </Button>
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     size={"icon"}
                     onClick={deleteStep}
                     className=""
@@ -212,15 +248,16 @@ const StepTitle = ({
                     <RiDeleteBin6Line />
                 </Button>
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     size={"icon"}
                     onClick={() => setIsOpen(!isOpen)}
-                    className="text-xl"
+                    className="text-xl reorder-handle"
+                    onPointerDown={onPointerDown}
                 >
-                    {isOpen ? <RiArrowRightSLine /> : <RiArrowDownSLine />}
+                    <RiDraggable />
                 </Button>
             </div>
-        </div>
+        </motion.div>
     );
 };
 
@@ -298,26 +335,46 @@ const StepProperties = ({
                                 updateProperty("selectorQuery", e.target.value)
                             }
                         />
+                        <label
+                            htmlFor="selector"
+                            className="block mb-1 text-xs text-zinc-700 dark:text-zinc-300"
+                        >
+                            Element to Select
+                        </label>
                     </>
                 );
             case "type":
                 return (
                     <>
-                        <label
-                            htmlFor="typeSelector"
-                            className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"
-                        >
-                            Element to Select
-                        </label>
-                        <Input
-                            id="typeSelector"
-                            className="border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 mb-2"
-                            placeholder="Selector"
-                            value={stepProperties?.selectorQuery || ""}
-                            onChange={(e) =>
-                                updateProperty("selectorQuery", e.target.value)
-                            }
-                        />
+                        <div className="flex flex-col mb-2 gap-2">
+                            <label
+                                htmlFor="typeSelector"
+                                className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"
+                            >
+                                Element to Select
+                            </label>
+                            <div className="flex flex-col justify-start items-start">
+                                <Input
+                                    id="typeSelector"
+                                    className="border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 mb-2"
+                                    placeholder="Selector"
+                                    value={stepProperties?.selectorQuery || ""}
+                                    onChange={(e) =>
+                                        updateProperty(
+                                            "selectorQuery",
+                                            e.target.value,
+                                        )
+                                    }
+                                />
+                                <label
+                                    htmlFor="selector"
+                                    className="block mb-1 text-[10px] text-zinc-400 dark:text-zinc-300 px-1"
+                                >
+                                    {stepProperties?.selector || ""}
+                                </label>
+                            </div>
+                        </div>
+
                         <label
                             htmlFor="typeText"
                             className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"

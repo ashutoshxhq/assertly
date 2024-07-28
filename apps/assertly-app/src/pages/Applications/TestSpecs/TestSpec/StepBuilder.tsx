@@ -46,7 +46,7 @@ const StepBuilder = () => {
     };
 
     return (
-        <div className="flex rounded-lg shadow ring-1 ring-zinc-200  dark:ring-zinc-950/4 bg-zinc-50 dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 h-[calc(100vh-62px)] overflow-y-scroll">
+        <div className="flex rounded-lg shadow ring-1 ring-zinc-200  dark:ring-zinc-950/4 bg-white dark:bg-zinc-950 dark:ring-white/5 dark:text-zinc-300 h-[calc(100vh-62px)] overflow-y-scroll">
             <Tabs
                 defaultValue="steps"
                 className="flex flex-col items-center justify-start w-full p-4"
@@ -60,7 +60,7 @@ const StepBuilder = () => {
                             </TabsTrigger>
                             <TabsTrigger value="chat">
                                 <RiRobot2Line className="mr-2" />
-                                Planner AI
+                                Browser AI
                             </TabsTrigger>
                         </TabsList>
                     </div>

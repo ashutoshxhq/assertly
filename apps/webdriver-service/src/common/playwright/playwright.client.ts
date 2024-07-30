@@ -84,8 +84,9 @@ export class PlaywrightClient {
                 break;
 
             case 'wait':
-                action.props.selector = await this.findSelectorByQuery(action);
-                if (action.props.selector) {
+                if (action.props.selector || action.props.selectorQuery) {
+                    action.props.selector =
+                        await this.findSelectorByQuery(action);
                     await this.page.waitForSelector(action.props.selector);
                 } else {
                     await this.page.waitForTimeout(action.props.timeout);

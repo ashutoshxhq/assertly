@@ -120,6 +120,13 @@ export class WebdriverService {
         });
     }
 
+    async cancelActions( id: string) {
+        const clientSession = this.clients.get(id);
+        clientSession.page.close();
+        clientSession.page = await clientSession.browser.newPage();
+    }
+
+
     async executeActions(client: Socket, id: string, actions: Action[]) {
         const clientSession = this.clients.get(id);
         if (!clientSession) {

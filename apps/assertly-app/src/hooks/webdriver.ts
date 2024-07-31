@@ -104,6 +104,7 @@ export const useWebdriver = () => {
                     }
                     break;
                 case "ACTIONS_COMPLETED":
+                    setCurrentRunningStepId("");
                     setIsStepsRunning(false);
                     break;
                 case "SCREENSHOT":
@@ -155,10 +156,10 @@ export const useWebdriver = () => {
                                     : step,
                             );
                         });
-                        setIsStepsRunning(false);
-                    } else {
-                        setTestSpecExecutedStepIds([]);
                     }
+                    setCurrentRunningStepId("");
+                    setIsStepsRunning(false);
+                    setTestSpecExecutedStepIds([]);
 
                     break;
             }
@@ -243,8 +244,17 @@ export const useWebdriver = () => {
         [steps, sendMessage],
     );
 
+    const cancelActions = useCallback(() => {
+        const message = {
+            event: "CANCEL_ACTIONS",
+            data: {},
+        };
+        sendMessage(JSON.stringify(message));
+    }, [steps, sendMessage]);
+
     return {
         runAllSteps,
         runStepById,
+        cancelActions,
     };
 };

@@ -168,9 +168,9 @@ const StepTitle = ({
         const remainingSteps = steps.filter(
             (step) => !testSpecExecutedStepIds.find((id) => id === step.id),
         );
+        console.log(remainingSteps, steps);
         setFirstRemainingStepId(remainingSteps[0]?.id || null);
     }, [steps, testSpecExecutedStepIds]);
-
     return (
         <motion.div
             layout={false}
@@ -339,7 +339,7 @@ const StepProperties = ({
                             htmlFor="selector"
                             className="block mb-1 text-xs text-zinc-700 dark:text-zinc-300"
                         >
-                            Element to Select
+                            {stepProperties?.selector}
                         </label>
                     </>
                 );
@@ -395,21 +395,33 @@ const StepProperties = ({
             case "press":
                 return (
                     <>
-                        <label
-                            htmlFor="pressSelector"
-                            className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"
-                        >
-                            Element to Select
-                        </label>
-                        <Input
-                            id="pressSelector"
-                            className="border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 mb-2"
-                            placeholder="Selector"
-                            value={stepProperties?.selectorQuery || ""}
-                            onChange={(e) =>
-                                updateProperty("selectorQuery", e.target.value)
-                            }
-                        />
+                        <div className="flex flex-col mb-2">
+                            <label
+                                htmlFor="pressSelector"
+                                className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"
+                            >
+                                Element to Select
+                            </label>
+                            <Input
+                                id="pressSelector"
+                                className="border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 mb-2"
+                                placeholder="Selector"
+                                value={stepProperties?.selectorQuery || ""}
+                                onChange={(e) =>
+                                    updateProperty(
+                                        "selectorQuery",
+                                        e.target.value,
+                                    )
+                                }
+                            />
+                            <label
+                                htmlFor="selector"
+                                className="block mb-1 text-xs text-zinc-700 dark:text-zinc-300"
+                            >
+                                {stepProperties?.selector}
+                            </label>
+                        </div>
+
                         <label
                             htmlFor="pressKey"
                             className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"
@@ -465,21 +477,33 @@ const StepProperties = ({
             case "wait":
                 return (
                     <>
-                        <label
-                            htmlFor="waitSelector"
-                            className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"
-                        >
-                            Element to Select
-                        </label>
-                        <Input
-                            id="waitSelector"
-                            className="dark:border-zinc-700 dark:focus-visible:ring-zinc-300 mb-2 "
-                            placeholder="Selector"
-                            value={stepProperties?.selectorQuery || ""}
-                            onChange={(e) =>
-                                updateProperty("selectorQuery", e.target.value)
-                            }
-                        />
+                        <div className="flex flex-col mb-2">
+                            <label
+                                htmlFor="waitSelector"
+                                className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"
+                            >
+                                Element to Select
+                            </label>
+                            <Input
+                                id="waitSelector"
+                                className="dark:border-zinc-700 dark:focus-visible:ring-zinc-300 mb-2 "
+                                placeholder="Selector"
+                                value={stepProperties?.selectorQuery || ""}
+                                onChange={(e) =>
+                                    updateProperty(
+                                        "selectorQuery",
+                                        e.target.value,
+                                    )
+                                }
+                            />
+                            <label
+                                htmlFor="selector"
+                                className="block mb-1 text-xs text-zinc-700 dark:text-zinc-300"
+                            >
+                                {stepProperties?.selector}
+                            </label>
+                        </div>
+
                         <label
                             htmlFor="waitTimeout"
                             className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"

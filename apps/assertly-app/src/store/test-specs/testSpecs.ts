@@ -3,6 +3,7 @@ import { atom } from "jotai";
 import { atomWithMutation, atomWithQuery } from "jotai-tanstack-query";
 import { ENGINE_SERVICE_URL } from "src/config/constants";
 import { teamIdAtom } from "../auth/auth";
+import { selectedApplicationIdAtom } from "../applications/applications";
 
 export type TestSpecPlannerMessage = {
     id: number;
@@ -39,6 +40,8 @@ export const testSpecsPaginationAtom = atom<TestSpecPagination>({
 });
 export const testSpecsAtom = atomWithQuery((get) => {
     const teamId = get(teamIdAtom);
+    const applicationId = get(selectedApplicationIdAtom);
+    console.log({ applicationId });
     return {
         queryKey: [teamId, "test-specs", get(testSpecsPaginationAtom)],
         queryFn: async ({ queryKey: [, , pagination] }: any) => {
@@ -48,6 +51,7 @@ export const testSpecsAtom = atomWithQuery((get) => {
                 where: {
                     ...query.where,
                     teamId,
+                    applicationId,
                 },
                 take: pagination.take,
                 skip: pagination.skip,

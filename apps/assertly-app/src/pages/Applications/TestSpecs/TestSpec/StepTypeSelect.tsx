@@ -117,10 +117,6 @@ const steps = [
         label: "Wait For",
     },
     {
-        value: "ai-action",
-        label: "AI Action",
-    },
-    {
         value: "ai-assert",
         label: "AI Assert",
     },
@@ -141,15 +137,11 @@ const steps = [
         label: "Execute User Flow",
     },
     {
-        value: "captha",
-        label: "Solve Captcha",
-    },
-    {
         value: "javascript",
         label: "Execute Javascript",
     },
     {
         value: "visual-assert",
-        label: "Visual Diff",
+        label: "Visual Assert",
     },
 ];

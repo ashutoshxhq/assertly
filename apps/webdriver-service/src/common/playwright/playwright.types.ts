@@ -143,3 +143,11 @@ export type Action =
     | WaitAction
     | LocalStorageAction
     | FileUploadAction;
+
+export type ActionWithSelector = Action & {
+    props: { selector?: string; selectorQuery?: string };
+};
+
+export function hasSelector(action: Action): action is ActionWithSelector {
+    return 'selector' in action.props || 'selectorQuery' in action.props;
+}

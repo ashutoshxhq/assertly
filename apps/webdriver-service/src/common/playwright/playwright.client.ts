@@ -1,5 +1,5 @@
 import { Browser, Page } from 'playwright';
-import { Action } from './playwright.types';
+import { Action, ActionWithSelector, hasSelector } from './playwright.types';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import * as FormData from 'form-data';
@@ -22,12 +22,61 @@ export class PlaywrightClient {
             );
         }
         for (const action of actions) {
-            await this.executeAction(action);
+            await this.executePlaywrightAction(action);
         }
         return actions;
     }
 
-    async executeAction(action: Action) {
+    async executeAction(action: Action, retries = 2) {
+        if (!this.page) {
+            throw new Error(
+                'PlaywrightClient not initialized. Call initialize() first.',
+            );
+        }
+
+        if (hasSelector(action)) {
+            for (let attempt = 0; attempt <= retries; attempt++) {
+                try {
+                    action = (await this.ensureSelector(action)) as Action;
+                    return await this.executePlaywrightAction(action);
+                } catch (error) {
+                    if (attempt === retries) {
+                        console.error(
+                            `Failed to execute ${action.type} action after ${retries} retries:`,
+                            error,
+                        );
+                        throw error;
+                    }
+                    console.warn(
+                        `Attempt ${attempt + 1} failed for ${action.type} action. Retrying...`,
+                    );
+                    if ('selector' in action.props) {
+                        delete action.props.selector;
+                    }
+                }
+            }
+        } else {
+            return await this.executePlaywrightAction(action);
+        }
+
+        throw new Error('Unexpected execution path');
+    }
+
+    private async ensureSelector(action: ActionWithSelector) {
+        if ('selector' in action.props && !action.props.selector) {
+            const selector = await this.findSelectorByQuery(action);
+            return {
+                ...action,
+                props: {
+                    ...action.props,
+                    selector,
+                },
+            };
+        }
+        return action;
+    }
+
+    async executePlaywrightAction(action: Action) {
         if (!this.page) {
             throw new Error(
                 'PlaywrightClient not initialized. Call initialize() first.',

@@ -18,9 +18,12 @@ import ApplicationSettings from "./ApplicationSettings/ApplicationSettings";
 import { CreateTestSpec } from "./TestSpecs/TestSpec/CreateTestSpec";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "src/components/ui/button";
+import { useAtom } from "jotai";
+import { selectedApplicationAtom } from "src/store/applications/applications";
 
 const Application = () => {
     const navigate = useNavigate();
+    const [selectedApplication] = useAtom(selectedApplicationAtom);
 
     return (
         <div className="flex flex-col">
@@ -50,7 +53,7 @@ const Application = () => {
                                         applications
                                     </Link>
                                     <h2 className="text-2xl font-bold tracking-tight ">
-                                        / assertly-webapp
+                                        / {selectedApplication.data?.name}
                                     </h2>
                                 </div>
                                 <p className="text-xs text-zinc-600 dark:text-zinc-400">

@@ -14,6 +14,9 @@ import {
 import Steps from "./Steps";
 import PlannerAI from "./PlannerAI";
 import {
+    currentRunningStepIdAtom,
+    currentTestSpecExecutionLogsAtom,
+    currentTestSpecExecutionNetworkLogsAtom,
     currentTestSpecExecutionPageURLAtom,
     currentTestSpecExecutionScreenshotAtom,
     isTestSpecRunningAtom,
@@ -24,16 +27,25 @@ import { useAtom } from "jotai";
 import { useWebdriver } from "src/hooks/webdriver";
 
 const StepBuilder = () => {
-    const { runAllSteps, runStepById } = useWebdriver();
+    const { runAllSteps, runStepById, cancelActions } = useWebdriver();
     const [, setTestSpecExecutedStepIds] = useAtom(testSpecExecutedStepIdsAtom);
-    const [isStepsRunning] = useAtom(isTestSpecRunningAtom);
+    const [isStepsRunning, setIsStepsRunning] = useAtom(isTestSpecRunningAtom);
     const [, setSteps] = useAtom(testSpecStepsAtom);
     const [, setLastPageScreenshot] = useAtom(
         currentTestSpecExecutionScreenshotAtom,
     );
     const [, setLastPageURL] = useAtom(currentTestSpecExecutionPageURLAtom);
+    const [, setcurrentTestSpecExecutionLogs] = useAtom(
+        currentTestSpecExecutionLogsAtom,
+    );
+
+    const [, setcurrentTestSpecExecutionNetworkLogs] = useAtom(
+        currentTestSpecExecutionNetworkLogsAtom,
+    );
+    const [, setCurrentRunningStepId] = useAtom(currentRunningStepIdAtom);
 
     const resetHandler = () => {
+        cancelActions();
         setTestSpecExecutedStepIds([]);
         setSteps((prev) =>
             prev.map((step) => ({
@@ -42,7 +54,11 @@ const StepBuilder = () => {
             })),
         );
         setLastPageScreenshot("");
-        setLastPageURL("");
+        setLastPageURL("about:blank");
+        setcurrentTestSpecExecutionLogs([]);
+        setcurrentTestSpecExecutionNetworkLogs([]);
+        setCurrentRunningStepId("");
+        setIsStepsRunning(false);
     };
 
     return (

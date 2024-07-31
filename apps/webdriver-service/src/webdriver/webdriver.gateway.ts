@@ -50,4 +50,18 @@ export class WebdriverGateway
             );
         }
     }
+
+    @SubscribeMessage('CANCEL_ACTIONS')
+    async cancelActions(client: Socket): Promise<void> {
+        try {
+            await this.webdriverService.cancelActions(client.data.id);
+        } catch (error) {
+            client.send(
+                JSON.stringify({
+                    event: 'ERROR',
+                    data: { success: false, message: error.message },
+                }),
+            );
+        }
+    }
 }

@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import { AI_AGENT_SERVICE_URL } from "src/config/constants";
 import { testSpecStepsAtom } from "src/store/test-specs/steps";
+import { v4 } from "uuid";
 
 const PlannerAI = () => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -50,9 +51,9 @@ const PlannerAI = () => {
 
             const data = response.data;
             setSteps(
-                data.data.steps.map((step: any, index: number) => ({
+                data.data.steps.map((step: any) => ({
                     ...step,
-                    id: index,
+                    id: v4(),
                 })),
             );
 

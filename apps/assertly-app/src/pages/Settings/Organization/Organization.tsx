@@ -15,7 +15,7 @@ import TeamMembers from "../TeamMembers/TeamMembers";
 const Organization = () => {
     return (
         <div className="flex flex-col gap-4">
-            <Card className="max-w-6xl">
+            <Card className="max-w-7xl">
                 <CardHeader>
                     <CardTitle>Organization Settings</CardTitle>
                 </CardHeader>
@@ -65,7 +65,7 @@ const Organization = () => {
                 </CardFooter>
             </Card>
 
-            <Card className="max-w-6xl">
+            <Card className="max-w-7xl">
                 <CardHeader>
                     <CardTitle>Team Members</CardTitle>
                 </CardHeader>

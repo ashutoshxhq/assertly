@@ -5,6 +5,7 @@ import { findLocatorPrompt } from 'src/common/prompts/find-locator.prompt';
 import { LanguageModelService } from 'src/language-model/language-model.service';
 import { FindLocatorDTO } from './dto/find-locator.dto';
 import { parse } from 'himalaya';
+import { aiAssertPrompt } from 'src/common/prompts/ai-assert.prompt';
 
 function cleanAndTrimContent(
     content,
@@ -104,55 +105,6 @@ function cleanAndTrimContent(
         : processElement(content);
 }
 
-function estimateJsonTokens(jsonData) {
-    function countTokens(obj) {
-        let count = 0;
-
-        if (typeof obj === 'string') {
-            // For strings, estimate based on words and punctuation
-            count += obj.trim().split(/\s+/).length;
-            count += (obj.match(/[^\w\s]/g) || []).length;
-        } else if (typeof obj === 'number') {
-            // For numbers, count as one token
-            count += 1;
-        } else if (Array.isArray(obj)) {
-            // For arrays, count brackets and recursively count elements
-            count += 2; // [ and ]
-            for (const item of obj) {
-                count += countTokens(item);
-                count += 1; // For comma
-            }
-            count -= 1; // Remove last comma
-        } else if (typeof obj === 'object' && obj !== null) {
-            // For objects, count braces and recursively count key-value pairs
-            count += 2; // { and }
-            for (const key in obj) {
-                count += countTokens(key);
-                count += 1; // For colon
-                count += countTokens(obj[key]);
-                count += 1; // For comma
-            }
-            count -= 1; // Remove last comma
-        } else if (typeof obj === 'boolean') {
-            // For booleans, count as one token
-            count += 1;
-        }
-
-        return count;
-    }
-
-    // Parse JSON if it's a string
-    const data = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
-
-    // Get initial count
-    let totalCount = countTokens(data);
-
-    // Add a small factor for potential subword tokenization
-    totalCount = Math.floor(totalCount * 1.1);
-
-    return totalCount;
-}
-
 @Injectable()
 export class ActionService {
     constructor(private llm: LanguageModelService) {}
@@ -160,7 +112,6 @@ export class ActionService {
     async findLocator(data: FindLocatorDTO) {
         const dom = new JSDOM(data.pageContent);
         const body = dom.window.document.body;
-        // remove style, script, ig, svg tags
         const elements = body.querySelectorAll(
             'style, script, img, svg, iframe',
         );
@@ -170,13 +121,6 @@ export class ActionService {
         const jsonBody = parse(body.innerHTML);
 
         const trimmedJsonBody = cleanAndTrimContent(jsonBody);
-        // if (estimateJsonTokens(trimmedJsonBody) > 120000) {
-        //     throw new Error('Content too large');
-        // } else {
-
-        // }
-
-        console.log(JSON.stringify(trimmedJsonBody, null, 2));
         const prompt = findLocatorPrompt({
             message: data.message,
             pageContent: JSON.stringify(trimmedJsonBody),
@@ -195,5 +139,34 @@ export class ActionService {
             locator,
             usage: res.usage,
         };
+    }
+
+    async aiAssert(data: any) {
+        const assertion = data.assertion;
+        const screenshot = data.screenshot;
+
+        const prompt = aiAssertPrompt({ assertion });
+
+        const res = await this.llm.generate([
+            {
+                role: 'user',
+                content: [
+                    {
+                        type: 'text',
+                        text: prompt,
+                    },
+                    {
+                        type: 'image_url',
+                        image_url: {
+                            url: `data:image/jpeg;base64,${screenshot}`
+                        },
+                    }
+                ],
+            }
+        ]);
+
+        const response = JSON.parse(res.data.message.content);
+
+        return response;
     }
 }

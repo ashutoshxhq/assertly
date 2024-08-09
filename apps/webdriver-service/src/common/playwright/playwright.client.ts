@@ -89,7 +89,11 @@ export class PlaywrightClient {
                 break;
 
             case 'visual-assert':
-                console.log('Visual diff not implemented in this wrapper.');
+            case 'ai-assert':
+                const screenshot = (await this.page.screenshot()).toString(
+                    'base64',
+                );
+                action['result'] = await this.aiAssert(action, screenshot);
                 break;
 
             case 'goto':
@@ -119,9 +123,7 @@ export class PlaywrightClient {
 
             case 'scroll':
                 action.props.selector = await this.findSelectorByQuery(action);
-                await this.page.evaluate((selector) => {
-                    document.querySelector(selector)?.scrollIntoView();
-                }, action.props.selector);
+                await this.page.click(action.props.selector);
                 break;
 
             case 'select':
@@ -171,6 +173,36 @@ export class PlaywrightClient {
         }
 
         return action;
+    }
+
+    async aiAssert(action: Action, screenshot: string) {
+        try {
+            if (
+                action?.type === 'ai-assert' ||
+                action?.type === 'visual-assert'
+            ) {
+                const formData = new FormData();
+                formData.append('assertion', action.props.assertion);
+                formData.append('screenshot', screenshot);
+
+                const response = await axios.post(
+                    `${this.configService.get('AI_AGENT_SERVICE_URL', 'http://localhost:8000')}/v1/actions/ai-assert`,
+                    formData,
+                    {
+                        headers: {
+                            ...formData.getHeaders(),
+                        },
+                        maxBodyLength: Infinity,
+                    },
+                );
+                return response.data;
+            } else {
+                throw new Error('No screenshot found in action');
+            }
+        } catch (error) {
+            console.error('Error asserting screenshot', error);
+            throw error;
+        }
     }
 
     async findSelectorByQuery(action) {

@@ -51,14 +51,34 @@ export const useWebdriver = () => {
             switch (parsedData.event) {
                 case "ACTION_RESULT":
                     if (parsedData.data) {
-                        console.log("ACTION_RESULT", parsedData.data);
+                        if (
+                            parsedData?.data?.step?.result?.assertion_result ===
+                            false
+                        ) {
+                            toast.error(parsedData.data.step.result.reason, {
+                                dismissible: false,
+                                duration: 20000,
+                            });
+                        }
+                        let stepStatus = "success";
+                        let stepReason = "";
+                        if (parsedData?.data?.step?.result) {
+                            if (
+                                parsedData.data.step.result
+                                    ?.assertion_result === false
+                            ) {
+                                stepStatus = "failure";
+                            }
+                            stepReason = parsedData.data.step.result.reason;
+                        }
                         // update step status to success or failure
                         setSteps((prev) => {
                             return prev.map((step) =>
                                 step.id === parsedData.data.step.id
                                     ? {
                                           ...step,
-                                          status: "success",
+                                          status: stepStatus,
+                                          reason: stepReason,
                                       }
                                     : step,
                             );
@@ -111,7 +131,6 @@ export const useWebdriver = () => {
                     setLastPageScreenshot(parsedData.data);
                     break;
                 case "CONSOLE_LOG":
-                    console.log("CONSOLE_LOG", parsedData.data);
                     setcurrentTestSpecExecutionLogs((prev) => [
                         ...prev,
                         parsedData.data,

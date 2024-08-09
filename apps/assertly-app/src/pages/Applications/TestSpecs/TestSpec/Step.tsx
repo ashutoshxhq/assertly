@@ -23,6 +23,12 @@ import {
 } from "src/store/test-specs/steps";
 import { useEffect, useState } from "react";
 import { motion, Reorder, useDragControls } from "framer-motion";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "src/components/ui/tooltip";
 
 interface StepProps {
     step: TestStep;
@@ -77,6 +83,7 @@ const Step = ({
                             setIsOpen={setIsOpen}
                             stepId={step.id}
                             stepType={step.type}
+                            stepReason={step.reason}
                             stepStatus={step.status}
                             stepProperties={step.props}
                             runStep={runStep}
@@ -109,6 +116,8 @@ const getStepDescription = (
             return "Run custom JavaScript code";
         case "visual-assert":
             return "Perform a visual assertion";
+        case "ai-assert":
+            return "Perform an AI assertion";
         case "goto":
             return `Navigate to ${stepProperties.url || "a URL"}`;
         case "click":
@@ -140,6 +149,7 @@ const StepTitle = ({
     stepId,
     stepType,
     stepStatus,
+    stepReason,
     stepProperties,
     deleteStep,
     updateStep,
@@ -151,6 +161,7 @@ const StepTitle = ({
     stepId: string;
     stepType?: string;
     stepStatus?: string;
+    stepReason?: string;
     stepProperties: Record<string, any>;
     deleteStep: () => void;
     updateStep: any;
@@ -168,7 +179,6 @@ const StepTitle = ({
         const remainingSteps = steps.filter(
             (step) => !testSpecExecutedStepIds.find((id) => id === step.id),
         );
-        console.log(remainingSteps, steps);
         setFirstRemainingStepId(remainingSteps[0]?.id || null);
     }, [steps, testSpecExecutedStepIds]);
     return (
@@ -205,40 +215,74 @@ const StepTitle = ({
 
             <div className="flex justify-center items-center px-2 gap-2">
                 {stepStatus === "failure" && (
-                    <div className="flex justify-center items-center p-2 text-2xl">
-                        <RiCloseCircleLine className="text-red-500" />{" "}
-                    </div>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div className="flex justify-center items-center p-2 text-2xl">
+                                    <RiCloseCircleLine className="text-red-500" />{" "}
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent
+                                align="end"
+                                side="right"
+                                className=""
+                            >
+                                <span className="dark:text-zinc-800 font-medium text-md">
+                                    {stepReason}
+                                </span>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 )}
-                <Button
-                    variant="outline"
-                    size={"icon"}
-                    onClick={runStep}
-                    disabled={
-                        firstRemainingStepId !== stepId ||
-                        currentRunningStepId === stepId
-                    }
-                    className={cn(
-                        "text-lg",
-                        firstRemainingStepId === stepId &&
-                            "text-green-500 hover:text-green-400 dark:hover:text-green-400",
+
+                {stepStatus === "success" &&
+                    currentRunningStepId !== stepId && (
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <div className="flex justify-center items-center p-2 text-2xl">
+                                        <RiCheckboxCircleLine className="text-green-500" />
+                                    </div>
+                                </TooltipTrigger>
+                                <TooltipContent
+                                    align="end"
+                                    side="right"
+                                    className="w-96"
+                                >
+                                    <span className="dark:text-zinc-800 font-medium text-md">
+                                        {stepReason}
+                                    </span>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     )}
-                >
-                    {stepStatus === "success" &&
-                        currentRunningStepId !== stepId && (
-                            <RiCheckboxCircleLine className="text-green-500" />
+
+                {stepStatus !== "success" && (
+                    <Button
+                        variant="outline"
+                        size={"icon"}
+                        onClick={runStep}
+                        disabled={
+                            firstRemainingStepId !== stepId ||
+                            currentRunningStepId === stepId
+                        }
+                        className={cn(
+                            "text-lg",
+                            firstRemainingStepId === stepId &&
+                                "text-green-500 hover:text-green-400 dark:hover:text-green-400",
                         )}
-
-                    {stepStatus !== "success" &&
-                        currentRunningStepId !== stepId && <RiPlayFill />}
-
-                    {currentRunningStepId === stepId && (
-                        <div className="flex justify-center items-center gap-0.5">
-                            <div className="h-1.5 w-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
-                            <div className="h-1.5 w-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
-                            <div className="h-1.5 w-1.5 bg-zinc-600 rounded-full animate-bounce"></div>
-                        </div>
-                    )}
-                </Button>
+                    >
+                        {currentRunningStepId === stepId ? (
+                            <div className="flex justify-center items-center gap-0.5">
+                                <div className="h-1.5 w-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                <div className="h-1.5 w-1.5 bg-zinc-600 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                                <div className="h-1.5 w-1.5 bg-zinc-600 rounded-full animate-bounce"></div>
+                            </div>
+                        ) : (
+                            <RiPlayFill />
+                        )}
+                    </Button>
+                )}
                 <Button
                     variant="outline"
                     size={"icon"}
@@ -293,7 +337,26 @@ const StepProperties = ({
                     </>
                 );
             case "visual-assert":
-                return <span>No additional properties for Visual Assert</span>;
+            case "ai-assert":
+                return (
+                    <>
+                        <label
+                            htmlFor="assertion"
+                            className="block mb-1 text-xs font-semibold text-zinc-700 dark:text-zinc-300"
+                        >
+                            Describe your assertion
+                        </label>
+                        <textarea
+                            id="assertion"
+                            className="w-full p-2 dark:bg-zinc-700 dark:text-white text-zinc-700 rounded-md"
+                            placeholder="Enter your assertion"
+                            value={stepProperties.assertion || ""}
+                            onChange={(e) =>
+                                updateProperty("assertion", e.target.value)
+                            }
+                        />
+                    </>
+                );
             case "goto":
                 return (
                     <>

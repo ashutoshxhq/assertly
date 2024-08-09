@@ -1,6 +1,7 @@
 export type ActionType =
     | 'javascript'
     | 'visual-assert'
+    | 'ai-assert'
     | 'goto'
     | 'click'
     | 'type'
@@ -29,6 +30,17 @@ export interface JavaScriptAction extends BaseAction {
 export interface VisualAssertAction extends BaseAction {
     id: string;
     type: 'visual-assert';
+    props: {
+        assertion: string;
+    };
+}
+
+export interface AIAssertAction extends BaseAction {
+    id: string;
+    type: 'ai-assert';
+    props: {
+        assertion: string;
+    };
 }
 
 export interface GotoAction extends BaseAction {
@@ -133,6 +145,7 @@ export interface FileUploadAction extends BaseAction {
 export type Action =
     | JavaScriptAction
     | VisualAssertAction
+    | AIAssertAction
     | GotoAction
     | ClickAction
     | TypeAction

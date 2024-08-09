@@ -8,6 +8,7 @@ export type Step = {
     type?: string;
     props?: any;
     status?: string;
+    reason?: string;
     stepExecutionReason?: string;
     teamId?: string;
     createdAt?: string;

@@ -13,7 +13,7 @@ COPY . .
 RUN npm run build
 
 # Production stage
-FROM mcr.microsoft.com/playwright:v1.45.1-jammy
+FROM mcr.microsoft.com/playwright:v1.46.0-jammy
 
 WORKDIR /usr/src/app
 

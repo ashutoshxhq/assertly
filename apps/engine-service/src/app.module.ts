@@ -9,7 +9,8 @@ import { IntegrationModule } from './integration/integration.module';
 import { ClientCredentialModule } from './client-credential/client-credential.module';
 import { HealthModule } from './health/health.module';
 import { ConfigModule } from '@nestjs/config';
-import { ApplicationModule } from './application/application.module';
+import { ProjectModule } from './project/project.module';
+import { SessionRecordingModule } from './session-recording/session-recording.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { ApplicationModule } from './application/application.module';
     ClientCredentialModule,
     IntegrationModule,
     HealthModule,
-    ApplicationModule,
+    ProjectModule,
+    SessionRecordingModule,
   ],
 })
 export class AppModule {}

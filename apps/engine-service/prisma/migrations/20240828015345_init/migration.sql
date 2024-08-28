@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "applications" (
+CREATE TABLE "projects" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "status" TEXT,
@@ -8,7 +8,7 @@ CREATE TABLE "applications" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "applications_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "projects_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -18,7 +18,7 @@ CREATE TABLE "test_specs" (
     "status" TEXT,
     "metadata" JSONB,
     "teamId" TEXT NOT NULL,
-    "applicationId" TEXT NOT NULL,
+    "projectId" TEXT NOT NULL,
     "lastRunAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE "user_flows" (
     "status" TEXT,
     "metadata" JSONB,
     "teamId" TEXT NOT NULL,
-    "applicationId" TEXT NOT NULL,
+    "projectId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -77,7 +77,7 @@ CREATE TABLE "test_runs" (
     "consoleContext" JSONB,
     "networkContext" JSONB,
     "specId" TEXT NOT NULL,
-    "applicationId" TEXT NOT NULL,
+    "projectId" TEXT NOT NULL,
     "finishedAt" TIMESTAMP(3),
     "teamId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -127,10 +127,10 @@ CREATE TABLE "integrations" (
 );
 
 -- AddForeignKey
-ALTER TABLE "test_specs" ADD CONSTRAINT "test_specs_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "applications"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "test_specs" ADD CONSTRAINT "test_specs_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "user_flows" ADD CONSTRAINT "user_flows_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "applications"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "user_flows" ADD CONSTRAINT "user_flows_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "test_schedules" ADD CONSTRAINT "test_schedules_specId_fkey" FOREIGN KEY ("specId") REFERENCES "test_specs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -145,4 +145,4 @@ ALTER TABLE "steps" ADD CONSTRAINT "steps_userFlowId_fkey" FOREIGN KEY ("userFlo
 ALTER TABLE "test_runs" ADD CONSTRAINT "test_runs_specId_fkey" FOREIGN KEY ("specId") REFERENCES "test_specs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "test_runs" ADD CONSTRAINT "test_runs_applicationId_fkey" FOREIGN KEY ("applicationId") REFERENCES "applications"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "test_runs" ADD CONSTRAINT "test_runs_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

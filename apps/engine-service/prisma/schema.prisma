@@ -9,19 +9,20 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Application {
-  id        String     @id @default(uuid())
-  name      String
-  status    String?
-  metadata  Json?
-  teamId    String
-  testSpecs TestSpec[]
-  userFlows UserFlow[]
-  testRuns  TestRun[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+model Project {
+  id               String             @id @default(uuid())
+  name             String
+  status           String?
+  metadata         Json?
+  teamId           String
+  testSpecs        TestSpec[]
+  userFlows        UserFlow[]
+  testRuns         TestRun[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  SessionRecording SessionRecording[]
 
-  @@map("applications")
+  @@map("projects")
 }
 
 model TestSpec {
@@ -30,8 +31,8 @@ model TestSpec {
   status        String?
   metadata      Json?
   teamId        String
-  application   Application    @relation(fields: [applicationId], references: [id])
-  applicationId String
+  project       Project        @relation(fields: [projectId], references: [id])
+  projectId     String
   steps         Step[]
   testRuns      TestRun[]
   testSchedules TestSchedule[]
@@ -43,18 +44,33 @@ model TestSpec {
 }
 
 model UserFlow {
-  id            String      @id @default(uuid())
-  name          String
-  status        String?
-  metadata      Json?
-  teamId        String
-  application   Application @relation(fields: [applicationId], references: [id])
-  applicationId String
-  steps         Step[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id        String   @id @default(uuid())
+  name      String
+  status    String?
+  steps     Json?
+  metadata  Json?
+  teamId    String
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("user_flows")
+}
+
+model SessionRecording {
+  id        String   @id @default(uuid())
+  name      String
+  status    String?
+  steps     Json?
+  metadata  Json?
+  teamId    String
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("session_recordings")
 }
 
 model TestSchedule {
@@ -70,37 +86,35 @@ model TestSchedule {
 }
 
 model Step {
-  id         String    @id @default(uuid())
-  title      String?
-  stepType   String?
-  props      Json?
-  status     String?
-  teamId     String
-  spec       TestSpec? @relation(fields: [specId], references: [id])
-  specId     String?
-  userFlow   UserFlow? @relation(fields: [userFlowId], references: [id])
-  userFlowId String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id        String    @id @default(uuid())
+  title     String?
+  stepType  String?
+  props     Json?
+  status    String?
+  teamId    String
+  spec      TestSpec? @relation(fields: [specId], references: [id])
+  specId    String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@map("steps")
 }
 
 model TestRun {
-  id             String      @id @default(uuid())
+  id             String    @id @default(uuid())
   status         String?
   metadata       Json?
   stepContext    Json?
   consoleContext Json?
   networkContext Json?
-  spec           TestSpec    @relation(fields: [specId], references: [id])
+  spec           TestSpec  @relation(fields: [specId], references: [id])
   specId         String
-  application    Application @relation(fields: [applicationId], references: [id])
-  applicationId  String
+  project        Project   @relation(fields: [projectId], references: [id])
+  projectId      String
   finishedAt     DateTime?
   teamId         String
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   @@map("test_runs")
 }

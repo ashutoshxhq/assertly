@@ -20,7 +20,7 @@ const SidebarNavItem = ({ icon, title, to }: SidebarNavItemProps) => {
                 {/* {isActive && <span className="absolute inset-y-2 -left-4 w-1 rounded-full dark:bg-zinc-950 dark:bg-white"></span>} */}
                 <div
                   className={cn(
-                    'flex w-full px-4 py-2 items-center justify-start gap-3 rounded-lg text-left text-base/6 font-medium text-zinc-950 border border-transparent dark:text-white hover:bg-zinc-800/5 dark:hover:bg-white/5',
+                    'flex w-full px-4 py-2 items-center justify-start gap-3 rounded-lg text-left text-base/6 font-normal text-zinc-950 border border-transparent dark:text-white hover:bg-zinc-800/5 dark:hover:bg-white/5',
                     isActive &&
                       'bg-zinc-200 dark:bg-zinc-800 border border-transparent hover:bg-zinc-200 dark:hover:bg-zinc-800'
                   )}
@@ -31,7 +31,7 @@ const SidebarNavItem = ({ icon, title, to }: SidebarNavItemProps) => {
               </span>
             </TooltipTrigger>
             <TooltipContent align="center" side="right" className="">
-              <span className="dark:text-zinc-800 font-medium text-md">{title}</span>
+              <span className="dark:text-zinc-800 font-normal text-md">{title}</span>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

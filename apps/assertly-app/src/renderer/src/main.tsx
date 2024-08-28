@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom/client'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './globals.css'
 import './App.css'
-import Account from './pages/Settings/Account/Account'
-import Integrations from './pages/Settings/Integrations/Integrations'
-import TeamMembers from './pages/Settings/TeamMembers/TeamMembers'
 import Login from './pages/Auth/Login/Login'
 import Register from './pages/Auth/Register/Register'
 import PublicLayout from './PublicLayout'
@@ -19,6 +16,12 @@ import Explore from './pages/Explore/Explore'
 import Knowledge from './pages/Knowledge/Knowledge'
 import TestSpecs from './pages/TestSpecs/TestSpecs'
 import SessionRecordings from './pages/SessionRecordings/SessionRecordings'
+import Account from './pages/Projects/Settings/Account/Account'
+import TeamMembers from './pages/Projects/Settings/TeamMembers/TeamMembers'
+import Integrations from './pages/Projects/Settings/Integrations/Integrations'
+import Environments from './pages/Environments/Environments'
+import TestSuits from './pages/TestSuits/TestSuits'
+import Analytics from './pages/Analytics/Analytics'
 
 const router = createBrowserRouter([
   {
@@ -46,12 +49,24 @@ const router = createBrowserRouter([
                 element: <TestSpecs />
               },
               {
+                path: '/test-suits',
+                element: <TestSuits />
+              },
+              {
                 path: '/runs',
                 element: <TestRuns />
               },
               {
+                path: '/analytics',
+                element: <Analytics />
+              },
+              {
                 path: '/session-recordings',
                 element: <SessionRecordings />
+              },
+              {
+                path: '/environments',
+                element: <Environments />
               },
               {
                 path: '/knowledge',

@@ -23,7 +23,7 @@ export type Pagination = {
 export const projectsQueryAtom = atom<Query>({})
 
 export const projectsPaginationAtom = atom<Pagination>({
-  take: 10,
+  take: 100,
   skip: 0
 })
 export const projectsAtom = atomWithQuery((get) => {

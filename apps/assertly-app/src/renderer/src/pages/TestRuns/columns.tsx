@@ -1,5 +1,4 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { TestRun } from './data'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +10,22 @@ import { Button } from '@renderer/components/ui/button'
 import { RiLoopRightLine, RiMoreFill } from 'react-icons/ri'
 import moment from 'moment'
 import { Checkbox } from '@renderer/components/ui/checkbox'
+
+export type TestRun = {
+  id: string
+  testName: string
+  status: 'running' | 'success' | 'failed'
+  startTime: string
+  endTime: string
+  duration: number // in seconds
+  result: {
+    totalTests: number
+    passed: number
+    failed: number
+    skipped: number
+  }
+  logs: string
+}
 
 function formatDuration(seconds: number) {
   const duration = moment.duration(seconds, 'seconds')

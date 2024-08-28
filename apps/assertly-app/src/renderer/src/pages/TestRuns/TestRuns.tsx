@@ -1,7 +1,6 @@
 import { RiAddLargeLine, RiListCheck3 } from 'react-icons/ri'
 import { Button } from '@renderer/components/ui/button'
-import { columns } from './TestRunsTable/columns'
-import { testRuns } from './TestRunsTable/data'
+import { columns } from './columns'
 import { DataTable } from '@renderer/components/molecules/Datatable/Datatable'
 
 const TestRuns = () => {
@@ -28,7 +27,7 @@ const TestRuns = () => {
         </div>
       </div>
       <div className="bg-white dark:bg-zinc-800/50 shadow border border-zinc-200 dark:border-zinc-800 rounded-md py-4">
-        <DataTable columns={columns} data={testRuns} />
+        <DataTable columns={columns} data={[]} />
       </div>
     </div>
   )

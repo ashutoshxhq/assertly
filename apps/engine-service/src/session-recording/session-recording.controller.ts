@@ -11,7 +11,7 @@ import {
 import { SessionRecordingService } from './session-recording.service';
 import { Prisma } from '@prisma/client';
 
-@Controller('session-recording')
+@Controller('v1/teams/:teamId/session-recordings')
 export class SessionRecordingController {
   constructor(
     private readonly sessionRecordingService: SessionRecordingService,

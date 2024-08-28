@@ -11,7 +11,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { ProjectService } from './project.service';
 
-@Controller('v1/teams/:teamId/Projects')
+@Controller('v1/teams/:teamId/projects')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
   @Post()

@@ -12,10 +12,19 @@ import moment from 'moment'
 import { Checkbox } from '@renderer/components/ui/checkbox'
 import { Badge } from '@renderer/components/ui/badge'
 import { Link } from 'react-router-dom'
-import { TestSpec } from '../TestSpecs'
 import { useAtom } from 'jotai'
 import { deleteTestSpecAtom, selectedTestSpecIdAtom } from '@renderer/store/test-specs/testSpecs'
 import { useEffect, useState } from 'react'
+
+export type TestSpec = {
+  id: string
+  name: string
+  pipeline: object[]
+  status: 'idle' | 'running' | 'success' | 'failed'
+  createdAt: string
+  lastRanAt: string
+  updatedAt: string
+}
 
 export const columns: ColumnDef<TestSpec>[] = [
   {

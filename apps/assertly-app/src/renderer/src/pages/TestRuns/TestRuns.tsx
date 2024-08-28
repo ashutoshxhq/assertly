@@ -26,7 +26,7 @@ const TestRuns = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white dark:bg-zinc-800/50 shadow border border-zinc-200 dark:border-zinc-800 rounded-md py-4">
+      <div className="bg-white dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 rounded-xl py-4">
         <DataTable columns={columns} data={[]} />
       </div>
     </div>

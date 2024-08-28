@@ -1,4 +1,3 @@
-import { columns } from './TestSpecsTable/columns'
 import { DataTable } from '@renderer/components/molecules/Datatable/Datatable'
 import { testSpecsAtom } from '@renderer/store/test-specs/testSpecs'
 import { useAtom } from 'jotai'
@@ -7,16 +6,7 @@ import { selectedProjectIdAtom } from '@renderer/store/projects/projects'
 import { useEffect } from 'react'
 import { CreateTestSpec } from './TestSpec/CreateTestSpec'
 import { RiFlaskLine } from 'react-icons/ri'
-
-export type TestSpec = {
-  id: string
-  name: string
-  pipeline: object[]
-  status: 'idle' | 'running' | 'success' | 'failed'
-  createdAt: string
-  lastRanAt: string
-  updatedAt: string
-}
+import { columns } from './columns'
 
 const TestSpecs = () => {
   const { projectId } = useParams()
@@ -48,7 +38,7 @@ const TestSpecs = () => {
             </div>
           </div>
         </div>
-        <div className="bg-white dark:bg-zinc-800/50 shadow border border-zinc-200 dark:border-zinc-800 rounded-md py-4">
+        <div className="bg-white dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 rounded-xl py-4">
           <DataTable columns={columns} data={(data || []) as any} />
         </div>
       </div>

@@ -23,7 +23,8 @@ export const currentUserAtom = atomWithQuery((get) => {
     }
   }
 })
-export const currentUserNameAtom = atom((get) => ({
+export const currentUserNameAndEmailAtom = atom((get) => ({
   firstname: get(currentUserAtom).data?.firstname,
-  lastname: get(currentUserAtom).data?.lastname
+  lastname: get(currentUserAtom).data?.lastname,
+  email: get(currentUserAtom).data?.email
 }))

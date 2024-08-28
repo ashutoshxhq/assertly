@@ -1,4 +1,4 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
@@ -11,6 +11,11 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
     contextBridge.exposeInMainWorld('api', api)
+
+    contextBridge.exposeInMainWorld('colorMode', {
+      dark: () => ipcRenderer.invoke('color-mode:dark'),
+      light: () => ipcRenderer.invoke('color-mode:light')
+    })
   } catch (error) {
     console.error(error)
   }

@@ -2,7 +2,7 @@ name: Deploy Assertly App to S3
 on:
     push:
         paths:
-            - 'apps/assertly-app/**'
+            - "apps/assertly-app/**"
         branches:
             - main
 jobs:
@@ -18,16 +18,16 @@ jobs:
             VITE_IDENTIY_SERVICE_URL: https://api.assertly.ai/identity/v1
         steps:
             - uses: actions/checkout@v2
-            
+
             - uses: pnpm/action-setup@v4
               name: Install pnpm
               with:
-                version: 8
-                run_install: false
+                  version: 8
+                  run_install: false
 
             - name: Install dependencies
               run: cd apps/assertly-app && pnpm install
-            
+
             - name: Build Library
               run: cd libs/web-components && pnpm run build
 
@@ -42,7 +42,7 @@ jobs:
                   aws-region: us-west-2
 
             - name: Deploy app to Bucket
-              run: aws s3 sync ./apps/assertly-app/dist/ s3://prd-assertly-app/
+              run: aws s3 sync ./apps/assertly-app/out/renderer s3://prd-assertly-app/
 
             - name: Invalidate dashboard cloudfront
               run: aws cloudfront create-invalidation --distribution-id E2IRH7B2SA4MBC --paths "/*"

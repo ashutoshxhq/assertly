@@ -20,7 +20,14 @@ const Account = () => {
         <CardFooter className="flex justify-between">
           <Button variant={'default'}>Update Profile</Button>
           <div className="pt-2">
-            <Switch checked={darkMode} onCheckedChange={setDarkMode} />
+            <Switch
+              checked={darkMode}
+              onCheckedChange={(checked) => {
+                setDarkMode(checked)
+                // @ts-ignore
+                checked && window?.colorMode ? window?.colorMode?.dark() : window?.colorMode?.light()
+              }}
+            />
           </div>
         </CardFooter>
       </Card>

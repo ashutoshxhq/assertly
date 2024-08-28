@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, ipcMain, Menu, PopupOptions, WebContentsView } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Menu, PopupOptions, WebContentsView, nativeTheme } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -58,10 +58,9 @@ const readJson = async (port: string): Promise<BrowserInfo> =>
 
 function createWindow(): void {
   mainWindow = new BrowserWindow({
-    width: 1600,
+    width: 1200,
     height: 1000,
     show: false,
-    autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -69,7 +68,7 @@ function createWindow(): void {
     },
     titleBarStyle: 'hidden',
     backgroundColor: '#2e2c29',
-    trafficLightPosition: { x: 10, y: 10 }
+    trafficLightPosition: { x: 10, y: 16 }
   })
 
   mainWindow.on('ready-to-show', () => {
@@ -152,6 +151,16 @@ const setupContextMenu = (mainWindow: BrowserWindow, previewWindow: WebContentsV
     }
     contextMenu.popup(popupOptions)
   })
+
+  mainWindow.webContents.on('context-menu', (_, params) => {
+    rightClickPosition = { x: params.x, y: params.y }
+    const popupOptions: PopupOptions = {
+      window: mainWindow,
+      x: params.x,
+      y: params.y
+    }
+    contextMenu.popup(popupOptions)
+  })
 }
 
 const updatePreviewWindowBounds = (mainWindow: BrowserWindow, previewWindow: WebContentsView): void => {
@@ -220,6 +229,7 @@ const getPlaywrightPage = async (browser: Browser, window: WebContentsView): Pro
 initialize()
   .then(() => {
     app.whenReady().then(() => {
+      nativeTheme.themeSource = 'system'
       electronApp.setAppUserModelId('com.electron')
 
       app.on('browser-window-created', (_, window) => {
@@ -228,6 +238,18 @@ initialize()
 
       ipcMain.on('toggle-preview', (_, show: boolean) => {
         togglePreviewWindow(show)
+      })
+
+      ipcMain.handle('color-mode:dark', () => {
+        console.log('Setting dark mode')
+        nativeTheme.themeSource = 'dark'
+        return nativeTheme.themeSource
+      })
+
+      ipcMain.handle('color-mode:light', () => {
+        console.log('Setting light mode')
+        nativeTheme.themeSource = 'light'
+        return nativeTheme.themeSource
       })
 
       createWindow()

@@ -10,15 +10,15 @@ import Login from './pages/Auth/Login/Login'
 import Register from './pages/Auth/Register/Register'
 import PublicLayout from './PublicLayout'
 import SettingsLayout from './pages/Settings/SettingsLayout'
-import TestSpec from './pages/Applications/TestSpecs/TestSpec/TestSpec'
+import TestSpec from './pages/TestSpecs/TestSpec/TestSpec'
 import PrivateLayout from './PrivateLayout'
 import ApplicationWithSidebarLayout from './ApplicationWithSidebarLayout'
 import AppLayout from './AppLayout'
-import Applications from './pages/Applications/Applications'
-import Application from './pages/Applications/Application'
 import TestRuns from './pages/TestRuns/TestRuns'
 import Explore from './pages/Explore/Explore'
 import Knowledge from './pages/Knowledge/Knowledge'
+import TestSpecs from './pages/TestSpecs/TestSpecs'
+import SessionRecordings from './pages/SessionRecordings/SessionRecordings'
 
 const router = createBrowserRouter([
   {
@@ -35,23 +35,23 @@ const router = createBrowserRouter([
             children: [
               {
                 path: '/',
-                element: <Navigate to="applications" />
+                element: <Navigate to="tests" />
               },
               {
-                path: '/explore',
+                path: '/dashboard',
                 element: <Explore />
               },
               {
-                path: '/applications',
-                element: <Applications />
-              },
-              {
-                path: '/applications/:applicationId',
-                element: <Application />
+                path: '/tests',
+                element: <TestSpecs />
               },
               {
                 path: '/runs',
                 element: <TestRuns />
+              },
+              {
+                path: '/session-recordings',
+                element: <SessionRecordings />
               },
               {
                 path: '/knowledge',

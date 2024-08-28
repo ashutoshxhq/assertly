@@ -1,21 +1,31 @@
 default: dev
 project:=assertly
 current_dir:=$(shell pwd)
-MAKEFLAGS += -j4
+MAKEFLAGS += -j5
 
-dev: dev-engine dev-webapp
+dev: dev-app dev-ai-agent-service dev-identity-service dev-engine-service dev-webdriver-service
+
+.PHONY: dev-app
+dev-app:
+	@echo "Starting web app..."
+	cd apps/assertly-app && pnpm dev
+
+.PHONY: dev-ai-agent
+dev-ai-agent-service:
+	@echo "Building ai-agent service..."
+	cd ./apps/ai-agent-service && pnpm dev
+
+.PHONY: dev-identity
+dev-identity-service:
+	@echo "Building identity service..."
+	cd ./apps/identity-service && cargo run
 
 .PHONY: dev-engine
-dev-engine:
-	@echo "Starting engine service..."
-	cd ./apps/engine-service && docker compose -p ${project} up
+dev-engine-service:
+	@echo "Building engine service..."
+	cd ./apps/engine-service && pnpm start:dev
 
-.PHONY: dev-webapp
-dev-webapp:
-	@echo "Starting web app..."
-	cd apps/assertly_app && pnpm dev
-
-.PHONY: dev-api
-build-api:
-	@echo "Building api service..."
-	cd ./apps/api_service && docker-compose -p ${project} build --no-cache
+.PHONY: dev-webdriver
+dev-webdriver-service:
+	@echo "Building webdriver service..."
+	cd ./apps/webdriver-service && pnpm start:dev

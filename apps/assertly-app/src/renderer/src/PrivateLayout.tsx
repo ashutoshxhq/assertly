@@ -20,7 +20,11 @@ function PrivateLayout() {
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark')
+      // @ts-ignore
+      window?.colorMode?.dark()
     } else {
+      // @ts-ignore
+      window?.colorMode?.light()
       document.documentElement.classList.remove('dark')
     }
   }, [darkMode])

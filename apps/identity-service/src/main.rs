@@ -1,11 +1,11 @@
 pub mod app;
-pub mod router;
-pub mod service;
-pub mod modules;
 pub mod middlewares;
-pub mod types;
-pub mod schema;
 pub mod models;
+pub mod modules;
+pub mod router;
+pub mod schema;
+pub mod service;
+pub mod types;
 
 use std::{env, time::Duration};
 
@@ -70,7 +70,7 @@ async fn main() {
             .into_inner(),
     );
 
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8000")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:5003")
         .await
         .expect("unable to create listner");
 

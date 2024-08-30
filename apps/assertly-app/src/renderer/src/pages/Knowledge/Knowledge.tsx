@@ -1,5 +1,14 @@
+import { Helmet } from "react-helmet"
+
 const Knowledge = () => {
-  return <div>Knowledge</div>
+  return (
+    <div>
+      <Helmet>
+        <title>Knowledge | Assertly</title>
+      </Helmet>
+      Knowledge
+    </div>
+  )
 }
 
 export default Knowledge

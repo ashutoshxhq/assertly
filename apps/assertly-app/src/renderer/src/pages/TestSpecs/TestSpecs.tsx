@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { CreateTestSpec } from './TestSpec/CreateTestSpec'
 import { RiFlaskLine } from 'react-icons/ri'
 import { columns } from './columns'
+import { Helmet } from 'react-helmet'
 
 const TestSpecs = () => {
   const { projectId } = useParams()
@@ -19,6 +20,9 @@ const TestSpecs = () => {
 
   return (
     <div className="py-4">
+      <Helmet>
+        <title>Tests | Assertly</title>
+      </Helmet>
       <div className="flex flex-col py-2 px-12 gap-4">
         <div className="flex flex-col bg-white dark:bg-zinc-800/50 p-8 rounded-xl shadow-sm gap-8 border border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center justify-between px-4">

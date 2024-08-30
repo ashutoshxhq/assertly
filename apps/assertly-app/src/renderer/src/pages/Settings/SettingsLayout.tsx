@@ -2,10 +2,14 @@ import { RiBellLine, RiOrganizationChart } from 'react-icons/ri'
 import { GoWorkflow } from 'react-icons/go'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@renderer/components/ui/tabs'
 import Notification from './Notification/Notification'
+import { Helmet } from 'react-helmet'
 
 const SettingsLayout = () => {
   return (
     <div className="p-12">
+      <Helmet>
+        <title>Project Settings | Assertly</title>
+      </Helmet>
       <div className="flex items-center justify-between px-6">
         <div className="flex items-center justify-between gap-4">
           {/* <span className="text-2xl">

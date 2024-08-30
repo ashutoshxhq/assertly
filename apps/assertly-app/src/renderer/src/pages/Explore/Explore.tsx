@@ -3,6 +3,7 @@ import { useRef } from 'react'
 import { Avatar, AvatarFallback } from '@renderer/components/ui/avatar'
 import { RiSendPlane2Line } from 'react-icons/ri'
 import { Button } from '@renderer/components/ui/button'
+import { Helmet } from 'react-helmet'
 
 const Explore = () => {
   const textAreaRef = useRef<any>(null)
@@ -16,6 +17,9 @@ const Explore = () => {
 
   return (
     <div className="mx-auto max-w-6xl dark:text-zinc-300 h-full text-sm overflow-y-scroll">
+      <Helmet>
+        <title>Explore | Assertly</title>
+      </Helmet>
       <div className="flex flex-col w-full h-full">
         <div className="flex-1 overflow-auto p-10 space-y-4">
           <div className="flex items-center gap-4 ">

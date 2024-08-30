@@ -8,6 +8,7 @@ import { Button } from '@renderer/components/ui/button'
 import { Input } from '@renderer/components/ui/input'
 import { toast } from 'sonner'
 import * as changeCase from 'change-case/keys'
+import { Helmet } from 'react-helmet'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -53,6 +54,9 @@ const Login = () => {
 
   return (
     <div className="dark h-screen w-screen flex bg-zinc-900">
+      <Helmet>
+        <title>Login | Assertly</title>
+      </Helmet>
       <div className="relative flex-1 max-w-[40%] h-full flex-col border-zinc-800 bg-zinc-200 text-white hidden md:flex dark:border-r custom-drag-region">
         <img src="/auth.jpg" alt="Auth Cover" className="object-cover w-full h-full" />
       </div>

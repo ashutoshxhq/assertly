@@ -8,6 +8,7 @@ import { Button, buttonVariants } from '@renderer/components/ui/button'
 import { Input } from '@renderer/components/ui/input'
 import { toast } from 'sonner'
 import * as changeCase from 'change-case/keys'
+import { Helmet } from 'react-helmet'
 
 const Register = () => {
   const [firstname, setFirstname] = useState('')
@@ -56,6 +57,9 @@ const Register = () => {
   return (
     <>
       <div className="dark h-screen w-screen flex bg-zinc-900">
+      <Helmet>
+        <title>Register | Assertly</title>
+      </Helmet>
         <Link
           to="/auth/login"
           className={cn(

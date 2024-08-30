@@ -3,10 +3,14 @@ import { Button } from '@renderer/components/ui/button'
 import { columns } from './UserFlowTable/columns'
 import { userFlows } from './UserFlowTable/data'
 import { DataTable } from '@renderer/components/molecules/Datatable/Datatable'
+import { Helmet } from 'react-helmet'
 
 const UserFlows = () => {
   return (
     <div className="p-8">
+      <Helmet>
+        <title>User Flows | Assertly</title>
+      </Helmet>
       <div className="flex items-center justify-between px-4">
         <div className="flex items-center justify-between gap-4">
           <span className="text-4xl">

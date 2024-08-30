@@ -1,5 +1,14 @@
+import {Helmet} from "react-helmet";
+
 const Analytics = () => {
-  return <div>Analytics</div>
+  return (
+    <div>
+      <Helmet>
+        <title>Analytics | Assertly</title>
+      </Helmet>
+      Analytics
+    </div>
+  )
 }
 
 export default Analytics

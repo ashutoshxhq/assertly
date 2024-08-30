@@ -1,9 +1,13 @@
 import { RiAddLargeLine, RiKeyLine } from 'react-icons/ri'
 import { Button } from '@renderer/components/ui/button'
+import { Helmet } from 'react-helmet'
 
 const ApiKeys = () => {
   return (
     <div className="p-8">
+      <Helmet>
+        <title>Api Keys | Assertly</title>
+      </Helmet>
       <div className="flex items-center justify-between px-4">
         <div className="flex items-center justify-between gap-4">
           <span className="text-4xl">

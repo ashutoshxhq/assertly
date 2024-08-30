@@ -19,7 +19,7 @@ const StepTypeSelect = ({ stepType, setStepType }: any) => {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" role="combobox" aria-expanded={open} className="justify-between">
-          {stepType ? steps.find((framework) => framework.value === stepType)?.label : 'Select Step'}
+          {stepType ? steps.find((step) => step.value === stepType)?.label : 'Select Step'}
           <RiArrowDownSLine className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -27,20 +27,20 @@ const StepTypeSelect = ({ stepType, setStepType }: any) => {
         <Command>
           <CommandInput placeholder="Search step..." className="h-9" />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No step found.</CommandEmpty>
             <CommandGroup>
-              {steps.map((framework) => (
+              {steps.map((step) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={step.value}
+                  value={step.value}
                   onSelect={(currentValue) => {
                     setStepType(currentValue === stepType ? '' : currentValue)
                     setOpen(false)
                   }}
                 >
-                  {framework.label}
+                  {step.label}
                   <RiCheckLine
-                    className={cn('ml-auto h-4 w-4', stepType === framework.value ? 'opacity-100' : 'opacity-0')}
+                    className={cn('ml-auto h-4 w-4', stepType === step.value ? 'opacity-100' : 'opacity-0')}
                   />
                 </CommandItem>
               ))}

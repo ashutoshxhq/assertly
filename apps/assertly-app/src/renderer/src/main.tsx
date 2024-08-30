@@ -6,7 +6,6 @@ import './App.css'
 import Login from './pages/Auth/Login/Login'
 import Register from './pages/Auth/Register/Register'
 import PublicLayout from './PublicLayout'
-import SettingsLayout from './pages/Settings/SettingsLayout'
 import TestSpec from './pages/TestSpecs/TestSpec/TestSpec'
 import PrivateLayout from './PrivateLayout'
 import ApplicationWithSidebarLayout from './ApplicationWithSidebarLayout'
@@ -16,12 +15,12 @@ import Explore from './pages/Explore/Explore'
 import Knowledge from './pages/Knowledge/Knowledge'
 import TestSpecs from './pages/TestSpecs/TestSpecs'
 import SessionRecordings from './pages/SessionRecordings/SessionRecordings'
-import Account from './pages/Projects/Settings/Account/Account'
-import TeamMembers from './pages/Projects/Settings/TeamMembers/TeamMembers'
-import Integrations from './pages/Projects/Settings/Integrations/Integrations'
 import Environments from './pages/Environments/Environments'
 import TestSuits from './pages/TestSuits/TestSuits'
 import Analytics from './pages/Analytics/Analytics'
+import ProjectSettingsLayout from './pages/Projects/Settings/ProjectSettingsLayout'
+import SettingsLayout from './pages/Settings/SettingsLayout'
+import Projects from './pages/Projects/Projects'
 
 const router = createBrowserRouter([
   {
@@ -38,57 +37,67 @@ const router = createBrowserRouter([
             children: [
               {
                 path: '/',
-                element: <Navigate to="tests" />
+                element: <Navigate to="projects" />
               },
               {
-                path: '/dashboard',
+                path: '/projects',
+                element: <Projects />
+              },
+              {
+                path: 'projects/:projectId/dashboard',
                 element: <Explore />
               },
               {
-                path: '/tests',
+                path: 'projects/:projectId/tests',
                 element: <TestSpecs />
               },
               {
-                path: '/test-suits',
+                path: 'projects/:projectId/test-suits',
                 element: <TestSuits />
               },
               {
-                path: '/runs',
+                path: 'projects/:projectId/runs',
                 element: <TestRuns />
               },
               {
-                path: '/analytics',
+                path: 'projects/:projectId/analytics',
                 element: <Analytics />
               },
               {
-                path: '/session-recordings',
+                path: 'projects/:projectId/session-recordings',
                 element: <SessionRecordings />
               },
               {
-                path: '/environments',
+                path: 'projects/:projectId/environments',
                 element: <Environments />
               },
               {
-                path: '/knowledge',
+                path: 'projects/:projectId/knowledge',
                 element: <Knowledge />
+              },
+
+              {
+                path: 'projects/:projectId/settings',
+                element: <ProjectSettingsLayout />,
+                children: [
+                  {
+                    path: '',
+                    element: <ProjectSettingsLayout />
+                  },
+                  {
+                    path: 'api-keys',
+                    element: <ProjectSettingsLayout />
+                  },
+                  {
+                    path: 'notifications',
+                    element: <ProjectSettingsLayout />
+                  }
+                ]
               },
               {
                 path: 'settings',
                 element: <SettingsLayout />,
-                children: [
-                  {
-                    path: 'account',
-                    element: <Account />
-                  },
-                  {
-                    path: 'team-members',
-                    element: <TeamMembers />
-                  },
-                  {
-                    path: 'integrations',
-                    element: <Integrations />
-                  }
-                ]
+                children: []
               }
             ]
           },

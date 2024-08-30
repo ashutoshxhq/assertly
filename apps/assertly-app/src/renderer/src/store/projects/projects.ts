@@ -3,6 +3,7 @@ import { atom } from 'jotai'
 import { atomWithQuery, atomWithMutation } from 'jotai-tanstack-query'
 import { ENGINE_SERVICE_URL } from '@renderer/config/constants'
 import { teamIdAtom } from '../auth/auth'
+import { atomWithStorage } from 'jotai/utils'
 
 export type Query = {
   where?: any
@@ -47,8 +48,9 @@ export const projectsAtom = atomWithQuery((get) => {
   }
 })
 
-export const selectedProjectIdAtom = atom<string>('')
-export const selectedprojectAtom = atomWithQuery((get) => {
+export const selectedProjectIdAtom = atomWithStorage<string>('selectedProjectId', '')
+
+export const selectedProjectAtom = atomWithQuery((get) => {
   const teamId = get(teamIdAtom)
   const selectedProjectId = get(selectedProjectIdAtom)
   return {

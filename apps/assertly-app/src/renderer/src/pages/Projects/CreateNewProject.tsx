@@ -64,7 +64,7 @@ export function CreateProject() {
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               className="col-span-3 w-full"
-              placeholder="Enter test name"
+              placeholder="Enter project name"
             />
           </div>
         </div>

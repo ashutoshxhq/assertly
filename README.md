@@ -1,2 +1,2 @@
-# webassert
-Monorepo for webassert
+# Assertly
+Monorepo for assertly (E2E Testing platform)
